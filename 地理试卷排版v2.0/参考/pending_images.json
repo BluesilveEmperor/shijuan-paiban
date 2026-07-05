@@ -1,0 +1,30 @@
+{
+  "source_docx": "精品解析：2025年海南高考地理真题（原卷版）.docx",
+  "total": 2,
+  "pending_images": [
+    {
+      "image_id": "img_001",
+      "image_file": "img_001.png",
+      "image_path": "C:\\Users\\Deledy_02\\Desktop\\地理试卷排版\\参考\\pending_images\\img_001.png",
+      "original_media_path": "word/media/image2.png",
+      "file_size": 183,
+      "file_ext": ".png",
+      "context_before": "",
+      "context_after": "2025年海南省普通高中学业水平选择性考试地理",
+      "paragraph_text": "2025年海南省普通高中学业水平选择性考试地理",
+      "identified_text": null
+    },
+    {
+      "image_id": "img_002",
+      "image_file": "img_002.png",
+      "image_path": "C:\\Users\\Deledy_02\\Desktop\\地理试卷排版\\参考\\pending_images\\img_002.png",
+      "original_media_path": "word/media/image3.png",
+      "file_size": 190,
+      "file_ext": ".png",
+      "context_before": "",
+      "context_after": "2025年海南省普通高中学业水平选择性考试地理",
+      "paragraph_text": "2025年海南省普通高中学业水平选择性考试地理",
+      "identified_text": null
+    }
+  ]
+}
