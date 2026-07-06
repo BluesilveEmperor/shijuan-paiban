@@ -163,6 +163,7 @@
 | question_number | integer | 必需 | 题号（如1, 2, 17...） |
 | question_type | string | 必需 | 题目类型（选择题/非选择题） |
 | stem | string | 必需 | 题干内容 |
+| stem_images | array/null | 可选 | 题干图片列表（选择题，位于题干与选项之间）。每项：`{"name":"img_003.png","description":"①②③④子选项图"}` |
 | sub_options | array/null | 可选 | 子选项（①②③④） |
 | options | object/null | 可选 | ABCD选项（选择题必需） |
 | sub_questions | array/null | 可选 | 子问题（非选择题） |

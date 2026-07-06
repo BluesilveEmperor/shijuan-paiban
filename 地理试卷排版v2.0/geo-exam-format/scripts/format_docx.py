@@ -981,6 +981,15 @@ def _format_material(doc, material, group, images_dir, logger, quality_data, ins
                     break
         return text_para
     
+    # 预扫描：收集所有 type:"image" 的图片名，用于后续去重
+    # 避免图片同时在 text 段（【图片：xxx】占位符）和 image 段各插入一次
+    image_seg_names = set()
+    for seg in segments:
+        if seg.get('type') == 'image':
+            name = seg.get('name', '')
+            if name:
+                image_seg_names.add(name)
+
     # 按 segments 顺序处理
     last_was_text = False
     for seg in segments:
@@ -1004,8 +1013,11 @@ def _format_material(doc, material, group, images_dir, logger, quality_data, ins
                                 add_text_mixed_fonts(p, part, cn_font='楷体', en_font='Times New Roman')
                         text_para = p
                         last_was_text = True
-                    # 插入占位符对应的图片
+                    # 插入占位符对应的图片（跳过已有独立 image segment 的图片，避免重复）
                     for img_name in img_placeholders:
+                        if img_name in image_seg_names:
+                            logger.debug(f'    跳过重复图片占位符: {img_name}（已有独立 image segment）')
+                            continue
                         img_path = os.path.join(images_dir, img_name) if images_dir else None
                         if img_path and os.path.exists(img_path):
                             add_image_centered(doc, img_path, logger)
@@ -1135,12 +1147,26 @@ def _format_sub_questions(doc, question, logger, quality_data):
 
 
 def _format_question(doc, question, section_type, images_dir, logger, quality_data):
-    """排版选择题：题干 + 选项。"""
+    """排版选择题：题干 + [stem_images] + [sub_options] + 选项。"""
     _format_question_stem(doc, question, logger, quality_data)
 
     q_type = question.get('question_type', section_type)
     # 选择题选项
     if q_type == '选择题':
+        # 插入题干图片（如有）——位于题干下方、选项上方
+        stem_images = question.get('stem_images')
+        if stem_images:
+            for img_info in stem_images:
+                img_name = img_info.get('name', str(img_info))
+                img_path = os.path.join(images_dir, img_name) if images_dir else img_name
+                if os.path.exists(img_path):
+                    add_image_centered(doc, img_path, logger)
+                    quality_data['images_inserted'] += 1
+                    logger.debug(f'  题干图片: {img_name}')
+                else:
+                    quality_data['missing_images'].append(img_name)
+                    logger.warning(f'  题干图片缺失: {img_name}')
+
         options = question.get('options')
         sub_options = question.get('sub_options')
         if options:

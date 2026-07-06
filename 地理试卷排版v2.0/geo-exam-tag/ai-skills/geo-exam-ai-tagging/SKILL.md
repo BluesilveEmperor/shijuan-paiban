@@ -93,6 +93,15 @@ AI通过语义理解识别结构（不依赖正则匹配）：
 - 识别【图片：<filename> - <description>】占位符
 - 在JSON中记录图片引用
 
+**题干图片（stem_images）识别**：
+- 场景：选择题题干包含含①②③④子选项的图片（如景观图、示意图），选项为文本组合（如"A.①③ B.②④"）
+- 判断规则：图片紧邻题干文字下方（题干段落后、选项段落前），且图片含子选项标注
+- 输出：将图片信息写入 `questions[].stem_images` 数组，格式 `[{"name":"img_xxx.png","description":"子选项图"}]`
+- 约束：
+  - 图片在排版时位于题干下方、选项上方
+  - 仅选择题支持 `stem_images`
+  - 若已以 `{{IMAGE:xxx}}` 形式嵌入题干 text 中，则不需要额外设置 stem_images
+
 ### 第四步：输出完整JSON
 
 AI输出tagged_ai.json，格式参考 `references/json_template.md`：

@@ -789,6 +789,12 @@ def _parse_question_group(group_elements, section_type, doc, docx_path, media_in
         # 纯图片段落 → append image segment(s)
         if has_img and not text:
             img_infos = extract_image(elem)
+            # 选择题：紧邻题干（题干已创建、选项尚未解析）的图片 → stem_image
+            # 典型场景：题干下方有一张含①②③④子选项的图片，选项为文本组合（如A.①③ B.②④）
+            if current_question and section_type == '选择题' and not current_options:
+                for img_info in img_infos:
+                    current_question.setdefault('stem_images', []).append(img_info)
+                continue
             for img_info in img_infos:
                 current_material['segments'].append({
                     'type': 'image',
