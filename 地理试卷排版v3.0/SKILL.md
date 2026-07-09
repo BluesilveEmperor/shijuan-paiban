@@ -1,0 +1,71 @@
+---
+name: "geo-exam-formatting"
+description: "Full pipeline for geography exam paper formatting: clean, tag structure, place images, understand images, map images, and typeset to .docx. Invoke when user provides a raw geography exam .docx file."
+---
+
+# 地理试卷排版 v3.0
+
+六步解耦流水线，将原始 .docx 地理试卷自动排版为规范格式的 Word 文档。
+
+## 流水线架构
+
+```
+原始试卷.docx
+    │
+    ▼
+[Step1] clean_exam          → 清洗产物/content.md + images/
+    │
+    ▼
+[Step2] tag_structure       → 中间数据/structure.json
+    │
+    ▼
+[Step3] tag_placeholders    → 中间数据/with_placeholders.json
+    │
+    ▼
+[Step4] tag_images          → 中间数据/image_descriptions.json  (可并行)
+    ▼
+[Step5] map_images          → 试卷数据/final_exam.json
+    │
+    ▼
+[Step6] typeset_exam        → 排版文档/final_exam.docx
+```
+
+## 子技能
+
+| 技能 | 路径 | 职责 |
+|------|------|------|
+| master_exam_layout | `.trae/skills/master_exam_layout/SKILL.md` | 主编排调度，逐步骤检查产物与 Schema 校验 |
+| clean_exam | `.trae/skills/clean_exam/SKILL.md` | 清洗原始 docx，提取正文 Markdown 和图片 |
+| tag_structure | `.trae/skills/tag_structure/SKILL.md` | 识别试卷结构（分区/题号/题干/选项/材料/子问题） |
+| tag_placeholders | `.trae/skills/tag_placeholders/SKILL.md` | 标注需要图片的位置，创建占位符 |
+| tag_images | `.trae/skills/tag_images/SKILL.md` | 逐张理解图片（类型/关键词/OCR/学科特征） |
+| map_images | `.trae/skills/map_images/SKILL.md` | 占位符与图片的语义匹配 |
+| typeset_exam | `.trae/skills/typeset_exam/SKILL.md` | 调用排版脚本生成最终 Word 文档 |
+
+## 核心设计原则
+
+- **单一职责**：每个子技能只做一件事
+- **落盘传递**：步骤间通过文件传递数据，不依赖上下文记忆
+- **Schema 先行**：所有产物通过 `schemas/exam_paper.schema.json` 校验
+- **兜底优先**：无法确定时标记 `uncertain`，不硬猜
+
+## 快速开始
+
+```
+请按 master_exam_layout 执行流水线：
+输入文件: <原始 docx 绝对路径>
+```
+
+主编排将自动调度 Step1→Step6，每步检查产物并报告状态。
+
+## 关键资源
+
+| 资源 | 路径 |
+|------|------|
+| 统一 Schema | `schemas/exam_paper.schema.json` |
+| 格式样板 | `templates/exam_reference.json` |
+| 样式模板 | `assets/template.dotx` |
+| 流水线文档 | `docs/pipeline.md` |
+| 异常手册 | `docs/error_cases.md` |
+| 实施计划 | `实施计划.md` |
+| 重构方案 | `重构方案.md` |

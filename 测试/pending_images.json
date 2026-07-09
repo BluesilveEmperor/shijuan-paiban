@@ -1,0 +1,18 @@
+{
+  "source_docx": "纯文字试卷.docx",
+  "total": 1,
+  "pending_images": [
+    {
+      "image_id": "img_001",
+      "image_file": "img_001.png",
+      "image_path": "C:\\Users\\Deledy_02\\Desktop\\测试\\pending_images\\img_001.png",
+      "original_media_path": "word/media/image2.png",
+      "file_size": 200,
+      "file_ext": ".png",
+      "context_before": "",
+      "context_after": "地    理",
+      "paragraph_text": "地    理",
+      "identified_text": null
+    }
+  ]
+}
