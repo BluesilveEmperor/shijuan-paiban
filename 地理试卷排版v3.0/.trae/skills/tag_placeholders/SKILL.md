@@ -16,7 +16,19 @@ description: "Annotates where images are needed in structured exam JSON using pl
 
 ## Task
 
-读取 `structure.json`，逐题判断哪里需要图片占位，输出 `with_placeholders.json`。
+基于 `structure.json` 增量标注图片占位符，输出 `with_placeholders.json`。
+
+**核心原则：复制+增量修改，不重写整个文件。** `with_placeholders.json` 与 `structure.json` 的唯一区别是部分 `placeholders` 数组被填充、部分 `stem`/`content` 中嵌入了 `{{image:ph_xxx}}` 标记。通过复制原文件再增量编辑，避免重新输出整个 JSON，大幅减少 token 消耗。
+
+### 第零步：复制文件
+
+在开始任何分析之前，先将 `structure.json` 复制为 `with_placeholders.json`：
+
+```powershell
+copy "{工作目录}\中间数据\structure.json" "{工作目录}\中间数据\with_placeholders.json"
+```
+
+后续所有修改都在 `with_placeholders.json` 上用 **Edit 工具** 增量进行，**不再使用 Write 工具重写整个文件**。
 
 ### 第一步：掌握全局上下文
 
@@ -119,7 +131,44 @@ description: "Annotates where images are needed in structured exam JSON using pl
 
 **处理**：创建占位符，`location_type: "option"`。
 
-### 第三步：为每个占位符生成完整信息
+### 第三步：为每个占位符生成完整信息并增量写入
+
+逐题排查完成后，对每个需要图片的位置，用 **Edit 工具** 在 `with_placeholders.json` 上做两类修改：
+
+**修改类型 A：在正文（stem/content）中嵌入 `{{image:ph_xxx}}` 标记**
+
+使用 Edit 工具，将标记插入到正文的准确位置。例如：
+
+```
+原文本: "下图示意1960~2015年东京都市圈人口净迁入率变化。"
+修改为: "下图示意1960~2015年东京都市圈人口净迁入率变化。{{image:ph_001}}"
+```
+
+**修改类型 B：填充 placeholders 数组**
+
+将空数组 `"placeholders": []` 替换为包含占位符对象的数组。例如：
+
+```
+"placeholders": []
+→
+"placeholders": [
+  {
+    "placeholder_id": "ph_001",
+    "token": "{{image:ph_001}}",
+    "location_type": "material",
+    "owner_id": "material_001",
+    "context_before": "下图示意1960~2015年",
+    "context_after": "东京都市圈人口净迁入率变化",
+    "reason": "材料中提到'下图示意'，需要插入对应图片",
+    "uncertain": false
+  }
+]
+```
+
+**关键要求**：
+- 每次只修改一个题目的相关字段，避免 Edit 的 `old_string` 不唯一
+- 先嵌入正文标记（修改类型 A），再填充 placeholders 数组（修改类型 B）
+- 不修改任何其他字段（meta、options、subquestions 结构等保持原样）
 
 每个占位符必须包含以下全部字段：
 
@@ -151,7 +200,7 @@ description: "Annotates where images are needed in structured exam JSON using pl
 - **不创建图片映射**：`image_mapping` 保持 `[]`，映射是 Step5 的工作
 - **不分析图片类型**：不猜测图片是地图还是图表，不填写图片的 `type`/`summary`/`keywords`
 - **不修改题目结构**：不新增或删除 `questions`/`sections`/`materials`/`subquestions`，只填充 `placeholders` 数组
-- **内嵌图片标记到正文中**：对于 `location_type` 为 `material`、`question_stem`、`subquestion` 的占位符，必须将 `{{image:ph_xxx}}` 标记嵌入到对应正文的末尾（材料 `content` 末尾、题干 `stem` 末尾等）。`placeholders` 数组同时保留作为追踪记录。排版脚本（Step6）依赖此标记来定位图片插入位置。
+- **内嵌图片标记到正文中**：对于 `location_type` 为 `material`、`question_stem`、`subquestion` 的占位符，**必须**将 `{{image:ph_xxx}}` 标记嵌入到对应正文的**准确位置**（即图片原本所在的位置），而不是末尾。`placeholders` 数组同时保留作为追踪记录。排版脚本（Step6）依赖此标记来定位图片插入位置。
 - **不修改正文原文**：在正文中嵌入 `{{image:xxx}}` 标记是元数据操作，不改变原文内容本身
 - **无依据不插图**：只有当满足第三步判定条件时才创建占位符，不在没有明确线索处随意插入
 - **不重复占位**：一处位置只创建一个占位符
@@ -168,143 +217,61 @@ description: "Annotates where images are needed in structured exam JSON using pl
 
 输出文件：`{工作目录}/中间数据/with_placeholders.json`
 
-输出格式与 `structure.json` 完全一致，唯一区别是 `questions[].placeholders` 数组被填充。`images` / `image_mapping` 保持空数组，`validation` 保持默认值。
+此文件由第零步复制 `structure.json` 得来，与原文件的区别**仅有**：
 
+1. 部分题目的 `"placeholders": []` 被替换为包含占位符对象的数组
+2. 部分题目的 `stem` 或材料的 `content` 中嵌入了 `{{image:ph_xxx}}` 标记
+3. 其余所有字段（meta、sections 结构、options、subquestions、images、image_mapping、validation）保持原样不变
+
+**禁止使用 Write 工具重写整个文件。** 只使用 Edit 工具对上述两个字段做增量修改。
+
+### 修改示例
+
+假设 `structure.json` 中 question_001 的材料提到"下图示意"：
+
+**修改类型 A（嵌入正文标记）**：
 ```json
-{
-  "meta": {
-    "title": "2025年普通高等学校招生全国统一考试（新课标卷）",
-    "subtitle": "地理",
-    "subject": "地理",
-    "grade": "高三",
-    "source_file": "原始文件路径",
-    "notes": "注意事项全文..."
-  },
-  "document": {
-    "sections": [
-      {
-        "id": "section_001",
-        "type": "选择题",
-        "title": "一、选择题：本题共16小题，每小题3分，共48分。",
-        "instructions": ["在每小题给出的四个选项中，只有一项是符合题目要求的。"],
-        "questions": [
-          {
-            "id": "question_001",
-            "number": "1",
-            "question_type": "选择题",
-            "stem": "题干原文（不含占位符标记）",
-            "options": [
-              {"label": "A", "text": "选项A内容"},
-              {"label": "B", "text": "选项B内容"},
-              {"label": "C", "text": "选项C内容"},
-              {"label": "D", "text": "选项D内容"}
-            ],
-            "placeholders": []
-          },
-          {
-            "id": "question_002",
-            "number": "2",
-            "question_type": "选择题",
-            "stem": "图1为某区域等高线地形图，据此回答2~3题。",
-            "options": [
-              {"label": "A", "text": "选项A"},
-              {"label": "B", "text": "选项B"},
-              {"label": "C", "text": "选项C"},
-              {"label": "D", "text": "选项D"}
-            ],
-            "placeholders": [
-              {
-                "placeholder_id": "ph_001",
-                "token": "{{image:ph_001}}",
-                "location_type": "question_stem",
-                "owner_id": "question_002",
-                "context_before": "图1为某区域等高线地形图",
-                "context_after": "，据此回答2~3题。",
-                "reason": "题干明确提到'图1'，需要插入对应的等高线地形图"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "section_002",
-        "type": "非选择题",
-        "title": "二、非选择题：共52分。",
-        "instructions": [],
-        "questions": [
-          {
-            "id": "question_017",
-            "number": "17",
-            "question_type": "非选择题",
-            "stem": "阅读图文材料，完成下列要求。",
-            "materials": [
-              {
-                "id": "material_001",
-                "content": "M国位于非洲西部，南临几内亚湾...（材料全文）"
-              }
-            ],
-            "subquestions": [
-              {
-                "id": "subq_001",
-                "label": "(1)",
-                "stem": "分析M国沿海地区降水丰富的原因。"
-              },
-              {
-                "id": "subq_002",
-                "label": "(2)",
-                "stem": "说明图中洋流对沿岸气候的影响。"
-              }
-            ],
-            "placeholders": [
-              {
-                "placeholder_id": "ph_005",
-                "token": "{{image:ph_005}}",
-                "location_type": "material",
-                "owner_id": "material_001",
-                "context_before": "M国位于非洲西部",
-                "context_after": "南临几内亚湾",
-                "reason": "题干引导语为'阅读图文材料'，材料需要配图",
-                "uncertain": false
-              },
-              {
-                "placeholder_id": "ph_006",
-                "token": "{{image:ph_006}}",
-                "location_type": "subquestion",
-                "owner_id": "subq_002",
-                "context_before": "说明图中",
-                "context_after": "洋流对沿岸气候的影响",
-                "reason": "子问题(2)提到'图中'，需要对应示意图"
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "unclassified_blocks": []
-  },
-  "images": [],
-  "image_mapping": [],
-  "validation": {
-    "has_unmapped_placeholders": false,
-    "has_unused_images": false,
-    "unmapped_placeholders": [],
-    "unused_images": [],
-    "warnings": []
+// 修改前（material_001 的 content）:
+"content": "东京都市圈包含1市3县...下图示意1960~2015年东京都市圈人口净迁入率变化。"
+
+// 修改后:
+"content": "东京都市圈包含1市3县...下图示意1960~2015年东京都市圈人口净迁入率变化。{{image:ph_001}}"
+```
+
+**修改类型 B（填充 placeholders 数组）**：
+```json
+// 修改前:
+"placeholders": []
+
+// 修改后:
+"placeholders": [
+  {
+    "placeholder_id": "ph_001",
+    "token": "{{image:ph_001}}",
+    "location_type": "material",
+    "owner_id": "material_001",
+    "context_before": "下图示意1960~2015年",
+    "context_after": "东京都市圈人口净迁入率变化",
+    "reason": "材料中提到'下图示意'，需要插入对应图片",
+    "uncertain": false
   }
-}
+]
 ```
 
 ### 输出后自检清单
 
-在写入文件前逐项确认：
+在完成所有编辑后逐项确认：
 
+- [ ] **使用了 Edit 工具增量修改**，而非 Write 工具重写整个文件
 - [ ] 所有 `placeholder_id` 全局唯一（无重复 `ph_xxx`）
 - [ ] 每个 `token` 与对应的 `placeholder_id` 一致（`{{image:ph_xxx}}` 中 `ph_xxx` 等于 `placeholder_id`）
 - [ ] 每个 `owner_id` 在 `structure.json` 中真实存在
+- [ ] **占位符标记已内嵌**：检查每个 `location_type` 为 `material`/`question_stem`/`subquestion` 的占位符，确认对应的 `content`/`stem` 字段中已包含 `{{image:ph_xxx}}` 标记
+- [ ] **标记位置准确**：确认标记位于正确位置（如"下图为..."之后、"（如下图）"之后），而非随意添加到末尾
 - [ ] `content.md` 中每个 `{{image:img_xxx}}` 标记都已找到对应占位符
 - [ ] `location_type` 全部来自枚举值：`title` / `material` / `question_stem` / `subquestion` / `option`
 - [ ] 每个占位符 `reason` 非空且有实质内容
-- [ ] 未修改 `structure.json` 原有的任何字段值（只填充了 `placeholders`）
+- [ ] 未修改 `structure.json` 原有的任何字段值（只填充了 `placeholders` 和嵌入标记）
 - [ ] `images` 字段保持 `[]`
 - [ ] `image_mapping` 字段保持 `[]`
 

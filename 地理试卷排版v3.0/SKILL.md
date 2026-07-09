@@ -49,6 +49,40 @@ description: "Full pipeline for geography exam paper formatting: clean, tag stru
 - **Schema 先行**：所有产物通过 `schemas/exam_paper.schema.json` 校验
 - **兜底优先**：无法确定时标记 `uncertain`，不硬猜
 
+## AI执行约束
+
+**严格禁止以下行为**：
+
+1. ❌ **禁止自行创建新的Python脚本文件**
+   - AI不得在执行过程中创建任何 `.py` 文件
+   - 已有的核心脚本（`clean_docx.py`、`extract_images.py`、`validate_json.py`、`typeset_exam.py`等）不得修改
+
+2. ❌ **禁止自行运行生成的Python脚本**
+   - AI不得通过 `RunCommand` 工具执行自行生成的脚本
+   - 仅允许调用项目已定义的核心脚本（见 `scripts/` 目录）
+
+3. ❌ **禁止绕过Schema校验直接生成最终产物**
+   - Step2-5的产物必须通过 `validate_json.py` 校验后才能进入下一步
+   - 绝不允许忽略Schema校验直接进入Step6
+
+4. ❌ **禁止生成临时工具脚本**
+   - 不允许创建 `generate_*.py`、`sanitize_*.py` 等辅助工具
+   - 所有验证和修复应通过现有工具完成
+
+**正确执行方式**：
+
+- ✅ **Step2 (tag_structure)**：AI应直接通过 `Write` 工具生成 `structure.json`，而非生成Python脚本
+- ✅ **Step3 (tag_placeholders)**：AI应直接通过 `Write` 工具生成 `with_placeholders.json`
+- ✅ **Step4 (tag_images)**：AI应直接通过 `Write` 工具生成 `image_descriptions.json`
+- ✅ **Step5 (map_images)**：AI应直接通过 `Write` 工具生成 `final_exam.json`，或调用 `scripts/map_images.py`
+- ✅ **所有产物必须通过 `validate_json.py` 校验**
+
+**违反后果**：
+
+- 生成的Python脚本将被立即删除
+- 未通过Schema校验的产物将被拒绝进入下一步
+- 违规执行将导致流水线中断并报错
+
 ## 快速开始
 
 ```

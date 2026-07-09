@@ -15,6 +15,10 @@ output/
 *.swp
 *~
 
+# 清洗过程生成的待识别符号图片（应在output目录中，不提交）
+pending_images/
+pending_images.json
+
 # IDE配置
 .vscode/
 .idea/

@@ -8,10 +8,13 @@ description: "Cleans raw .docx exam papers, extracting text to Markdown and imag
 
 ## Input
 - 一个原始试卷 `.docx` 文件（用户提供路径）
+- 工作目录路径（如 `output/{试卷名称}/`），用于存放所有清洗产物
 - 以下脚本（由主编排确保路径可访问）：
   - `scripts/clean_docx.py` — 清洗 docx（去水印/去域代码/统一标点等）
   - `scripts/extract_images.py` — 提取图片并记录位置
   - `scripts/utils.py` — 公共工具（含 `docx_to_markdown()` 转换函数）
+
+**重要**：工作目录必须是独立目录，不能与源文件在同一目录。
 
 ## Task
 严格按照以下顺序执行，每一步必须等待上一步成功后才能继续：

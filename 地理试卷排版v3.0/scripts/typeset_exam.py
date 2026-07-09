@@ -156,6 +156,8 @@ def _classify_char(ch):
         return 'en'
     if ch == "'":
         return 'en'
+    if ch == '\u201c' or ch == '\u201d':  # 中文弯引号
+        return 'cn'
     code = ord(ch)
     if 0x2070 <= code <= 0x208F:
         return 'en'
@@ -533,30 +535,15 @@ def format_options(doc, options, image_resolver, logger, sub_options=None):
 
 def _format_sub_options(doc, sub_options, logger):
     """排版子选项（①②③④等）。"""
-    current_line = []
-    current_width = 0.0
-    gap_cm = 0.5
-    max_width = PAGE_CONTENT_WIDTH_CM
-
+    if not sub_options:
+        return
+    
     for sub in sub_options:
-        sub_w = estimate_text_width_cm(sub)
-        if current_line and current_width + gap_cm + sub_w > max_width:
-            p = doc.add_paragraph()
-            apply_style(p, '选项')
-            p.add_run('  '.join(current_line))
-            clear_run_fonts(p)
-            current_line = [sub]
-            current_width = sub_w
-        else:
-            if current_line:
-                current_width += gap_cm
-            current_line.append(sub)
-            current_width += sub_w
-
-    if current_line:
+        label = sub.get('label', '')
+        text = sub.get('text', '')
         p = doc.add_paragraph()
         apply_style(p, '选项')
-        p.add_run('  '.join(current_line))
+        add_mixed_text(p, f'  {label} {text}', cn_font='宋体')
         clear_run_fonts(p)
 
 
@@ -692,7 +679,7 @@ def _format_question_stem(doc, question, image_resolver, logger, quality):
                 logger.warning(f'    图片缺失: placeholder_id={ph_id}')
 
 
-def _format_subquestions(doc, question, logger, quality):
+def _format_subquestions(doc, question, image_resolver, logger, quality):
     """排版非选择题子问题。"""
     subquestions = question.get('subquestions', [])
     for sq in subquestions:
@@ -701,9 +688,40 @@ def _format_subquestions(doc, question, logger, quality):
         formatted = FILL_IN_BLANK_PATTERN.sub('______', stem)
         if formatted != stem:
             quality['fill_in_blank_count'] += 1
-        p = doc.add_paragraph()
-        apply_style(p, 'Normal')
-        add_mixed_text(p, f'{label} {formatted}', cn_font='宋体')
+
+        parts = PLACEHOLDER_TOKEN_PATTERN.split(formatted)
+        tokens = PLACEHOLDER_TOKEN_PATTERN.findall(formatted)
+
+        if not tokens:
+            p = doc.add_paragraph()
+            apply_style(p, 'Normal')
+            if label:
+                add_mixed_text(p, f'{label} {formatted}', cn_font='宋体')
+            else:
+                add_mixed_text(p, formatted, cn_font='宋体')
+            continue
+
+        first_text = True
+        for i, part in enumerate(parts):
+            part = part.strip()
+            if part:
+                p = doc.add_paragraph()
+                apply_style(p, 'Normal')
+                prefix = f'{label} ' if first_text and label else ''
+                add_mixed_text(p, f'{prefix}{part}', cn_font='宋体')
+                first_text = False
+
+            if i < len(tokens):
+                token = tokens[i]
+                ph_id = token.replace('{{image:', '').replace('}}', '')
+                file_path, exists = image_resolver.resolve(ph_id)
+                if exists:
+                    add_centered_picture(doc, file_path, logger)
+                    quality['images_inserted'] += 1
+                    logger.info(f'    子问题图片: {os.path.basename(file_path)}')
+                else:
+                    quality['missing_images'].append(ph_id)
+                    logger.warning(f'    子问题图片缺失: placeholder_id={ph_id}')
 
 
 # ============================================================================
@@ -860,7 +878,7 @@ def _format_section(doc, section, image_resolver, logger, quality):
             # 非选择题：题干 → 材料 → 子问题
             _format_question_stem(doc, question, image_resolver, logger, quality)
             _format_materials(doc, question, image_resolver, logger, quality)
-            _format_subquestions(doc, question, logger, quality)
+            _format_subquestions(doc, question, image_resolver, logger, quality)
         else:
             # 选择题：材料(如有) → 题干 → 选项
             _format_materials(doc, question, image_resolver, logger, quality)
@@ -868,8 +886,9 @@ def _format_section(doc, section, image_resolver, logger, quality):
 
             if q_type == '选择题':
                 options = question.get('options', [])
+                sub_options = question.get('sub_options', [])
                 if options:
-                    rule = format_options(doc, options, image_resolver, logger)
+                    rule = format_options(doc, options, image_resolver, logger, sub_options)
                     if rule:
                         quality['option_rules'][f'规则{rule}'] = \
                             quality['option_rules'].get(f'规则{rule}', 0) + 1

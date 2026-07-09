@@ -862,7 +862,7 @@ def _clean_app_xml(data, logger):
 # 主函数
 # =====================================================================
 
-def clean_docx(input_path, output_path, log_path=None, rules=None):
+def clean_docx(input_path, output_path, log_path=None, rules=None, pending_output_dir=None):
     """执行试卷清洗。
 
     Args:
@@ -870,6 +870,8 @@ def clean_docx(input_path, output_path, log_path=None, rules=None):
         output_path: 输出 docx 文件路径
         log_path: 日志文件路径（可选）
         rules: 要执行的规则列表（可选，如 ['1.1', '1.2']，默认全部）
+        pending_output_dir: pending_images.json和pending_images文件夹的输出目录（可选）
+                           默认使用output_path所在目录，避免在源文件夹生成临时文件
     """
     input_path = os.path.abspath(input_path)
     output_path = os.path.abspath(output_path)
@@ -917,8 +919,10 @@ def clean_docx(input_path, output_path, log_path=None, rules=None):
         logger.info('--- 阶段二：图片处理 ---')
 
         if should_run('1.18'):
-            replace_image_punctuation(doc, input_path, logger, 
-                                      output_dir=os.path.dirname(output_path) or '.')
+            # 优先使用pending_output_dir，否则使用output_path所在目录
+            pending_dir = pending_output_dir if pending_output_dir else (os.path.dirname(output_path) or '.')
+            replace_image_punctuation(doc, input_path, logger,
+                                      output_dir=pending_dir)
         if should_run('1.17'):
             rule_1_17_remove_exam_name_images(doc, logger)
         if should_run('1.7'):
@@ -1003,12 +1007,13 @@ def main():
     parser.add_argument('--output', '-o', required=True, help='输出 docx 文件路径')
     parser.add_argument('--log', '-l', help='日志文件路径（默认与输出文件同目录）')
     parser.add_argument('--rules', '-r', help='指定规则编号（逗号分隔，如 1.1,1.2,1.15）')
+    parser.add_argument('--pending-dir', '-p', help='pending_images.json输出目录（可选，默认与输出文件同目录）')
 
     args = parser.parse_args()
 
     rules = args.rules.split(',') if args.rules else None
 
-    success = clean_docx(args.input, args.output, args.log, rules)
+    success = clean_docx(args.input, args.output, args.log, rules, args.pending_dir)
 
     if not success:
         sys.exit(1)

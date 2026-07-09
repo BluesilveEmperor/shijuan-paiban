@@ -244,10 +244,11 @@ def get_embed_rid(drawing_element):
 def docx_to_markdown(docx_path, md_path, image_manifest_path=None):
     """将 docx 文件转换为 Markdown 文本文件。
 
-    遍历每个段落的 run，逐字处理以保留：
+    遍历每个段落和表格，逐字处理以保留：
     - 上标：用 <sup>...</sup> 包裹
     - 下标：用 <sub>...</sub> 包裹
     - 图片位置：若提供 image_manifest.json，在对应位置插入 {{symbol:img_xxx}} 标记
+    - 表格：转换为 Markdown 表格格式（|列1|列2|...|），便于后续结构识别
 
     Args:
         docx_path: 输入 docx 文件路径（通常为 cleaned_no_images.docx）
@@ -255,13 +256,16 @@ def docx_to_markdown(docx_path, md_path, image_manifest_path=None):
         image_manifest_path: image_manifest.json 路径（可选），用于标记图片位置
 
     Returns:
-        int: 输出的段落数
+        int: 输出的段落数（含表格块数）
     """
     from docx import Document
     from docx.oxml.ns import qn as docx_qn
     import json
 
     doc = Document(docx_path)
+
+    # 获取文档的 body 元素，以便按 XML 顺序遍历段落和表格
+    body = doc.element.body
 
     # 如果提供了 image_manifest，加载图片信息并按段落实例分组
     img_by_para = {}
@@ -282,67 +286,82 @@ def docx_to_markdown(docx_path, md_path, image_manifest_path=None):
                     'file_size': file_size,
                 })
 
-    paragraphs = []
+    blocks = []  # 存储所有内容块（段落文本或表格 Markdown）
+    para_count = 0  # 段落计数器（用于图片定位）
+    table_count = 0  # 表格计数器
 
-    for para_idx, para in enumerate(doc.paragraphs):
-        para_text_parts = []
-
-        # 获取段落 XML 元素以访问 run 级别的格式
-        p_elem = para._element
-        runs = p_elem.findall(qn('w:r'))
-
-        # 跟踪当前 run 索引（用于图片定位）
-        current_run_idx = 0
-
-        for r_elem in runs:
-            # 检查是否该位置有图片标记（基于 image_manifest 中的 run_index）
-            if para_idx in img_by_para:
-                for img_info in img_by_para[para_idx]:
-                    if img_info['run_idx'] == current_run_idx:
-                        # 仅小图片 (< 2KB) 可能是符号截图，插入标记
-                        # 大图片是正常内容图片，不在此处标记（由 Step3 tag_placeholders 处理）
-                        if img_info['file_size'] < 2048:
-                            para_text_parts.append(f'{{{{symbol:{img_info["img_id"]}}}}}')
-
-            # 提取 run 中的文本，并检测上下标
-            rpr = r_elem.find(qn('w:rPr'))
-            is_superscript = False
-            is_subscript = False
-            if rpr is not None:
-                vertAlign = rpr.find(qn('w:vertAlign'))
-                if vertAlign is not None:
-                    val = vertAlign.get(qn('w:val'))
-                    if val == 'superscript':
-                        is_superscript = True
-                    elif val == 'subscript':
-                        is_subscript = True
-
-            # 提取该 run 中所有 w:t 元素的文本
-            t_elements = r_elem.findall(qn('w:t'))
-            run_text = ''
-            for t in t_elements:
-                if t.text:
-                    run_text += t.text
-
-            if run_text:
-                if is_superscript:
-                    para_text_parts.append(f'<sup>{run_text}</sup>')
-                elif is_subscript:
-                    para_text_parts.append(f'<sub>{run_text}</sub>')
-                else:
-                    para_text_parts.append(run_text)
-
-            current_run_idx += 1
-
-        para_text = ''.join(para_text_parts)
-        if para_text is not None:
-            para_text = para_text.rstrip()
-        else:
-            para_text = ''
-        paragraphs.append(para_text)
+    # 遍历 body 中的所有子元素（段落和表格），保持原始顺序
+    for child_idx, child in enumerate(body):
+        tag = child.tag
+        
+        # 处理段落
+        if tag == qn('w:p'):
+            para_text_parts = []
+            p_elem = child
+            runs = p_elem.findall(qn('w:r'))
+            
+            # 跟踪当前 run 索引（用于图片定位）
+            current_run_idx = 0
+            
+            for r_elem in runs:
+                # 检查是否该位置有图片标记（基于 image_manifest 中的 run_index）
+                if para_count in img_by_para:
+                    for img_info in img_by_para[para_count]:
+                        if img_info['run_idx'] == current_run_idx:
+                            # 仅小图片 (< 2KB) 可能是符号截图，插入标记
+                            # 大图片是正常内容图片，不在此处标记（由 Step3 tag_placeholders 处理）
+                            if img_info['file_size'] < 2048:
+                                para_text_parts.append(f'{{{{symbol:{img_info["img_id"]}}}}}')
+                
+                # 提取 run 中的文本，并检测上下标
+                rpr = r_elem.find(qn('w:rPr'))
+                is_superscript = False
+                is_subscript = False
+                if rpr is not None:
+                    vertAlign = rpr.find(qn('w:vertAlign'))
+                    if vertAlign is not None:
+                        val = vertAlign.get(qn('w:val'))
+                        if val == 'superscript':
+                            is_superscript = True
+                        elif val == 'subscript':
+                            is_subscript = True
+                
+                # 提取该 run 中所有 w:t 元素的文本
+                t_elements = r_elem.findall(qn('w:t'))
+                run_text = ''
+                for t in t_elements:
+                    if t.text:
+                        run_text += t.text
+                
+                if run_text:
+                    if is_superscript:
+                        para_text_parts.append(f'<sup>{run_text}</sup>')
+                    elif is_subscript:
+                        para_text_parts.append(f'<sub>{run_text}</sub>')
+                    else:
+                        para_text_parts.append(run_text)
+                
+                current_run_idx += 1
+            
+            para_text = ''.join(para_text_parts)
+            if para_text is not None:
+                para_text = para_text.rstrip()
+            else:
+                para_text = ''
+            
+            # 只添加非空段落（或空段落保留换行）
+            blocks.append(para_text)
+            para_count += 1
+        
+        # 处理表格
+        elif tag == qn('w:tbl'):
+            table_md = _table_to_markdown(child)
+            if table_md:
+                blocks.append(table_md)
+                table_count += 1
 
     # 以双换行分隔段落（Markdown 标准段落分隔）
-    content = '\n\n'.join(paragraphs)
+    content = '\n\n'.join(blocks)
 
     # 确保目录存在
     os.makedirs(os.path.dirname(md_path) or '.', exist_ok=True)
@@ -350,7 +369,66 @@ def docx_to_markdown(docx_path, md_path, image_manifest_path=None):
     with open(md_path, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    return len(paragraphs)
+    return para_count + table_count
+
+
+def _table_to_markdown(tbl_element):
+    """将 Word 表格元素（w:tbl）转换为 Markdown 表格格式。
+    
+    Args:
+        tbl_element: lxml Element，代表 <w:tbl> 元素
+    
+    Returns:
+        str: Markdown 表格文本，或空字符串（如果表格为空）
+    """
+    rows = []
+    
+    # 遍历表格中的所有行
+    for tr in tbl_element.findall(qn('w:tr')):
+        cells = []
+        # 遍历行中的所有单元格
+        for tc in tr.findall(qn('w:tc')):
+            # 提取单元格中的所有段落文本
+            cell_text_parts = []
+            for p in tc.findall(qn('w:p')):
+                # 提取段落中的所有 w:t 元素
+                for t in p.findall('.//' + qn('w:t')):
+                    if t.text:
+                        cell_text_parts.append(t.text)
+            cell_text = ' '.join(cell_text_parts).strip()
+            cells.append(cell_text)
+        
+        if cells:
+            rows.append(cells)
+    
+    if not rows:
+        return ''
+    
+    # 确定列数（取最大列数）
+    max_cols = max(len(row) for row in rows) if rows else 0
+    
+    # 构建 Markdown 表格
+    md_lines = []
+    
+    # 表头行（第一行）
+    if rows:
+        header = rows[0]
+        # 补齐列数
+        while len(header) < max_cols:
+            header.append('')
+        md_lines.append('| ' + ' | '.join(header) + ' |')
+        
+        # 分隔线
+        md_lines.append('| ' + ' | '.join(['---'] * max_cols) + ' |')
+        
+        # 数据行（从第二行开始）
+        for row in rows[1:]:
+            # 补齐列数
+            while len(row) < max_cols:
+                row.append('')
+            md_lines.append('| ' + ' | '.join(row) + ' |')
+    
+    return '\n'.join(md_lines)
 
 
 # =====================================================================

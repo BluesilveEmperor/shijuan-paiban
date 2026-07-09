@@ -305,7 +305,7 @@
           "description": "题目材料（如材料题中的大段阅读材料）",
           "items": {
             "type": "object",
-            "required": ["id", "content"],
+            "required": ["id"],
             "properties": {
               "id": {
                 "type": "string",
@@ -313,11 +313,70 @@
               },
               "content": {
                 "type": "string",
-                "description": "材料正文（不包含引导语）"
+                "description": "材料正文（不包含引导语）- 当使用segments时可为空，由segments提供内容"
               },
               "guide_sentence": {
                 "type": "string",
                 "description": "材料末尾的引导语句，如'据此完成下面小题'、'完成下列要求'等，用于紧跟材料后单独设置字体样式"
+              },
+              "segments": {
+                "type": "array",
+                "description": "材料的分段内容（可包含文本、图片、表格），按出现顺序排列",
+                "items": {
+                  "type": "object",
+                  "required": ["type"],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "内容段类型",
+                      "enum": ["text", "image", "table"]
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "文本内容（type=text时必需）"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "图片文件名（type=image时必需），如'img_001.png'"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "表格数据（type=table时必需）",
+                      "required": ["rows", "cols", "data"],
+                      "properties": {
+                        "rows": {
+                          "type": "integer",
+                          "description": "表格行数",
+                          "minimum": 1
+                        },
+                        "cols": {
+                          "type": "integer",
+                          "description": "表格列数",
+                          "minimum": 1
+                        },
+                        "data": {
+                          "type": "array",
+                          "description": "表格数据（二维数组，rows行cols列）",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "header": {
+                          "type": "array",
+                          "description": "表头行内容（可选，默认取data第一行）",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
               }
             },
             "additionalProperties": false
@@ -337,6 +396,25 @@
               "text": {
                 "type": "string",
                 "description": "选项内容"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "sub_options": {
+          "type": "array",
+          "description": "选择题子选项列表（如①②③④）",
+          "items": {
+            "type": "object",
+            "required": ["label", "text"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "子选项标签，如'①'、'②'"
+              },
+              "text": {
+                "type": "string",
+                "description": "子选项内容"
               }
             },
             "additionalProperties": false
