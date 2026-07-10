@@ -10,6 +10,7 @@ description: "Annotates where images are needed in structured exam JSON using pl
 
 ## Input
 - `{工作目录}/中间数据/structure.json` — Step2 产出的试卷结构 JSON（`placeholders` 字段均为空数组 `[]`）
+- `{工作目录}/中间数据/image_descriptions.json` — Step4 产出的图片描述 JSON（含每张图片的 `type`、`summary`、`keywords`、`clues` 等，用于辅助判断图片合并、归属和数量不匹配）
 - `{工作目录}/清洗产物/content.md` — 清洗后的纯文字试卷正文（用于获取完整上下文，含 `<sup>`/`<sub>` 和 `{{image:img_xxx}}` 标记）
 - `{工作目录}/清洗产物/image_manifest.json` — 图片清单（了解有多少张可用图片及其提取来源）
 - `schemas/exam_paper.schema.json` — 统一数据契约（输出必须符合此 Schema）
@@ -65,6 +66,34 @@ copy "{工作目录}\中间数据\structure.json" "{工作目录}\中间数据\w
 
 掌握试卷整体结构：有哪些分区、每道题的内容、材料、选项、子问题。
 
+**4. 查看 `image_descriptions.json`（图片感知辅助判断）**
+
+> Step4 已在 Step3 之前完成，你现在拥有每张图片的内容描述。利用这些信息做出更准确的占位判断。
+
+若 `image_descriptions.json` 中 `model_support_images` 为 `true`（模型支持图片分析），执行以下辅助判断：
+
+**a. 图片合并检测**：
+- 检查每张图片的 `summary`/`clues` 是否包含多个子图描述（如"左图为等高线地形图，右图为天气统计图"、"包含两个子图"、"合并图"等）
+- 若一张图片包含多个子图，但材料文字中提到了多个图号（如"图2...图3..."），**只创建 1 个占位符**（因为实际只有 1 张图片文件）
+- 在占位符 `reason` 中注明："材料提及图X、图Y，图片分析确认为一张合并图，故只创建1个占位符"
+
+**b. 无文字引用图片发现**：
+- 对比 `image_manifest.json` 图片总数与通过文字触发词（优先级 1-2）已创建的占位符数量
+- 若图片总数 > 已创建占位符数，检查多余图片在 `content.md` 中的 `paragraph_index` 上下文
+- 若多余图片夹在某道题题干/选项之间 → 补充创建占位符，`location_type` 根据 `paragraph_index` 判断
+- 在 `reason` 中注明："题干无'如图'等关键词，但根据图片位置判断此处需要插图"
+
+**c. 图片数量不匹配处理**：
+- 若材料文字提到 N 张图（如"图2...图3..."）但 `image_descriptions.json` 仅含 M 张（M < N）：
+  - 若图片分析确认为合并图（见 a）→ 创建 1 个占位符
+  - 若图片分析未确认合并，且图片数确实少于文字引用数 → 按实际图片数创建占位符，标记 `uncertain: true`，在 `reason` 中注明："材料提及N张图，但仅检测到M张，可能原文档缺失图片"
+- 若 M > N（图片比文字引用多）→ 可能是无文字引用的图片（见 b），按 b 处理
+
+**d. 选项图片归属确认**：
+- 若 `image_descriptions.json` 中某图片的 `clues` 包含"选项""ABCD"等关键词，且 `content.md` 中该图片标记位于选项区域 → 确认 `location_type: "option"`
+
+若 `model_support_images` 为 `false` 或文件不存在，跳过本步骤，使用纯上下文判断（回退到原有逻辑）。
+
 ### 第二步：逐题排查需要图片的位置
 
 对 `structure.json` 中每道题，按以下优先级排查：
@@ -89,6 +118,41 @@ copy "{工作目录}\中间数据\structure.json" "{工作目录}\中间数据\w
 题干: "图1为某区域等高线地形图，据此回答1~2题。"
 → 创建占位符，location_type: "question_stem"，owner_id: "question_001"
 ```
+
+#### 图片与材料绑定规则（核心）
+
+当占位符的 `location_type` 为 `material` 时，**图片与材料整体绑定，而非与"下图""如图"语句所在的段落绑定**。
+
+**1. 材料有【材料一】【材料二】等显式标记时**：
+
+- 若"下图为XXX"出现在材料一中，图片归属于**整个材料一**
+- `{{image:ph_xxx}}` 占位符必须嵌入到材料一 **所有段落的末尾**（即该 material 的 `content` 字段最末尾）
+- 不能因为"下图为XXX"在某段末尾，就把占位符紧贴该句之后（如果材料一还有后续段落）
+
+错误示例：
+```
+材料一：段落A...下图为巴西区域简图。{{image:ph_007}}  ← 错误！占位符在这里
+        段落B（仍属材料一）补充说明...
+```
+正确示例：
+```
+材料一：段落A...下图为巴西区域简图。
+        段落B（仍属材料一）补充说明...{{image:ph_007}}  ← 正确！占位符在材料一末尾
+```
+
+**2. 材料无显式标记时**：
+
+- 材料边界已由 Step2 确定（子问题分隔 / 话题突变 / 空行分隔）
+- 图片归属于其所在的 material 块，占位符放在该 material 的 `content` 末尾
+
+**3. 何时紧贴触发语句**：
+
+当 `location_type` 为 `question_stem` 或 `subquestion` 时，占位符紧贴触发语句之后即可。题干和子问题不存在多段合并问题，且图片通常是问题的直接组成部分。
+
+**判定流程（material 场景的完整链路）**：
+1. 先确定占位符属于哪个 material（`owner_id` 指向该 material 的 `id`）
+2. 再确定占位符在该 material `content` 中的嵌入位置：**始终在最末尾**
+3. 不要根据"下图"语句在 content 中的偏移位置来决定——偏移量不可靠，material 有一段的末尾才是正确位置
 
 #### 优先级 2：材料题引导语
 

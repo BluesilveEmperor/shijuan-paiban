@@ -239,6 +239,17 @@ python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {
 
 注意：`image_descriptions.json` 只包含 `images` 数组信息，不是完整试卷 JSON。校验时若 `validate_json.py` 要求完整 Schema 结构，可临时用该文件作为 `images` 字段嵌入完整模板后校验；或仅对 JSON 语法和字段类型做人工检查。
 
+**校验失败时的修复策略（增量修改，禁止全量重写）**：
+
+校验不通过时，**禁止使用 Write 工具或 Python 脚本全量重新生成整个文件**。必须：
+
+1. 读取 `validate_json.py` 的错误输出，精确定位失败字段（如 `images[2].type`）
+2. 使用 **Edit 工具** 仅修改报错的字段
+3. 重新运行校验
+4. 重复直到通过
+
+原则：**修改一个字段 ≠ 重写整个文件**。image_descriptions.json 包含所有图片的分析结果，一个字段类型错误就全量重写会浪费大量 token。
+
 ### 输出到主编排的报告
 
 最后向主编排简要报告：

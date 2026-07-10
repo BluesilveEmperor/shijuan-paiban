@@ -10,20 +10,25 @@ description: "Identifies exam structure (sections, questions, options, materials
 - `{工作目录}/清洗产物/content.md` — 清洗后的纯文字试卷正文（含 `<sup>`/`<sub>` 和 `{{symbol:xx}}` 标记）
 - `{工作目录}/清洗产物/symbols_report.md` — 符号图片检查报告（如有，记录了未解析的小图片信息）
 - `templates/exam_reference.json` — 标准 JSON 结构参考（组织范式模板）
-- `templates/tag_structure_examples.md` — 打标案例集（含原文与标准标注对照，帮助理解材料、引导语、子选项等关键判断规则）
 - `schemas/exam_paper.schema.json` — 统一数据契约（输出必须符合此 Schema）
+- 打标案例文件（按需加载，节省 token）：
+  - `templates/tag_examples_quick_ref.md` — 打标规则速查表（**始终加载**，所有题型的通用规则）
+  - `templates/tag_examples_choice.md` — 选择题打标案例（试卷含选择题时加载）
+  - `templates/tag_examples_subjective.md` — 非选择题打标案例（试卷含非选择题时加载）
+  - `templates/tag_examples_general.md` — 通用结构案例（**始终加载**，涵盖表格、注意事项、分区标题）
 
 ## Task
 
-在开始识别前，先阅读 `templates/tag_structure_examples.md` 中的打标案例，理解以下关键判断规则：
-- **材料 vs 引导语**：如何区分材料正文与"据此完成X~Y题"等引导语句
-- **子选项（sub_options）**：①②③④出现在选择题下方时如何提取
-- **子问题拆分**：①②③出现在非选择题子问题中时如何拆分
-- **单问 label**：只有一个子问题时 `label` 为空字符串
-- **表格材料**：含表格的材料如何使用 `segments` 结构
-- **注意事项**：`notes_items` 的标题项与条目项如何拆分
+### 按需加载案例文件
 
-然后读取 `content.md`，逐段识别试卷结构，输出符合 Schema 的 `structure.json`。
+为节省 token，不一次性加载全部案例。按以下策略分步加载：
+
+1. **始终加载**：先阅读 `templates/tag_examples_quick_ref.md`（速查表）和 `templates/tag_examples_general.md`（通用案例）
+2. **快速扫描 `content.md`**，判断试卷包含的题型（是否有选择题分区、非选择题分区）
+3. **按题型加载**：
+   - 试卷含选择题（如"一、选择题"） → 阅读 `templates/tag_examples_choice.md`
+   - 试卷含非选择题（如"二、非选择题"） → 阅读 `templates/tag_examples_subjective.md`
+4. 加载完毕后，逐段识别试卷结构，输出符合 Schema 的 `structure.json`。
 
 ### 读取前先理解 Markdown 中的特殊标记
 
@@ -119,6 +124,51 @@ description: "Identifies exam structure (sections, questions, options, materials
   "subquestions": [{"id": "subq_009", "label": "", "stem": "有人认为..."}]
   ```
 
+**子问题类型判断**：
+
+检查每个子问题的 `stem` 内容，设置 `sub_question_type` 字段：
+- `stem` 中包含 `____` 或 `______`（下划线填空空位），且整句为简短的填空陈述句（不含"分析""说明""简述""论述"等论述动词）→ `sub_question_type: "fill_in_blank"`
+- `stem` 中同时包含 `____` 和完整的论述问句 → `sub_question_type: "mixed"`
+- 其他情况 → `sub_question_type: "essay"`（默认值）
+
+示例：
+- "甲、乙、丙三地物种数量变化趋势是____，解释其自然原因____。" → `mixed`（有填空+完整问句）
+- "雅鲁藏布江中游河谷地区冬、夏季盛行风向分别是____风、____风。" → `fill_in_blank`（简短填空）
+- "分析巴西吸引中国新能源汽车企业建厂的优势区位条件。（6分）" → `essay`（论述题）
+
+**子问题材料归属**：
+
+子问题可能自带专属材料（如表格、图片），这些材料归属于该子问题而非父问题：
+- 若子问题题干下方紧跟着一个表格（无独立的材料标题）→ 将该表格放入 `subquestions[].materials[].segments` 中
+- 若子问题题干下方有段落文字 + 表格 → 整体放入 `subquestions[].materials[]`
+- 例如：28题(2)的访谈调查表 → 属于 `subq_002` 的 `materials`
+
+**交错排序（order 字段）**：
+
+当同一道题目下，材料与子问题在原文中交替出现（非"所有材料 → 所有子问题"的标准排列）时，必须为 materials 和 subquestions 赋值 `order` 字段：
+
+- 遍历题目内容，按原文出现顺序为每个 material 和 subquestion 分配连续的 `order` 值（从 1 开始）
+- material 和 subquestion 共享同一编号空间
+- 若原文为标准排列（所有材料在前，所有子问题在后），可省略 `order` 字段
+- 若原文为交错排列，则必须填写 `order`
+
+示例（28题交错的研学见闻结构）：
+```json
+{
+  "materials": [
+    {"id": "mat_001", "order": 1, "content": "【研学背景】..."},
+    {"id": "mat_002", "order": 2, "content": "【研学见闻一】..."},
+    {"id": "mat_003", "order": 4, "content": "【研学见闻二】..."},
+    {"id": "mat_004", "order": 6, "content": "【调查数据】..."}
+  ],
+  "subquestions": [
+    {"id": "subq_001", "order": 3, "label": "(1)", "stem": "..."},
+    {"id": "subq_002", "order": 5, "label": "(2)", "stem": "..."},
+    {"id": "subq_003", "order": 7, "label": "(3)", "stem": "..."}
+  ]
+}
+```
+
 **选项识别**：
 - 格式：`A. xxx` `B. xxx` `C. xxx` `D. xxx`
 - 选项必须归属于它前面最近的选择题
@@ -144,6 +194,47 @@ description: "Identifies exam structure (sections, questions, options, materials
 - 题目之前的段落为材料（选择题和非选择题均适用）
 - 材料段落通常较长，表述为"阅读图文材料……"或包含"如图"、"下图"等引导词
 - **引导语分离**：材料末尾的引导语句（如"据此完成下面小题"、"完成下列要求"、"据此回答X~Y题"等）必须单独提取到 `guide_sentence` 字段，`content` 字段只保留材料正文。引导语判断标准：以"据此"、"完成"等词开头，语义上引导后续答题的短句。
+
+**无标记材料的段落边界检测**：
+
+当连续段落之间没有"材料一""材料二"等显式标记时，按以下优先级判断是否拆分为独立材料：
+
+1. **子问题位置作为分界**：若段落A与段落B之间夹着一个子问题（如"(1)..."），则段落A和段落B是两个独立材料。例如：
+   ```
+   段落1 → (1)分析... → 段落2 → (2)说明...
+   ```
+   → "段落1"和"段落2"是两个独立 `material`，各赋 `order` 值
+
+2. **话题突变检测**：若连续两段讲述了明显不同的话题/区域/对象 → 拆分为独立材料。例如：
+   - 段落1讲"巴西汽车产业概况" → 段落2讲"充电设施布局" → 两个独立材料
+   - 段落1讲"德化陶瓷" → 段落2讲"景德镇陶瓷" → 两个独立材料
+
+3. **非标准材料标题识别**：除"材料一""材料二"外，以下格式也标记材料段落开头：
+   - `【xxx】` 格式：如"【研学背景】""【研学见闻一：德化】""【调查数据】"→ 新材料的起始标记
+   - `材料X：` 格式（含冒号）：保留在 `content` 中，标记材料拆分点
+
+4. **"下图""图X"作为材料尾部标记**：若段落末尾出现"下图为..."且下一段无子问题分隔也无显式材料标记 → 该图片跟随当前材料，不拆分。例如：
+   - 段落A末尾"下图为巴西区域简图。" + 图片 + 段落B → 图片紧跟段落A，段落B是独立材料
+
+5. **保守策略**：不确定时合并为一个大材料，标记 `uncertain: true`，在 `notes` 中注明疑似边界位置（如"第2段与第3段之间可能为材料边界，因话题突变"）。
+
+**有标记材料的多段合并**：
+
+当材料以"材料一：""材料二："或"【材料一】""【材料二】"等显式标记开头时，该标记之后、下一个标记（或子问题）之前的所有段落都属于同一个材料。**必须合并为一个 material**。
+
+示例：
+```
+材料一：第一段内容...下图为某区域简图。
+第二段（同一材料，无新标记）补充说明...
+材料二：第三段内容...
+```
+
+→ "材料一："下的两段合并为**一个** `material`，`content` 字段包含全部两段文字。
+
+关键判断：
+- "材料一："之后的所有段落，只要没有出现"材料二："或子问题标记（如 `(1)`），都属于材料一
+- 不要在"材料一："内部根据空行或句号拆分出多个 material
+- 图片归属由材料标记决定——"下图为XXX"出现在材料一中，图片就属于材料一整体（图片占位符的具体位置由 Step3 决定，但 Step2 要确保材料一的所有段落不丢失、不拆分）
 
 **表格识别与转换**：
 - **识别表格**：当 `content.md` 中出现 Markdown 表格格式（使用 `|` 分隔列，表头与内容间有分隔线 `---`）时，识别为表格内容
@@ -287,63 +378,25 @@ python scripts/sanitize_json.py --in-place {工作目录}/中间数据/structure
 python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {工作目录}/中间数据/structure.json
 ```
 
-校验不通过则修正后重新输出，直到通过为止。
+**校验失败时的修复策略（增量修改，禁止全量重写）**：
 
-### JSON 写入最佳实践
+校验不通过时，**禁止使用 Write 工具或 Python 脚本全量重新生成整个文件**。必须：
 
-**重要**：不要使用文本写入工具直接写入 JSON 文件——中文弯引号（`""`）可能被错误转换为 ASCII 引号导致 JSON 解析失败。
+1. 读取 `validate_json.py` 的错误输出，精确定位失败字段（如 `document.sections[0].questions[3].stem`）
+2. 使用 **Edit 工具** 仅修改报错的字段
+3. 重新运行校验
+4. 重复直到通过
 
-**正确做法**：使用 Python 的 `json.dump()` 写入：
+原则：**修改一个字段 ≠ 重写整个文件**。structure.json 通常有数百行，一个字段类型错误就全量重写会浪费大量 token。
 
-```python
-import json
-data = { ... }  # 你的结构化数据
-with open('{工作目录}/中间数据/structure.json', 'w', encoding='utf-8') as f:
-    json.dump(data, f, ensure_ascii=False, indent=2)
+### JSON 写入方式
+
+**重要**：使用 `Write` 工具直接写入 JSON 文件。`Write` 工具已正确处理 UTF-8 编码，中文弯引号不会出现转义问题。
+
+**严禁**创建 Python 脚本调用 `json.dump()` —— 这会被 `check_compliance.py` 检测并拒绝进入下一步。
+
+若写入后发现中文弯引号被错误转义，运行：
+
+```powershell
+python scripts/sanitize_json.py --in-place {工作目录}/中间数据/structure.json
 ```
-
-如果必须使用文本写入工具，写入后必须运行 `python scripts/sanitize_json.py --in-place <文件>` 修复编码问题。
-
-### Python 源文件中文字符串警告
-
-**如果使用 Python 脚本（.py 文件）生成 JSON，必须注意以下陷阱**：
-
-中文弯引号 `""`（U+201C / U+201D）在某些环境下会被 Python 解析器**误认为 ASCII 字符串分隔符**，导致 `SyntaxError`：
-
-```python
-# ❌ 错误：中文弯引号 "" 与 Python 字符串引号 " 冲突
-stem = "开通"中欧快航"航线主要是因为（）"   # SyntaxError!
-
-# ❌ 错误：即使使用 f-string 也可能出问题
-stem = f"开通"中欧快航"航线"   # SyntaxError!
-```
-
-**正确的 Python 写法（按推荐度排序）**：
-
-```python
-# 方案 1（推荐）：使用 Unicode 转义
-LQ = '\u201c'  # 左弯引号 "
-RQ = '\u201d'  # 右弯引号 "
-stem = f'开通{LQ}中欧快航{RQ}航线主要是因为（）'
-
-# 方案 2：把中文文本内容单独存入变量，用 json.dumps 处理转义
-import json
-text = '开通\u201c中欧快航\u201d航线主要是因为（）'
-
-# 方案 3：纯构造字典 → json.dump，完全避开源码中的中文
-data = {"stem": "\u5f00\u901b\u201c\u4e2d\u6b27\u5feb\u822a\u201d\u822a\u7ebf"}
-```
-
-**强制要求**：所有包含中文文本的字符串必须使用方案1（Unicode 转义）处理中文弯引号。在生成 Python 脚本时，必须先定义以下常量：
-
-```python
-LQ = '\u201c'  # 左弯引号 "
-RQ = '\u201d'  # 右弯引号 "
-```
-
-然后在所有包含中文弯引号的字符串中使用 `{LQ}` 和 `{RQ}` 替代：
-```python
-stem = f"紫花苜蓿被称为{LQ}牧草之王{RQ}的主要原因是（）"
-```
-
-**记住**：`json.dump(data, f, ensure_ascii=False)` 输出到文件后，中文会正确显示。问题只出现在 `.py` 源码阶段。

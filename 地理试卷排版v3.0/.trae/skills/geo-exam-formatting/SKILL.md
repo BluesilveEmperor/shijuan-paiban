@@ -32,15 +32,15 @@ description: "Full pipeline for geography exam paper formatting: clean, tag stru
 
 ## 子技能
 
-| 技能 | 路径 | 职责 |
-|------|------|------|
-| master_exam_layout | `.trae/skills/master_exam_layout/SKILL.md` | 主编排调度，逐步骤检查产物与 Schema 校验 |
-| clean_exam | `.trae/skills/clean_exam/SKILL.md` | 清洗原始 docx，提取正文 Markdown 和图片 |
-| tag_structure | `.trae/skills/tag_structure/SKILL.md` | 识别试卷结构（分区/题号/题干/选项/材料/子问题） |
-| tag_placeholders | `.trae/skills/tag_placeholders/SKILL.md` | 标注需要图片的位置，创建占位符 |
-| tag_images | `.trae/skills/tag_images/SKILL.md` | 逐张理解图片（类型/关键词/OCR/学科特征） |
-| map_images | `.trae/skills/map_images/SKILL.md` | 占位符与图片的语义匹配 |
-| typeset_exam | `.trae/skills/typeset_exam/SKILL.md` | 调用排版脚本生成最终 Word 文档 |
+| 技能 | 职责 |
+|------|------|
+| master_exam_layout | 主编排调度，逐步骤检查产物与 Schema 校验 |
+| clean_exam | 清洗原始 docx，提取正文 Markdown 和图片 |
+| tag_structure | 识别试卷结构（分区/题号/题干/选项/材料/子问题） |
+| tag_placeholders | 标注需要图片的位置，创建占位符 |
+| tag_images | 逐张理解图片（类型/关键词/OCR/学科特征） |
+| map_images | 占位符与图片的语义匹配 |
+| typeset_exam | 调用排版脚本生成最终 Word 文档 |
 
 ## 核心设计原则
 
@@ -78,13 +78,13 @@ description: "Full pipeline for geography exam paper formatting: clean, tag stru
 生成 JSON 产物（structure.json / with_placeholders.json / image_descriptions.json / final_exam.json）时：
 
 - **唯一正确方式**：使用 `Write` 工具直接写入 JSON 内容
-- **唯一例外**：Step3 的增量修改使用 `Edit` 工具（见 tag_placeholders.md）
+- **唯一例外**：Step3 的增量修改使用 `Edit` 工具（见 tag_placeholders 技能文档）
 - **严禁方式**：创建 `.py` 脚本调用 `json.dump()` —— 这会被 `check_compliance.py` 检测并拒绝
 
 ## 快速开始
 
 ```
-请按 master_exam_layout 执行流水线：
+请按 master_exam_layout 技能执行流水线：
 输入文件: <原始 docx 绝对路径>
 ```
 

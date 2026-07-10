@@ -15,12 +15,12 @@ description: "Orchestrates the 6-step geography exam formatting pipeline. Invoke
 
 - **一份原始试卷 `.docx` 文件**（用户提供路径，如 `2025年天津卷.docx`）
 - **项目内置资源**（由运行环境确保可访问）：
-  - `skills/clean_exam.md` — Step1 清洗 Skill
-  - `skills/tag_structure.md` — Step2 结构打标 Skill
-  - `skills/tag_placeholders.md` — Step3 图片占位 Skill
-  - `skills/tag_images.md` — Step4 图片理解 Skill
-  - `skills/map_images.md` — Step5 图片映射 Skill
-  - `skills/typeset_exam.md` — Step6 排版 Skill
+  - `clean_exam` — Step1 清洗 Skill
+  - `tag_structure` — Step2 结构打标 Skill
+  - `tag_placeholders` — Step3 图片占位 Skill
+  - `tag_images` — Step4 图片理解 Skill
+  - `map_images` — Step5 图片映射 Skill
+  - `typeset_exam` — Step6 排版 Skill
   - `schemas/exam_paper.schema.json` — 统一数据契约
   - `scripts/validate_json.py` — Schema 校验工具
   - `scripts/clean_docx.py` / `scripts/extract_images.py` — 清洗脚本
@@ -71,7 +71,7 @@ description: "Orchestrates the 6-step geography exam formatting pipeline. Invoke
 
 | 项目 | 内容 |
 |------|------|
-| **Skill** | `skills/clean_exam.md` |
+| **Skill** | `clean_exam` |
 | **任务** | 调用清洗脚本，提取正文和图片 |
 | **输入** | 原始 `.docx` 文件 |
 | **预期产物** | `{工作目录}/清洗产物/cleaned_no_images.docx`、`{工作目录}/清洗产物/content.md`、`{工作目录}/清洗产物/images/`、`{工作目录}/清洗产物/image_manifest.json` |
@@ -79,7 +79,7 @@ description: "Orchestrates the 6-step geography exam formatting pipeline. Invoke
 **执行指令**（将 SKILL 分发给子 Agent 执行）：
 
 ```
-请严格按照 skills/clean_exam.md 执行试卷清洗任务。
+请严格按照 clean_exam 技能执行试卷清洗任务。
 输入文件: <原始 docx 路径>
 输出目录: {工作目录}/清洗产物/
 
@@ -97,6 +97,12 @@ description: "Orchestrates the 6-step geography exam formatting pipeline. Invoke
 - [ ] `{工作目录}/清洗产物/images/` 目录存在
 - [ ] `{工作目录}/清洗产物/image_manifest.json` 存在
 - [ ] `{工作目录}/清洗产物/clean_log.txt` 无 ERROR 级别日志
+
+**合规检查**（强制，非零退出码不得进入 Step2）：
+
+```powershell
+python scripts/check_compliance.py --work-dir {工作目录} --step step1
+```
 
 **状态输出**：
 
@@ -127,7 +133,7 @@ description: "Orchestrates the 6-step geography exam formatting pipeline. Invoke
 
 | 项目 | 内容 |
 |------|------|
-| **Skill** | `skills/tag_structure.md` |
+| **Skill** | `tag_structure` |
 | **任务** | 读取 content.md，识别试卷结构，输出 structure.json |
 | **输入** | `{工作目录}/清洗产物/content.md` + `templates/exam_reference.json` + `schemas/exam_paper.schema.json` |
 | **预期产物** | `{工作目录}/中间数据/structure.json` |
@@ -135,7 +141,7 @@ description: "Orchestrates the 6-step geography exam formatting pipeline. Invoke
 **执行指令**：
 
 ```
-请严格按照 skills/tag_structure.md 执行结构打标任务。
+请严格按照 tag_structure 技能执行结构打标任务。
 输入: {工作目录}/清洗产物/content.md
 参考模板: templates/exam_reference.json
 Schema: schemas/exam_paper.schema.json
@@ -148,14 +154,11 @@ Schema: schemas/exam_paper.schema.json
 
 - [ ] `{工作目录}/中间数据/structure.json` 存在且非空
 
-**Schema 校验**：
+**合规检查**（强制，非零退出码不得进入 Step3）：
 
 ```powershell
-python scripts/sanitize_json.py --in-place {工作目录}/中间数据/structure.json
-python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {工作目录}/中间数据/structure.json
+python scripts/check_compliance.py --work-dir {工作目录} --step step2 --json 中间数据/structure.json
 ```
-
-校验不通过则报告错误详情，不进入 Step3。
 
 **状态输出**：
 
@@ -184,22 +187,24 @@ python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {
 
 | 项目 | 内容 |
 |------|------|
-| **Skill** | `skills/tag_placeholders.md` |
-| **任务** | 逐题判断哪里需要图片，插入占位符 |
-| **输入** | `{工作目录}/中间数据/structure.json` + `{工作目录}/清洗产物/content.md` + `{工作目录}/清洗产物/image_manifest.json` |
+| **Skill** | `tag_placeholders` |
+| **任务** | 结合图片分析结果，逐题判断哪里需要图片，插入占位符 |
+| **前置依赖** | Step2 (`structure.json`) + Step4 (`image_descriptions.json`) 均已完成 |
+| **输入** | `{工作目录}/中间数据/structure.json` + `{工作目录}/中间数据/image_descriptions.json` + `{工作目录}/清洗产物/content.md` + `{工作目录}/清洗产物/image_manifest.json` |
 | **预期产物** | `{工作目录}/中间数据/with_placeholders.json` |
 
 **执行指令**：
 
 ```
-请严格按照 skills/tag_placeholders.md 执行图片占位标注任务。
-输入: {工作目录}/中间数据/structure.json
+请严格按照 tag_placeholders 技能执行图片占位标注任务。
+输入: {工作目录}/中间数据/structure.json, {工作目录}/中间数据/image_descriptions.json
 上下文: {工作目录}/清洗产物/content.md
 图片清单: {工作目录}/清洗产物/image_manifest.json
 Schema: schemas/exam_paper.schema.json
 输出: {工作目录}/中间数据/with_placeholders.json
 
-注意：不读取实际图片，只标注需要图片的位置。
+注意：你现在拥有图片描述信息（image_descriptions.json），请利用图片分析结果辅助判断图片合并、无文字引用图片、数量不匹配等情况。
+若 image_descriptions.json 中 model_support_images 为 false，则降级为纯上下文判断。
 ```
 
 **产物检查**：
@@ -208,11 +213,10 @@ Schema: schemas/exam_paper.schema.json
 - [ ] 占位符 `placeholder_id` 无重复
 - [ ] 每个占位符有 `owner_id` 和 `reason`
 
-**Schema 校验**：
+**合规检查**（强制，非零退出码不得进入 Step5）：
 
 ```powershell
-python scripts/sanitize_json.py --in-place {工作目录}/中间数据/with_placeholders.json
-python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {工作目录}/中间数据/with_placeholders.json
+python scripts/check_compliance.py --work-dir {工作目录} --step step3 --json 中间数据/with_placeholders.json
 ```
 
 **状态输出**：
@@ -233,7 +237,7 @@ python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {
     "uncertain_placeholders": 1
   },
   "schema_validation": "pass",
-  "next_action": "并行执行 Step4: tag_images 与 Step5: map_images"
+  "next_action": "执行 Step5: map_images"
 }
 ```
 
@@ -243,7 +247,7 @@ python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {
 
 | 项目 | 内容 |
 |------|------|
-| **Skill** | `skills/tag_images.md` |
+| **Skill** | `tag_images` |
 | **任务** | 逐张分析图片内容，输出图片描述 JSON |
 | **输入** | `{工作目录}/清洗产物/images/` |
 | **预期产物** | `{工作目录}/中间数据/image_descriptions.json` |
@@ -251,7 +255,7 @@ python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {
 **执行指令**：
 
 ```
-请严格按照 skills/tag_images.md 执行图片理解任务。
+请严格按照 tag_images 技能执行图片理解任务。
 输入: {工作目录}/清洗产物/images/
 Schema: schemas/exam_paper.schema.json
 输出: {工作目录}/中间数据/image_descriptions.json
@@ -269,10 +273,10 @@ Schema: schemas/exam_paper.schema.json
 
 若 `image_descriptions.json` 中 `model_support_images` 为 `false`，说明当前模型无法读取和分析图片文件。这是**正常情况**，不视为步骤失败。主编排应：
 1. 接受此产物，Step4 标记为 `success`（非 `failed`）
-2. Step5 将使用文档顺序匹配（由 `skills/map_images.md` 的快速路径处理）
+2. Step5 将使用文档顺序匹配（由 `map_images` 技能的快速路径处理）
 3. 在状态输出中明确标注 `image_analysis: "skipped (model unsupported)"`
 
-**说明**：Step4 仅依赖 `{工作目录}/清洗产物/images/`，与 Step2/3 无依赖关系。在调度 Step2 和 Step3 的同时可并行启动 Step4。但 Step5 必须等待 Step3 和 Step4 都完成后才能开始。
+**说明**：Step4 仅依赖 `{工作目录}/清洗产物/images/`，与 Step2 无依赖关系。在调度 Step2 的同时可并行启动 Step4。Step3 必须等待 Step2 和 Step4 都完成后才能开始（Step3 需要 structure.json 和 image_descriptions.json）。
 
 **状态输出**：
 
@@ -320,7 +324,7 @@ Schema: schemas/exam_paper.schema.json
 
 | 项目 | 内容 |
 |------|------|
-| **Skill** | `skills/map_images.md` |
+| **Skill** | `map_images` |
 | **任务** | 将占位符与图片进行语义匹配，产出完整 final_exam.json |
 | **前置依赖** | Step3 (`with_placeholders.json`) + Step4 (`image_descriptions.json`) 均已完成 |
 | **预期产物** | `{工作目录}/试卷数据/final_exam.json`
@@ -328,7 +332,7 @@ Schema: schemas/exam_paper.schema.json
 **执行指令**：
 
 ```
-请严格按照 skills/map_images.md 执行图片映射任务。
+请严格按照 map_images 技能执行图片映射任务。
 输入: {工作目录}/中间数据/with_placeholders.json, {工作目录}/中间数据/image_descriptions.json
 上下文: {工作目录}/清洗产物/content.md
 图片清单: {工作目录}/清洗产物/image_manifest.json
@@ -346,11 +350,10 @@ Schema: schemas/exam_paper.schema.json
 - [ ] `validation` 字段完整（含 unmapped_placeholders、unused_images、warnings）
 - [ ] `images` 字段已从 image_descriptions.json 完整复制
 
-**Schema 校验**：
+**合规检查**（强制，非零退出码不得进入 Step6）：
 
 ```powershell
-python scripts/sanitize_json.py --in-place {工作目录}/试卷数据/final_exam.json
-python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {工作目录}/试卷数据/final_exam.json
+python scripts/check_compliance.py --work-dir {工作目录} --step step5 --json 试卷数据/final_exam.json
 ```
 
 **状态输出**：
@@ -380,7 +383,7 @@ python scripts/validate_json.py --schema schemas/exam_paper.schema.json --json {
 
 | 项目 | 内容 |
 |------|------|
-| **Skill** | `skills/typeset_exam.md` |
+| **Skill** | `typeset_exam` |
 | **任务** | 调用排版脚本生成最终 Word 文档 |
 | **输入** | `{工作目录}/试卷数据/final_exam.json` + `assets/template.dotx` + `{工作目录}/清洗产物/images/` |
 | **预期产物** | `{工作目录}/排版文档/final_exam.docx` + `{工作目录}/排版文档/quality_report.html` + `{工作目录}/排版文档/typeset_log.txt` |
@@ -397,6 +400,12 @@ python scripts/typeset_exam.py --json {工作目录}/试卷数据/final_exam.jso
 - [ ] `{工作目录}/排版文档/final_exam.docx` 存在且文件大小 > 0
 - [ ] `{工作目录}/排版文档/quality_report.html` 存在
 - [ ] `{工作目录}/排版文档/typeset_log.txt` 中无 ERROR 级别日志
+
+**合规检查**（强制）：
+
+```powershell
+python scripts/check_compliance.py --work-dir {工作目录} --step step6
+```
 
 **状态输出**：
 
@@ -465,12 +474,12 @@ python scripts/typeset_exam.py --json {工作目录}/试卷数据/final_exam.jso
 - **不分析试卷内容**：不判断题目对错、不修改题干文字、不调整选项排序
 - **不参与图片映射**：不猜测哪张图对应哪个位置——这是 Step5 的职责
 - **不自行排版**：不调用 python-docx 直接写文档——排版是 Step6 的职责
-- **不修改 Skill 文件**：不编辑 clean_exam.md / tag_structure.md 等 Skill 定义
+- **不修改 Skill 文件**：不编辑 clean_exam / tag_structure 等 Skill 定义
 - **不"智能补全"**：任一步骤产物缺失时，不尝试绕过或自动生成替代内容
 
 ### 不跳步
 - **严格 Step1→Step6 顺序**：前一步未完成（产物缺失或 Schema 校验失败），不得进入下一步
-- **Step4 可与 Step2+Step3 并行**：但 Step5 必须等待 Step3 和 Step4 都完成后才能开始
+- **Step4 可与 Step2 并行**：Step4 只依赖 Step1 的 images/ 产物。Step3 必须等待 Step2 和 Step4 都完成后才能开始。
 
 ### 失败不冒进
 - **任一步骤失败立即停止**：不尝试跳过、不自动重试、不猜测失败原因
@@ -537,7 +546,7 @@ python scripts/typeset_exam.py --json {工作目录}/试卷数据/final_exam.jso
 用户可通过以下格式启动主编排：
 
 ```
-请按 master_exam_layout.md 执行流水线：
+请按 master_exam_layout 技能执行流水线：
 输入文件: <原始 docx 绝对路径>
 工作目录: <输出目录绝对路径>（如 output/2025年天津卷/）
 ```

@@ -151,10 +151,12 @@ def set_alignment(paragraph, alignment):
 # ============================================================================
 
 def _classify_char(ch):
-    """分类字符: 'en' 或 'cn'"""
-    if ch.isascii() and (ch.isdigit() or ch.isalpha()):
-        return 'en'
-    if ch == "'":
+    """分类字符: 'en' 或 'cn'。
+
+    所有 ASCII 字符（含标点符号 ~ - ( ) % 等）归为 'en'，使用西文字体。
+    非 ASCII 字符（含中文弯引号、CJK 字符等）归为 'cn'。
+    """
+    if ch.isascii():
         return 'en'
     if ch == '\u201c' or ch == '\u201d':  # 中文弯引号
         return 'cn'
@@ -187,22 +189,23 @@ def _set_run_font(run, cn_font=None, en_font=None, size_pt=None, force_cn_all=Fa
         run.font.size = Pt(size_pt)
 
 
-def _parse_subscript_text(text):
-    """解析包含 <sub> 标签的文本，返回分段列表 [(text, is_subscript)]。"""
+def _parse_format_tags(text):
+    """解析包含 <sub> 和 <sup> 标签的文本，返回 [(text, tag_type)]。tag_type 为 None / 'sub' / 'sup'。"""
     import re
     parts = []
-    pattern = re.compile(r'<sub>(.*?)</sub>', re.DOTALL)
+    pattern = re.compile(r'<(sub|sup)>(.*?)</\1>', re.DOTALL)
     last_end = 0
     
     for match in pattern.finditer(text):
         start, end = match.span()
+        tag_type = match.group(1)  # 'sub' 或 'sup'
         if start > last_end:
-            parts.append((text[last_end:start], False))
-        parts.append((match.group(1), True))
+            parts.append((text[last_end:start], None))
+        parts.append((match.group(2), tag_type))
         last_end = end
     
     if last_end < len(text):
-        parts.append((text[last_end:], False))
+        parts.append((text[last_end:], None))
     
     return parts
 
@@ -212,9 +215,9 @@ def add_mixed_text(paragraph, text, cn_font=None, en_font='Times New Roman', siz
     if not text:
         return
     
-    sub_parts = _parse_subscript_text(text)
+    format_parts = _parse_format_tags(text)
     
-    for sub_text, is_subscript in sub_parts:
+    for sub_text, tag_type in format_parts:
         if not sub_text:
             continue
         
@@ -233,8 +236,12 @@ def add_mixed_text(paragraph, text, cn_font=None, en_font='Times New Roman', siz
 
         for seg_text, seg_type in segments:
             run = paragraph.add_run(seg_text)
-            if is_subscript:
+            if tag_type == 'sub':
                 run.font.subscript = True
+                if size_pt:
+                    run.font.size = Pt(size_pt * 0.7)
+            elif tag_type == 'sup':
+                run.font.superscript = True
                 if size_pt:
                     run.font.size = Pt(size_pt * 0.7)
             if seg_type == 'en':
@@ -643,6 +650,11 @@ def _format_question_stem(doc, question, image_resolver, logger, quality):
     formatted = formatted.replace('（）', '（\u3000\u3000）')
     formatted = formatted.replace('()', '（\u3000\u3000）')
 
+    # 填空题题干：含 ______ 时使用下划线渲染
+    if q_type == '填空题' and '______' in formatted:
+        _format_fill_in_blank_paragraph(doc, f'{q_num}.', formatted, logger)
+        return
+
     # 按占位符分段处理
     parts = PLACEHOLDER_TOKEN_PATTERN.split(formatted)
     # 使用 findall 获取 token
@@ -728,22 +740,64 @@ def _format_subquestions(doc, question, image_resolver, logger, quality):
 # 材料排版
 # ============================================================================
 
+def _format_choice_material_with_images(doc, text_parts, text_tokens, guide_sentence, image_resolver, logger, quality):
+    """选择题材料含图片时的特殊处理：图片放在引导语之后。
+    
+    正确排版顺序：材料正文 + 引导语 → 图片
+    而非：材料正文 → 图片 → 引导语
+    """
+    all_text = ''.join(text_parts)
+    
+    p = doc.add_paragraph()
+    apply_style(p, 'Body Text')
+    add_mixed_text(p, all_text, cn_font='楷体')
+    
+    if guide_sentence:
+        add_mixed_text(p, guide_sentence, cn_font='宋体')
+    
+    for k, token in enumerate(text_tokens):
+        ph_id = token.replace('{{image:', '').replace('}}', '')
+        file_path, exists = image_resolver.resolve(ph_id)
+        if exists:
+            add_centered_picture(doc, file_path, logger)
+            quality['images_inserted'] += 1
+            logger.info(f'    材料图片: {os.path.basename(file_path)}')
+        else:
+            quality['missing_images'].append(ph_id)
+            logger.warning(f'    图片缺失: placeholder_id={ph_id}')
+
+
 def _format_materials(doc, question, image_resolver, logger, quality):
     """排版题目材料（含 segments: text/image/table）。"""
     materials = question.get('materials', [])
     if not materials:
         return
 
+    q_type = question.get('question_type', '')
+    
     for material in materials:
-        content = material.get('content', '')
-        guide_sentence = material.get('guide_sentence', '')
-        segments = material.get('segments', [])
+        _format_materials_inner(doc, material, image_resolver, logger, quality, q_type)
 
-        if not segments and content:
-            text_parts = PLACEHOLDER_TOKEN_PATTERN.split(content)
-            text_tokens = PLACEHOLDER_TOKEN_PATTERN.findall(content)
-            
-            if text_tokens:
+
+def _format_one_material(doc, material, image_resolver, logger, quality, q_type=''):
+    """排版单个 material 对象（用于 order 排序后的逐一渲染）。"""
+    _format_materials_inner(doc, material, image_resolver, logger, quality, q_type)
+
+
+def _format_materials_inner(doc, material, image_resolver, logger, quality, q_type=''):
+    """单个 material 的核心渲染逻辑，被 _format_materials 和 _format_one_material 共用。"""
+    content = material.get('content', '')
+    guide_sentence = material.get('guide_sentence', '')
+    segments = material.get('segments', [])
+
+    if not segments and content:
+        text_parts = PLACEHOLDER_TOKEN_PATTERN.split(content)
+        text_tokens = PLACEHOLDER_TOKEN_PATTERN.findall(content)
+
+        if text_tokens:
+            if q_type == '选择题':
+                _format_choice_material_with_images(doc, text_parts, text_tokens, guide_sentence, image_resolver, logger, quality)
+            else:
                 for k, tp in enumerate(text_parts):
                     tp = tp.strip()
                     if tp:
@@ -760,87 +814,213 @@ def _format_materials(doc, question, image_resolver, logger, quality):
                         else:
                             quality['missing_images'].append(ph_id)
                             logger.warning(f'    图片缺失: placeholder_id={ph_id}')
-                
+
                 if guide_sentence:
-                    last_p = doc.paragraphs[-1] if doc.paragraphs else None
-                    if last_p:
-                        add_mixed_text(last_p, guide_sentence, cn_font='宋体')
-                    else:
-                        p = doc.add_paragraph()
-                        apply_style(p, 'Body Text')
-                        add_mixed_text(p, guide_sentence, cn_font='宋体')
-            else:
-                p = doc.add_paragraph()
-                apply_style(p, 'Body Text')
-                add_mixed_text(p, content, cn_font='楷体')
-                if guide_sentence:
-                    add_mixed_text(p, guide_sentence, cn_font='宋体')
-                logger.debug(f'  材料: {content[:50]}...')
-            continue
+                    add_mixed_text(p, guide_sentence, cn_font='楷体')
+        else:
+            p = doc.add_paragraph()
+            apply_style(p, 'Body Text')
+            add_mixed_text(p, content, cn_font='楷体')
+            logger.debug(f'  材料: {content[:50]}...')
+            
+            if guide_sentence:
+                add_mixed_text(p, guide_sentence, cn_font='楷体')
+        return
 
-        if not segments:
-            continue
+    if not segments:
+        return
 
-        # 按 segments 顺序处理
-        for seg in segments:
-            seg_type = seg.get('type', '')
+    # 按 segments 顺序处理
+    for seg in segments:
+        seg_type = seg.get('type', '')
 
-            if seg_type == 'text':
-                text = seg.get('content', '')
-                if text:
-                    # 处理占位符
-                    text_parts = PLACEHOLDER_TOKEN_PATTERN.split(text)
-                    text_tokens = PLACEHOLDER_TOKEN_PATTERN.findall(text)
-                    if text_tokens:
-                        p = doc.add_paragraph()
-                        apply_style(p, 'Body Text')
-                        for j, tp in enumerate(text_parts):
-                            if tp.strip():
-                                add_mixed_text(p, tp.strip(), cn_font='楷体')
-                            if j < len(text_tokens):
-                                ph_id = text_tokens[j].replace('{{image:', '').replace('}}', '')
-                                file_path, exists = image_resolver.resolve(ph_id)
-                                if exists:
-                                    add_centered_picture(doc, file_path, logger)
-                                    quality['images_inserted'] += 1
-                    else:
-                        p = doc.add_paragraph()
-                        apply_style(p, 'Body Text')
-                        add_mixed_text(p, text, cn_font='楷体')
+        if seg_type == 'text':
+            text = seg.get('content', '')
+            if text:
+                text_parts = PLACEHOLDER_TOKEN_PATTERN.split(text)
+                text_tokens = PLACEHOLDER_TOKEN_PATTERN.findall(text)
+                if text_tokens:
+                    p = doc.add_paragraph()
+                    apply_style(p, 'Body Text')
+                    for j, tp in enumerate(text_parts):
+                        if tp.strip():
+                            add_mixed_text(p, tp.strip(), cn_font='楷体')
+                        if j < len(text_tokens):
+                            ph_id = text_tokens[j].replace('{{image:', '').replace('}}', '')
+                            file_path, exists = image_resolver.resolve(ph_id)
+                            if exists:
+                                add_centered_picture(doc, file_path, logger)
+                                quality['images_inserted'] += 1
+                else:
+                    p = doc.add_paragraph()
+                    apply_style(p, 'Body Text')
+                    add_mixed_text(p, text, cn_font='楷体')
 
-            elif seg_type == 'image':
-                img_name = seg.get('name', '')
-                if img_name:
-                    # 直接通过文件名查找
-                    img_path = os.path.join(image_resolver._ph_to_file.get('', '') or '', img_name)
-                    # fallback: 通过 image_mapping 中的 file_name 查找
-                    from pathlib import Path
-                    resolved = False
-                    for ph_id, path in image_resolver._ph_to_file.items():
-                        if os.path.basename(path) == img_name:
-                            img_path = path
-                            resolved = True
+        elif seg_type == 'image':
+            img_name = seg.get('name', '')
+            if img_name:
+                from pathlib import Path
+                resolved = False
+                for ph_id, path in image_resolver._ph_to_file.items():
+                    if os.path.basename(path) == img_name:
+                        img_path = path
+                        resolved = True
+                        break
+                if not resolved:
+                    for key, val in image_resolver._ph_to_file.items():
+                        img_path = os.path.join(os.path.dirname(val), img_name)
+                        if os.path.exists(img_path):
                             break
-                    if not resolved:
-                        # 直接拼接 images_dir
-                        for key, val in image_resolver._ph_to_file.items():
-                            img_path = os.path.join(os.path.dirname(val), img_name)
-                            if os.path.exists(img_path):
-                                break
-                    if os.path.exists(img_path):
-                        add_centered_picture(doc, img_path, logger)
-                        quality['images_inserted'] += 1
+                if os.path.exists(img_path):
+                    add_centered_picture(doc, img_path, logger)
+                    quality['images_inserted'] += 1
 
-            elif seg_type == 'table':
-                table_data = seg.get('data', seg.get('table_data'))
-                if table_data:
-                    add_table(doc, table_data, logger)
-                    quality['tables_inserted'] += 1
+        elif seg_type == 'table':
+            table_data = seg.get('data', seg.get('table_data'))
+            if table_data:
+                add_table(doc, table_data, logger)
+                quality['tables_inserted'] += 1
+
+
+def _format_one_subquestion(doc, subq, image_resolver, logger, quality):
+    """排版单个子问题（含子问题专属 materials 和填空类型渲染）。"""
+    label = subq.get('label', '')
+    stem = subq.get('stem', '')
+    sub_question_type = subq.get('sub_question_type', 'essay')
+    subq_materials = subq.get('materials', [])
+
+    formatted = FILL_IN_BLANK_PATTERN.sub('______', stem)
+    if formatted != stem:
+        quality['fill_in_blank_count'] += 1
+
+    # 填空式子问题：在 ______ 处添加下划线
+    is_fill = sub_question_type in ('fill_in_blank', 'mixed')
+
+    parts = PLACEHOLDER_TOKEN_PATTERN.split(formatted)
+    tokens = PLACEHOLDER_TOKEN_PATTERN.findall(formatted)
+
+    if not tokens and not is_fill:
+        # 无图片、无填空：简单段落
+        p = doc.add_paragraph()
+        apply_style(p, 'Normal')
+        if label:
+            add_mixed_text(p, f'{label} {formatted}', cn_font='宋体')
+        else:
+            add_mixed_text(p, formatted, cn_font='宋体')
+    elif not tokens and is_fill:
+        # 有填空无图片：将 ______ 渲染为下划线
+        _format_fill_in_blank_paragraph(doc, label, formatted, logger)
+    else:
+        # 有图片占位符：分段处理
+        first_text = True
+        for i, part in enumerate(parts):
+            part = part.strip()
+            if part:
+                if is_fill and '______' in part:
+                    _format_fill_in_blank_paragraph(doc, label if first_text else '', part, logger)
+                else:
+                    p = doc.add_paragraph()
+                    apply_style(p, 'Normal')
+                    prefix = f'{label} ' if first_text and label else ''
+                    add_mixed_text(p, f'{prefix}{part}', cn_font='宋体')
+                first_text = False
+
+            if i < len(tokens):
+                token = tokens[i]
+                ph_id = token.replace('{{image:', '').replace('}}', '')
+                file_path, exists = image_resolver.resolve(ph_id)
+                if exists:
+                    add_centered_picture(doc, file_path, logger)
+                    quality['images_inserted'] += 1
+                    logger.info(f'    子问题图片: {os.path.basename(file_path)}')
+                else:
+                    quality['missing_images'].append(ph_id)
+                    logger.warning(f'    子问题图片缺失: placeholder_id={ph_id}')
+
+    # 子问题专属材料（如访谈调查表）
+    if subq_materials:
+        for mat in subq_materials:
+            _format_materials_inner(doc, mat, image_resolver, logger, quality)
+
+
+def _format_fill_in_blank_paragraph(doc, label, text, logger):
+    """将含 ______ 的文本渲染为带下划线填空区域的段落。"""
+    blank_pattern = re.compile(r'(_{3,})')
+    parts = blank_pattern.split(text)
+
+    p = doc.add_paragraph()
+    apply_style(p, 'Normal')
+    # 填空题增加行间距
+    p.paragraph_format.line_spacing = 1.8
+
+    if label:
+        add_mixed_text(p, f'{label} ', cn_font='宋体')
+
+    for part in parts:
+        if blank_pattern.match(part):
+            # 填空区域：用空格+下划线渲染
+            blank_len = len(part)
+            # 使用全角空格模拟填空宽度，每个 ______ (6个_) 渲染为约 4 个全角空格
+            space_count = max(4, blank_len // 2)
+            run = p.add_run('\u3000' * space_count)
+            run.underline = True
+            run.font.size = Pt(14)
+            _set_run_font(run, cn_font='宋体', en_font='Times New Roman')
+        else:
+            if part:
+                add_mixed_text(p, part, cn_font='宋体')
 
 
 # ============================================================================
 # 分区排版
 # ============================================================================
+
+def _format_non_choice_body(doc, question, image_resolver, logger, quality):
+    """排版非选择题主体：若 materials/subquestions 含 order 字段则按 order 交错渲染，否则默认顺序。"""
+    materials = question.get('materials', [])
+    subquestions = question.get('subquestions', [])
+
+    # 检测是否有 order 字段
+    has_material_order = any(m.get('order') is not None for m in materials)
+    has_subq_order = any(sq.get('order') is not None for sq in subquestions)
+
+    if not has_material_order and not has_subq_order:
+        # 默认顺序：所有材料 → 所有子问题
+        _format_materials(doc, question, image_resolver, logger, quality)
+        for sq in subquestions:
+            _format_one_subquestion(doc, sq, image_resolver, logger, quality)
+        return
+
+    # 有 order 字段：构建排序列表
+    ordered_items = []
+    for m in materials:
+        order = m.get('order')
+        if order is not None:
+            ordered_items.append((order, 'material', m))
+    for sq in subquestions:
+        order = sq.get('order')
+        if order is not None:
+            ordered_items.append((order, 'subquestion', sq))
+
+    ordered_items.sort(key=lambda x: x[0])
+
+    # 验证是否有遗漏（有 order 的部分按 order 排，无 order 的放在最后）
+    no_order_materials = [m for m in materials if m.get('order') is None]
+    no_order_subqs = [sq for sq in subquestions if sq.get('order') is None]
+
+    # 按 order 顺序渲染
+    for _, item_type, item in ordered_items:
+        if item_type == 'material':
+            _format_one_material(doc, item, image_resolver, logger, quality)
+        elif item_type == 'subquestion':
+            _format_one_subquestion(doc, item, image_resolver, logger, quality)
+
+    # 渲染无 order 的剩余项
+    for m in no_order_materials:
+        _format_one_material(doc, m, image_resolver, logger, quality)
+    for sq in no_order_subqs:
+        _format_one_subquestion(doc, sq, image_resolver, logger, quality)
+
 
 def _format_section(doc, section, image_resolver, logger, quality):
     """排版一个分区（选择题/非选择题等）。"""
@@ -874,11 +1054,14 @@ def _format_section(doc, section, image_resolver, logger, quality):
     for question in questions:
         q_type = question.get('question_type', sec_type)
 
-        if q_type == '非选择题':
-            # 非选择题：题干 → 材料 → 子问题
+        if q_type == '非选择题' or q_type == '综合题':
+            # 非选择题/综合题：题干 → 按 order 交错渲染 materials/subquestions（或默认顺序）
             _format_question_stem(doc, question, image_resolver, logger, quality)
+            _format_non_choice_body(doc, question, image_resolver, logger, quality)
+        elif q_type == '填空题':
+            # 填空题：材料(如有) → 题干（含下划线渲染），无选项
             _format_materials(doc, question, image_resolver, logger, quality)
-            _format_subquestions(doc, question, image_resolver, logger, quality)
+            _format_question_stem(doc, question, image_resolver, logger, quality)
         else:
             # 选择题：材料(如有) → 题干 → 选项
             _format_materials(doc, question, image_resolver, logger, quality)
@@ -951,30 +1134,46 @@ def _format_meta_notes(doc, meta, logger):
 # 考试信息排版
 # ============================================================================
 
-def _format_exam_header(doc, meta, logger):
+SYMBOL_TOKEN_RE = re.compile(r'\{\{symbol:[^}]+\}\}')
+IMAGE_TOKEN_RE = re.compile(r'\{\{image:[^}]+\}\}')
+
+
+def _strip_placeholder_tokens(text):
+    """移除文本中的占位符 token（{{symbol:xxx}} / {{image:xxx}}），清理首尾空白。"""
+    text = SYMBOL_TOKEN_RE.sub('', text)
+    text = IMAGE_TOKEN_RE.sub('', text)
+    return text.strip()
+
+
+def _format_exam_header(doc, meta, image_resolver, logger, quality):
     """排版考试名称和科目。"""
     title = meta.get('title', '')
     subtitle = meta.get('subtitle', '')
     subject = meta.get('subject', '')
+
+    # 清理 title 中的占位符
+    title = _strip_placeholder_tokens(title)
 
     if title:
         p = doc.add_paragraph()
         apply_style(p, '考试名称')
         add_mixed_text(p, title, cn_font='黑体')
         logger.info(f'  考试名称: {title}')
+    else:
+        logger.warning('  meta.title 为空或仅含占位符 token，已跳过')
 
+    # subtitle：清理占位符，仅在有实质内容时渲染
+    subtitle = _strip_placeholder_tokens(subtitle)
     if subtitle:
         p = doc.add_paragraph()
         apply_style(p, '考试名称')
         add_mixed_text(p, subtitle, cn_font='黑体')
         logger.info(f'  副标题: {subtitle}')
 
+    # subject 不再作为独立行渲染。原卷标题区只有主标题+副标题两行，
+    # subject 字段是 tag_structure 的硬编码填充，不应凭空创造第三行。
     if subject:
-        subject_display = '地  理' if subject == '地理' else subject
-        p = doc.add_paragraph()
-        apply_style(p, '科目名称')
-        p.add_run(subject_display)
-        logger.info(f'  科目: {subject_display}')
+        logger.info(f'  科目(仅记录，不渲染): {subject}')
 
 
 # ============================================================================
@@ -1158,7 +1357,7 @@ def typeset_exam(json_path, template_path, output_path, images_dir=None, log_pat
 
         # 3. 初始质检数据
         quality = {
-            'exam_name': meta.get('title', ''),
+            'exam_name': _strip_placeholder_tokens(meta.get('title', '')),
             'sections': 0,
             'total_questions': 0,
             'choice_questions': 0,
@@ -1190,7 +1389,7 @@ def typeset_exam(json_path, template_path, output_path, images_dir=None, log_pat
         # 5. 排版：考试信息
         logger.info('')
         logger.info('--- 考试信息 ---')
-        _format_exam_header(doc, meta, logger)
+        _format_exam_header(doc, meta, image_resolver, logger, quality)
 
         # 6. 排版：注意事项
         _format_meta_notes(doc, meta, logger)
@@ -1203,8 +1402,22 @@ def typeset_exam(json_path, template_path, output_path, images_dir=None, log_pat
         # 8. 未归类块（如有）
         unclassified = document.get('unclassified_blocks', [])
         if unclassified:
-            logger.warning(f'存在 {len(unclassified)} 个未归类块，未排版')
-            quality['warnings'].append(f'存在 {len(unclassified)} 个未归类文本块')
+            logger.warning(f'存在 {len(unclassified)} 个未归类块，渲染为灰色警告标注')
+            quality['warnings'].append(f'存在 {len(unclassified)} 个未归类文本块，已以灰色标注渲染')
+            # 添加分隔标记
+            p_sep = doc.add_paragraph()
+            apply_style(p_sep, '题型标题')
+            add_mixed_text(p_sep, '【未归类内容】', cn_font='黑体')
+            for block in unclassified:
+                text = block.get('text', '')
+                reason = block.get('reason', '未知原因')
+                if text:
+                    p = doc.add_paragraph()
+                    apply_style(p, 'Body Text')
+                    run_label = p.add_run(f'[{reason}] ')
+                    run_label.font.color.rgb = RGBColor(180, 180, 180)
+                    run_label.font.size = Pt(10)
+                    add_mixed_text(p, text, cn_font='宋体')
 
         # 9. 保存
         logger.info('')

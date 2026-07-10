@@ -377,7 +377,7 @@ def rule_1_17_remove_exam_name_images(doc, logger):
     for p in paragraphs[:5]:
         text = get_paragraph_text(p).strip()
         # 检查是否是考试名称段落
-        if '考试' in text or '学业水平' in text or '高考' in text or '招生' in text:
+        if any(kw in text for kw in ('考试', '学业水平', '高考', '招生', '检测', '期末', '期中', '模拟', '联考', '诊断')):
             # 删除这个段落中的所有图片
             for r in p.findall(qn('w:r')):
                 drawings = get_drawings(r)
