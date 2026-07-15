@@ -1,0 +1,295 @@
+你现在接手一个地理试卷排版项目，请根据下面要求修复当前表格处理链路。
+
+项目背景：
+原始输入是 docx 地理试卷。当前链路大致为：
+
+原始 docx
+  -> scripts/clean_docx.py 清洗
+  -> scripts/extract_images.py 提取图片
+  -> scripts/utils.py::docx_to_markdown() 转 Markdown，同时输出 tables.json
+  -> AI: tag_structure 结构标注
+  -> scripts/typeset_exam.py::add_table() 用 python-docx 重新生成表格
+
+当前表格相关核心代码位置：
+- scripts/utils.py
+  - _extract_cell_text()
+  - _table_to_data()
+  - docx_to_markdown() 中表格处理
+- scripts/typeset_exam.py
+  - add_table()
+  - _format_choice_material_segments()
+  - _format_non_choice_material_segments()
+- schemas/exam_paper.schema.json
+- tag_structure skill 的提示词或配置文件，如果项目中存在
+
+当前主要问题：
+1. add_table() 中 has_header 默认 True，导致所有表格第一行都被错误当成表头，加粗黑体，并设置跨页重复表头。
+2. _table_to_data() 输出不包含 has_header/header_rows，tables.json 链路里无法控制表头。
+3. 真实地理试卷中大量表格不是数据表，而是材料表、作答表、图文表、版式表，不应该默认有表头。
+4. 表格内图片目前会丢失。extract_images.py 已经能递归提取表格内图片，但 _extract_cell_text() 只提取 w:t 文本，导致图片 run 没有进入 tables.json；add_table() 也不识别 {{image:xxx}} 或 {{symbol:xxx}} 占位符。
+5. add_table() 先填充所有单元格文本和样式，再执行合并单元格，合并单元格尤其纵向合并时容易残留内容和样式。
+6. Schema 中 table segment 缺少 data/header_rows/table_role/table_style 等实际字段。
+7. 选择题/非选择题材料渲染时，图片和表格顺序可能被重新排列，不能严格保留原始 material_segments 顺序。
+
+请按以下优先级进行修复。
+
+一、修复表头默认策略
+
+目标：
+不要再默认所有表格都有首行表头。
+
+具体要求：
+1. 在 scripts/typeset_exam.py::add_table() 中，将：
+   has_header = table_data.get('has_header', True)
+   改为兼容 header_rows 的逻辑。
+
+推荐逻辑：
+
+   header_rows = table_data.get('header_rows')
+   if header_rows is None:
+       header_rows = 1 if table_data.get('has_header', False) else 0
+   header_rows = max(0, int(header_rows or 0))
+
+2. 后续所有判断表头样式的地方，不再使用：
+   if r == 0 and has_header:
+   而使用：
+   if r < header_rows:
+
+3. 设置跨页重复表头时，只在 header_rows > 0 时执行，并且对前 header_rows 行设置 w:tblHeader。
+
+4. 不要再让 has_header 默认 True。兼容旧字段即可，新逻辑以 header_rows 为主。
+
+二、让 _table_to_data() 输出更完整的表格字段
+
+目标：
+tables.json 中每个表格默认带上清晰的排版控制字段。
+
+请在 scripts/utils.py::_table_to_data() 的返回结构中增加：
+
+   "header_rows": 0,
+   "table_role": "unknown",
+   "table_style": "grid"
+
+注意：
+1. _table_to_data() 只负责提取 docx 表格事实，不要在这里复杂判断表头。
+2. header_rows 默认必须是 0。
+3. 保留原有 rows/cols/data/spans 字段，保持兼容。
+
+三、修复表格内图片和符号占位符
+
+目标：
+表格单元格中的图片、符号图片不要丢失。
+
+请检查项目中已有正文图片占位符逻辑，例如 {{image:img_xxx}}、{{symbol:img_xxx}} 的提取和渲染方式，尽量复用现有函数、正则、image_map、路径查找逻辑，不要另起一套不兼容的机制。
+
+需要修复两层：
+
+A. scripts/utils.py::_extract_cell_text()
+
+当前问题：
+只提取 w:t 文本，忽略图片 run。
+
+要求：
+1. 改为按段落、按 run 顺序提取单元格内容。
+2. 文本 run 继续提取 w:t。
+3. 图片 run 要识别 drawing/pict 中的 blip embed id，并映射到项目已有图片 id，占位输出为：
+   {{image:img_xxx}}
+4. 如果项目已有 symbol 判定逻辑，也要在单元格内保留：
+   {{symbol:img_xxx}}
+5. 多段落之间保留换行。
+6. 不要只用 .//w:t 一次性扫文本，因为这样会破坏图片和文本顺序。
+
+如果当前 _extract_cell_text() 无法直接拿到 rels/image 映射，请调整调用链，让 _table_to_data() 或 docx_to_markdown() 将必要映射传入。优先复用 docx_to_markdown() 正文处理图片时已有的数据结构。
+
+B. scripts/typeset_exam.py::add_table()
+
+当前问题：
+单元格内容被当成纯文本写入，{{image:xxx}} 和 {{symbol:xxx}} 不会被渲染。
+
+要求：
+1. 不要直接 cell.text = content。
+2. 新增或复用一个函数，将单元格内容按占位符拆分：
+   - 普通文本：写入 run
+   - {{image:xxx}}：插入对应图片
+   - {{symbol:xxx}}：按符号图片尺寸插入
+3. 图片路径、宽度计算、异常处理尽量复用正文图片渲染逻辑。
+4. 如果图片找不到，不要崩溃，可以保留占位文本或记录 warning。
+5. 保留单元格内换行，换行可以转为 paragraph 或 run.add_break()，根据项目现有风格处理。
+
+四、调整合并单元格处理顺序
+
+目标：
+避免合并单元格后残留内容和样式。
+
+当前问题：
+add_table() 先填充所有单元格，再 merge。
+
+请改为：
+1. 创建空表格。
+2. 根据 spans 先执行 merge。
+3. 构建 covered_cells 集合，记录被合并覆盖的非起始单元格。
+4. 渲染内容时跳过 covered_cells，只对 origin cell 渲染内容和样式。
+5. 样式判断使用 header_rows，即 r < header_rows。
+6. 注意 python-docx merge 后 table.cell(r, c) 的行为，避免重复写入合并区域。
+
+covered_cells 逻辑示例：
+
+   covered_cells = set()
+   for span in spans:
+       row = span.get("row", 0)
+       col = span.get("col", 0)
+       rowspan = span.get("rowspan", 1)
+       colspan = span.get("colspan", 1)
+       for rr in range(row, row + rowspan):
+           for cc in range(col, col + colspan):
+               if rr == row and cc == col:
+                   continue
+               covered_cells.add((rr, cc))
+
+五、支持 table_style 字段
+
+目标：
+不要把所有表格强制设为 Table Grid。
+
+在 add_table() 中读取：
+
+   table_style = table_data.get("table_style", "grid")
+
+先支持这些值：
+- "grid"：使用 Table Grid
+- "plain"：尽量使用无网格或 Table Normal
+- "preserve"：如果当前项目还没有原始边框信息，暂时可以退化为 grid，但不要崩溃
+
+注意：
+1. 默认仍可为 grid，避免大面积改变现有输出。
+2. 如果 table_role 是 layout，且 table_style 没有显式提供，可以考虑默认 plain，但不要做太激进的改动。
+3. 不要因为 table_style 字段缺失导致异常。
+
+六、补全 schema
+
+请更新 schemas/exam_paper.schema.json 中 table segment 的定义。
+
+table segment 至少应允许：
+
+   {
+     "type": "table",
+     "data": {
+       "table_id": "table_001",
+       "rows": 5,
+       "cols": 4,
+       "data": [[...]],
+       "spans": [...],
+       "header_rows": 0,
+       "table_role": "unknown",
+       "table_style": "grid"
+     }
+   }
+
+字段要求：
+1. data 必须允许 object。
+2. data.table_id: string
+3. data.rows/data.cols/header_rows: integer
+4. data.data: array
+5. data.spans: array
+6. data.table_role enum:
+   data, layout, material, answer, mixed, unknown
+7. data.table_style enum:
+   grid, plain, preserve
+8. 为兼容旧数据，可以暂时允许 has_header: boolean。
+
+七、更新 tag_structure skill 的提示词或规则
+
+如果项目中存在 tag_structure 的 SKILL.md、prompt、schema 描述或类似配置，请更新表格字段说明。
+
+要求 AI 对 table segment 输出或保留以下字段：
+
+   header_rows
+   table_role
+   table_style
+
+推荐说明：
+
+   header_rows:
+   - 表头行数。
+   - 没有表头则为 0。
+   - 不确定时必须输出 0。
+   - 不要因为第一行有文字就认为它是表头。
+   - 只有第一行或前几行明确是字段名称、分类名称、年份/地区/指标标题时，才输出大于 0。
+
+   table_role:
+   - data: 数据表
+   - layout: 仅用于排版对齐的表格
+   - material: 文字材料表
+   - answer: 作答区域或填写表
+   - mixed: 图文混排表
+   - unknown: 不确定
+
+   table_style:
+   - grid: 有网格线表格
+   - plain: 无网格/弱边框版式表格
+   - preserve: 尽量保留原样
+
+重要原则：
+1. 不确定时 header_rows = 0。
+2. 版式表、材料表、作答表、图文混排表一般 header_rows = 0。
+3. AI 的判断只影响排版样式，不要改变 rows/cols/data/spans 结构。
+4. 不要强行判断首列表头，本次只实现 header_rows。
+
+八、修复材料中表格和图片顺序
+
+请检查：
+- scripts/typeset_exam.py::_format_choice_material_segments()
+- scripts/typeset_exam.py::_format_non_choice_material_segments()
+
+当前可能存在先渲染文字、再统一渲染图片、最后统一渲染表格的逻辑。
+
+目标：
+尽量按 material_segments 数组原始顺序逐个渲染：
+
+   for segment in material_segments:
+       if segment["type"] == "text":
+           ...
+       elif segment["type"] == "image":
+           ...
+       elif segment["type"] == "table":
+           add_table(...)
+
+要求：
+1. 不要无理由改变原始顺序。
+2. 如果当前函数因为选择题版式有特殊逻辑，尽量小范围修改，保证表格和图片的相对顺序来自 material_segments。
+3. 保持现有选择题/非选择题的整体版式习惯，不要大改无关逻辑。
+
+九、兼容性要求
+
+1. 保持旧 tables.json 可用。
+2. 如果旧数据只有 has_header，则转换为 header_rows：
+   has_header true -> header_rows 1
+   has_header false 或缺失 -> header_rows 0
+3. 不要破坏现有图片、正文、题目、选项排版逻辑。
+4. 所有新增字段缺失时都要有安全默认值。
+5. 对图片缺失、非法 span、越界 span 做保护，不要直接崩溃。
+
+十、验证要求
+
+完成修改后，请至少做以下检查：
+
+1. 搜索确认没有残留：
+   table_data.get('has_header', True)
+
+2. 构造或使用现有样例验证：
+   A. 无表头普通表格：第一行不加粗、不设置重复表头。
+   B. header_rows=1：第一行加粗，并设置重复表头。
+   C. header_rows=2：前两行加粗，并设置重复表头。
+   D. 含 colspan/rowspan 的表格：合并后无重复残留文本。
+   E. 单元格中含 {{image:xxx}}：图片能插入或至少不崩溃。
+   F. 单元格中含 {{symbol:xxx}}：符号能插入或至少不残留异常。
+   G. material_segments 中 image 在 table 后时，输出顺序仍为 table 后 image，不能被强制改成 image 先 table 后。
+
+3. 如果项目有测试命令，请运行测试。
+4. 如果没有测试命令，请至少运行一次项目中现有的样例排版流程，确认不报错。
+
+请直接修改代码，并在最后总结：
+- 修改了哪些文件
+- 修复了哪些问题
+- 哪些地方保持兼容
+- 哪些风险还需要后续处理
