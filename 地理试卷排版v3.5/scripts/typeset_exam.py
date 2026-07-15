@@ -59,10 +59,12 @@ _EN_CHAR_WIDTH_CM = 14 * 0.0353 * 0.43                # 西文比例字体平均
 # 1x4: A\tB\tC\tD → B@T2(4.54), C@T3(8.98), D@T4(13.43)
 #       各槽宽: A=4.54, B=4.44, C=4.45, D=3.77 cm
 TAB_STOPS_4 = [Cm(4.54), Cm(8.98), Cm(13.43)]
-# 2x2: A\t\tB, C\t\tD → tab1→T3(8.98), tab2→T4(13.43)
-#       左列 A/C ≤ 8.98cm, 右列 B/D ≤ 3.97cm (含 0.2cm 比例字体容差)
-#       确保与 1x4 的 D 列垂直对齐（均命中 T4=13.43cm）
-TAB_STOPS_2 = [Cm(8.98), Cm(13.43)]
+# 2x2: 三档对齐，B/D 落在 4.54/8.98/13.43 之一（与 1x4 的 B/C/D 列对齐）
+#       优先选最大可行位置（B/D 尽量靠右最美观），动态 1/2/3 tab 精确命中目标
+#       情况2: A/C 短(<4.54)，B/D 长(≤12.66)  → B/D @ 4.54cm
+#       情况3: A/C 中(<8.98)，B/D 中(≤8.22)   → B/D @ 8.98cm
+#       情况4: A/C 长(<13.43)，B/D 短(≤3.77)  → B/D @ 13.43cm
+TAB_STOPS_2 = [Cm(4.54), Cm(8.98), Cm(13.43)]
 
 # 占位符匹配模式（支持 ph_xxx / img_xxx / ph_anchor_xxx，捕获组用于 split 分隔）
 PLACEHOLDER_TOKEN_PATTERN = re.compile(r'\{\{image:(ph(?:_anchor)?_\d{3}|img_\d{3})\}\}')
@@ -1113,20 +1115,24 @@ def _select_option_rule(options, logger=None):
     """根据选项文本宽度选择排版规则。
 
     规则 1 (1x4): 四个选项一行，Tab 分隔
-    规则 2 (2x2): 两行，每行两个，B/D 对齐 1x4 中 D 的位置
+    规则 2 (2x2): 两行，每行两个，B/D 对齐 1x4 的 B/C/D 之一（三档）
     规则 3 (4x1): 每行一个
 
     1x4 制表位 TAB_STOPS_4 = [4.54, 8.98, 13.43]，版心宽 17.2cm
     各槽位实际宽度: A=4.54, B=4.44, C=4.45, D=3.77
 
-    2x2 制表位 TAB_STOPS_2 = [8.98, 13.43]
-    左列 (A/C) 可用宽度 8.98cm，右列 (B/D) 可用宽度 3.77cm (17.2-13.43)
+    2x2 三档对齐（制表位与 1x4 相同 [4.54, 8.98, 13.43]）：
+      情况2: B/D @ 4.54cm  — A/C 短(<4.54)，B/D 长(≤12.66)，单 tab
+      情况3: B/D @ 8.98cm  — A/C 中等(<8.98)，B/D 中等(≤8.22)，单/双 tab
+      情况4: B/D @ 13.43cm — A/C 长(<13.43)，B/D 短(≤3.77)，单/双/三 tab
+    优先选最大可行目标位置（B/D 尽量靠右，视觉美观度最优先）。
 
     测量使用 measure_text_width_cm（Pillow 精确测量优先，估算兜底）。
     所有槽位/列宽检查均预留 SAFETY_MARGIN_CM 安全余量，防止 Word 渲染时
     因微小差异导致换行。
     """
-    SAFETY_MARGIN_CM = 0.15  # 安全余量，补偿测量与 Word 渲染间的微小偏差
+    SAFETY_MARGIN_CM = 0.15  # 1x4 安全余量，补偿 tab 间距与渲染偏差
+    SAFETY_MARGIN_2X2_CM = 0.05  # 2x2 安全余量较小（无 tab 间距，仅纯文本列宽）
 
     opt_widths = {}
     for label, text in options.items():
@@ -1154,7 +1160,7 @@ def _select_option_rule(options, logger=None):
         if logger:
             logger.debug(f'  1x4不适用: {rule1_failed}')
 
-    # 规则2: 2x2 — 左列 (A/C) + 余量 ≤ 8.98cm，右列 (B/D) + 余量 ≤ 3.77cm
+    # 规则2: 2x2 — 三档对齐（B/D 落在 4.54/8.98/13.43 之一，与 1x4 的 B/C/D 对齐）
     first_col_labels = ['A', 'C']
     second_col_labels = ['B', 'D']
     first_col_max = max(
@@ -1163,15 +1169,23 @@ def _select_option_rule(options, logger=None):
     second_col_max = max(
         (opt_widths.get(l, 0) for l in second_col_labels), default=0
     )
-    rule2_ok = (first_col_max + SAFETY_MARGIN_CM <= 8.98 and
-                second_col_max + SAFETY_MARGIN_CM <= 3.77)
+    # 依次尝试三个目标位置，选最大可行位置（B/D 尽量靠右，与 1x4 的 D 对齐最美观）
+    targets_2x2 = [13.43, 8.98, 4.54]
+    rule2_ok = False
+    chosen_target = None
+    for t in targets_2x2:
+        if (first_col_max + SAFETY_MARGIN_2X2_CM <= t and
+                second_col_max + SAFETY_MARGIN_2X2_CM <= PAGE_CONTENT_WIDTH_CM - t):
+            rule2_ok = True
+            chosen_target = t
+            break
 
     if logger:
         width_detail = ', '.join(f'{l}={opt_widths[l]:.2f}cm' for l in letters)
+        target_str = f'{chosen_target:.2f}cm' if chosen_target else '无'
         logger.debug(
-            f'  2x2检查: 左列最大={first_col_max:.2f}cm(需≤{8.98 - SAFETY_MARGIN_CM:.2f}), '
-            f'右列最大={second_col_max:.2f}cm(需≤{3.77 - SAFETY_MARGIN_CM:.2f}), '
-            f'通过={rule2_ok} | 选项宽: {width_detail}'
+            f'  2x2检查: 左列最大={first_col_max:.2f}cm, 右列最大={second_col_max:.2f}cm, '
+            f'目标位置={target_str}, 通过={rule2_ok} | 选项宽: {width_detail}'
         )
 
     if rule2_ok:
@@ -1339,12 +1353,62 @@ def _format_rule_1x4(doc, options, image_resolver, logger, page_tracker=None):
 
 
 def _format_rule_2x2(doc, options, image_resolver, logger, page_tracker=None):
-    """2x2 布局：A+B 一行，C+D 一行，双 Tab 分隔。
-    
-    B/D 对齐 1x4 中 D 的制表位（13.43cm），保证跨题垂直对齐。
-    A 和 C 垂直对齐（左列），B 和 D 垂直对齐（右列）。
+    """2x2 布局：三档对齐，B/D 落在 4.54/8.98/13.43 之一。
+
+    根据 A/C 和 B/D 的宽度，选择能让两者都放下的最大目标位置（B/D 尽量靠右最美观）：
+      情况2: B/D @ 4.54cm  — A/C 短，B/D 长
+      情况3: B/D @ 8.98cm  — A/C 中等，B/D 中等
+      情况4: B/D @ 13.43cm — A/C 长，B/D 短
+    A/C 在 0cm，B/D 对齐 1x4 的 B/C/D 之一，跨题垂直对齐。
+    每行根据左选项宽度动态选择 tab 数量（1/2/3），使右选项精确落在目标位置。
     """
-    letters = sorted(options.keys())
+    SAFETY_MARGIN_2X2_CM = 0.05  # 2x2 安全余量较小（无 tab 间距，仅纯文本列宽）
+    tab_stops_cm = [4.54, 8.98, 13.43]
+
+    # 测量各选项宽度
+    opt_widths = {}
+    for label, text in options.items():
+        clean = PLACEHOLDER_TOKEN_PATTERN.sub('', f'{label}. {text}')
+        clean = FORMAT_TAG_PATTERN.sub('', clean)
+        opt_widths[label] = measure_text_width_cm(clean)
+
+    first_col_max = max(opt_widths.get('A', 0), opt_widths.get('C', 0))
+    second_col_max = max(opt_widths.get('B', 0), opt_widths.get('D', 0))
+
+    # 选择目标位置（最大可行位置优先，B/D 尽量靠右最美观）
+    # 注意：tab_stops_cm 保持正序 [4.54, 8.98, 13.43] 用于 _tab_count 的 index 计算，
+    #       此处仅选择循环使用逆序，使 B/D 尽量对齐到 D 列(13.43)
+    target = None
+    for t in [13.43, 8.98, 4.54]:
+        if (first_col_max + SAFETY_MARGIN_2X2_CM <= t and
+                second_col_max + SAFETY_MARGIN_2X2_CM <= PAGE_CONTENT_WIDTH_CM - t):
+            target = t
+            break
+
+    if target is None:
+        # 无可行位置，降级 4x1（理论上 _select_option_rule 已过滤）
+        if logger:
+            logger.warning('  2x2 无可行目标位置，降级 4x1')
+        _format_rule_4x1(doc, options, image_resolver, logger, page_tracker)
+        return
+
+    target_index = tab_stops_cm.index(target)
+
+    def _tab_count(left_label):
+        """根据左选项宽度和目标位置计算 tab 数量，使右选项精确落在目标位置。"""
+        if left_label not in opt_widths:
+            return 1
+        w = opt_widths[left_label]
+        # 找到左选项宽度对应的起始制表位索引（第一个 >= w 的制表位）
+        start_index = 0
+        for i, pos in enumerate(tab_stops_cm):
+            if w < pos:
+                start_index = i
+                break
+        else:
+            start_index = len(tab_stops_cm)
+        # tab 数量 = 目标索引 - 起始索引 + 1
+        return max(1, target_index - start_index + 1)
 
     p1 = doc.add_paragraph()
     apply_style(p1, '选项')
@@ -1352,7 +1416,7 @@ def _format_rule_2x2(doc, options, image_resolver, logger, page_tracker=None):
     if 'A' in options:
         _add_option_label_text(p1, 'A', options['A'], image_resolver, logger, page_tracker=page_tracker)
     if 'B' in options:
-        p1.add_run('\t\t')
+        p1.add_run('\t' * _tab_count('A'))
         _add_option_label_text(p1, 'B', options['B'], image_resolver, logger, page_tracker=page_tracker)
     clear_run_fonts(p1)
 
@@ -1362,7 +1426,7 @@ def _format_rule_2x2(doc, options, image_resolver, logger, page_tracker=None):
     if 'C' in options:
         _add_option_label_text(p2, 'C', options['C'], image_resolver, logger, page_tracker=page_tracker)
     if 'D' in options:
-        p2.add_run('\t\t')
+        p2.add_run('\t' * _tab_count('C'))
         _add_option_label_text(p2, 'D', options['D'], image_resolver, logger, page_tracker=page_tracker)
     clear_run_fonts(p2)
     if page_tracker:
