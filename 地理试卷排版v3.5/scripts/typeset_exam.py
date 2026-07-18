@@ -2539,10 +2539,12 @@ def _format_exam_header(doc, meta, image_resolver, logger, quality):
 
     if title:
         # 版式一不进行 AI 断句，渲染完整考试名称（\n 仅用于版式二封面）
+        # 移除 tag_structure AI 可能插入的 \n 换行标记，保证版式一连续排版
+        title_v1 = title.replace('\n', '')
         p = doc.add_paragraph()
         apply_style(p, '考试名称')
-        add_mixed_text(p, title)
-        logger.info(f'  考试名称: {title[:50]}')
+        add_mixed_text(p, title_v1)
+        logger.info(f'  考试名称: {title_v1[:50]}')
     else:
         logger.warning('  meta.title 为空或仅含占位符 token，已跳过')
 
