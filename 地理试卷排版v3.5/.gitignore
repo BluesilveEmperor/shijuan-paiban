@@ -6,7 +6,11 @@ __pycache__/
 
 # 输出产物（gitignore，README.md 除外）
 output/
+output_test/
 !output/README.md
+
+# Windows 保留文件名
+nul
 
 # 临时文件
 *.tmp

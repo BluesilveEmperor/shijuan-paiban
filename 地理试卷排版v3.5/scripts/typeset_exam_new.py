@@ -816,11 +816,17 @@ class ImageResolver:
     """将 placeholder_id 解析为实际图片文件路径。
 
     解析链路: placeholder_id → image_mapping → image_id → images[].file_name → file_path
+
+    v3.6.7 新增：_images_data 存储原始图片元数据（含 clues），供非选择题兜底匹配使用；
+             _resolved_phs 追踪已渲染占位符，避免 clues 匹配时重复渲染。
     """
 
     def __init__(self, images_data, image_mapping_data, images_dir):
         self._ph_to_file = {}
         self._unmapped = set()
+        self._images_data = images_data
+        self._image_mapping_data = image_mapping_data
+        self._resolved_phs = set()
 
         # 构建 image_id → file_name 映射
         id_to_file = {}
@@ -843,11 +849,68 @@ class ImageResolver:
                     self._unmapped.add(ph_id)
 
     def resolve(self, placeholder_id):
-        """返回 (file_path, exists)，不存在时返回 (None, False)"""
+        """返回 (file_path, exists)，不存在时返回 (None, False)。渲染成功后自动追踪。"""
         path = self._ph_to_file.get(placeholder_id)
         if path and os.path.exists(path):
+            self._resolved_phs.add(placeholder_id)
             return path, True
         return path, False
+
+    def is_rendered(self, placeholder_id):
+        """检查某占位符是否已被 resolve 并渲染过。"""
+        return placeholder_id in self._resolved_phs
+
+    def find_images_by_clues(self, question):
+        """通过 images[].clues 匹配题目子问题，返回未被渲染的图片列表。
+
+        匹配规则：clues 中去除 {{image:xxx}} 格式的条目后，与 subquestions[].stem
+        做精确文本匹配。每个匹配结果包含 file_path 和对应的 subquestion 索引。
+
+        Returns:
+            list of dict: [{'file_path': str, 'placeholder_id': str, 'subq_index': int}, ...]
+        """
+        subq_stems = [sq.get('stem', '').strip() for sq in question.get('subquestions', [])]
+        if not subq_stems:
+            return []
+
+        matched = []
+
+        for mapping in self._image_mapping_data:
+            ph_id = mapping.get('placeholder_id', '')
+            img_id = mapping.get('image_id', '')
+            if not ph_id or not img_id:
+                continue
+            if ph_id in self._resolved_phs:
+                continue
+
+            # 在 images_data 中找对应的图片元数据
+            img_meta = next((i for i in self._images_data if i.get('image_id') == img_id), None)
+            if not img_meta:
+                continue
+
+            clues = img_meta.get('clues', [])
+            file_path = self._ph_to_file.get(ph_id)
+            if not file_path or not os.path.exists(file_path):
+                continue
+
+            # 遍历 clues 中的非占位符条目，匹配子问题 stem
+            for clue in clues:
+                if clue.startswith('{{image:'):
+                    continue
+                clue_clean = clue.strip()
+                for idx, stem in enumerate(subq_stems):
+                    if clue_clean == stem:
+                        matched.append({
+                            'file_path': file_path,
+                            'placeholder_id': ph_id,
+                            'subq_index': idx,
+                        })
+                        break
+                else:
+                    continue
+                break  # 找到匹配后跳出 clues 循环
+
+        return matched
 
     @property
     def unmapped_placeholders(self):
@@ -1692,6 +1755,47 @@ def _is_image_only_materials(question):
     return True
 
 
+def _is_image_only_material(material):
+    """判断单个 material 是否仅含图片（无文本/表格/引导语/标题）。
+    
+    返回 True 表示该 material 是纯图片材料（题干配图），应在题干之后、选项之前渲染。
+    """
+    # 含正文文本 → 不是纯图片
+    if (material.get('content') or '').strip():
+        return False
+    # 含引导语 → 不是纯图片
+    if (material.get('guide_sentence') or '').strip():
+        return False
+    # 含标题 → 不是纯图片
+    if (material.get('title') or '').strip():
+        return False
+    segments = material.get('segments', [])
+    if not segments:
+        return False
+    # 任一段非 image 类型 → 不是纯图片
+    for seg in segments:
+        if seg.get('type', '') != 'image':
+            return False
+    return True
+
+
+def _split_materials(question):
+    """将题目的 materials 分离为 text_materials 和 image_materials。
+    
+    - text_materials: 包含文本/表格的普通材料，渲染在题干之前
+    - image_materials: 纯图片材料（题干配图），渲染在题干之后、选项之前
+    """
+    materials = question.get('materials', [])
+    text_materials = []
+    image_materials = []
+    for mat in materials:
+        if _is_image_only_material(mat):
+            image_materials.append(mat)
+        else:
+            text_materials.append(mat)
+    return text_materials, image_materials
+
+
 def _format_materials(doc, question, image_resolver, logger, quality, page_tracker=None):
     """排版题目材料（含 segments: text/image/table）。"""
     materials = question.get('materials', [])
@@ -2396,14 +2500,23 @@ def _format_section(doc, section, image_resolver, logger, quality):
             _format_question_stem(doc, question, image_resolver, logger, quality, page_tracker)
         else:
             # 选择题：材料(如有) → 题干 → 选项
-            # 特殊处理：当 materials 仅含图片（无文本/表格/引导语）时，
-            # 该图片为题干配图（如含①②③④序号），应放在题干之后、选项之前
-            if q_type == '选择题' and _is_image_only_materials(question):
-                _format_question_stem(doc, question, image_resolver, logger, quality, page_tracker)
+            # 选择题：材料分离为文本材料和纯图片材料
+            # 文本材料 → 题干前；纯图片材料 → 题干后、选项前（题干配图）
+            text_mats, image_mats = _split_materials(question)
+            # 先渲染文本材料
+            if text_mats:
+                orig_mats = question.get('materials', [])
+                question['materials'] = text_mats
                 _format_materials(doc, question, image_resolver, logger, quality, page_tracker)
-            else:
+                question['materials'] = orig_mats
+            # 渲染题干
+            _format_question_stem(doc, question, image_resolver, logger, quality, page_tracker)
+            # 再渲染纯图片材料（题干配图）
+            if image_mats:
+                orig_mats = question.get('materials', [])
+                question['materials'] = image_mats
                 _format_materials(doc, question, image_resolver, logger, quality, page_tracker)
-                _format_question_stem(doc, question, image_resolver, logger, quality, page_tracker)
+                question['materials'] = orig_mats
 
             if q_type == '选择题':
                 options = question.get('options', [])
@@ -2538,11 +2651,13 @@ def _format_exam_header(doc, meta, image_resolver, logger, quality):
     title = _strip_placeholder_tokens(title)
 
     if title:
-        # 版式一不进行 AI 断句，渲染完整考试名称（\n 仅用于版式二封面）
+        # 版式一不进行 AI 断句，渲染完整考试名称
+        # python-docx 1.2.0 会把真实 \n 转为 <w:br/>，必须清理
+        title_clean = title.replace('\n', '').replace('\r', '').replace('\\n', '')
         p = doc.add_paragraph()
         apply_style(p, '考试名称')
-        add_mixed_text(p, title)
-        logger.info(f'  考试名称: {title[:50]}')
+        add_mixed_text(p, title_clean)
+        logger.info(f'  考试名称: {title_clean[:50]}')
     else:
         logger.warning('  meta.title 为空或仅含占位符 token，已跳过')
 

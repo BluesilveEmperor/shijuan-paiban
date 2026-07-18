@@ -23,22 +23,40 @@ description: "Generates final formatted Word document from complete exam JSON. I
    - 确认 `{工作目录}/清洗产物/images/` 目录存在（无图片时可为空目录）
    - 若任一缺失，报告具体缺失项并停止
 
-2. **调用排版脚本**
+2. **调用排版脚本（并行生成版式一和版式二）**
+   
+   版式一（标准版式，含考试信息头部 + 末尾答题卡）：
    ```
    python scripts/typeset_exam.py \
        --json {工作目录}/试卷数据/final_exam.json \
        --template assets/template.dotx \
        --images {工作目录}/清洗产物/images/ \
-       --output {工作目录}/{试卷名称}-排版后.docx \
+       --output {工作目录}/{试卷名称}-版式一.docx \
        --report-dir {工作目录}/排版文档/ \
-       [--log {工作目录}/排版文档/typeset_log.txt]
+       --log {工作目录}/排版文档/typeset_v1_log.txt \
+       --format v1
    ```
 
+   版式二（封面版式，含独立封面，无末尾答题卡）：
+   ```
+   python scripts/typeset_exam.py \
+       --json {工作目录}/试卷数据/final_exam.json \
+       --template assets/template.dotx \
+       --images {工作目录}/清洗产物/images/ \
+       --output {工作目录}/{试卷名称}-版式二.docx \
+       --report-dir {工作目录}/排版文档/ \
+       --log {工作目录}/排版文档/typeset_v2_log.txt \
+       --format v2
+   ```
+
+   两个命令可并行执行（互不依赖），以节省时间。
+
 3. **结果检查**
-   - 确认脚本退出码为 0
-   - 确认 `{工作目录}/{试卷名称}-排版后.docx` 已生成且文件大小 > 0
+   - 确认两个脚本退出码均为 0
+   - 确认 `{工作目录}/{试卷名称}-版式一.docx` 已生成且文件大小 > 0
+   - 确认 `{工作目录}/{试卷名称}-版式二.docx` 已生成且文件大小 > 0
    - 确认 `{工作目录}/排版文档/quality_report.html` 已生成
-   - 读取 `{工作目录}/排版文档/typeset_log.txt`，检查是否有 ERROR 级别日志
+   - 分别读取 `typeset_v1_log.txt` 和 `typeset_v2_log.txt`，检查是否有 ERROR 级别日志
 
 4. **质检报告摘要**
    - 阅读 `{工作目录}/排版文档/quality_report.html`
@@ -64,7 +82,10 @@ description: "Generates final formatted Word document from complete exam JSON. I
   "input_file": "{工作目录}/试卷数据/final_exam.json",
   "template": "assets/template.dotx",
   "images_dir": "{工作目录}/清洗产物/images/",
-  "output_file": "{工作目录}/{试卷名称}-排版后.docx",
+  "output_files": {
+    "format_v1": "{工作目录}/{试卷名称}-版式一.docx",
+    "format_v2": "{工作目录}/{试卷名称}-版式二.docx"
+  },
   "quality_report": "{工作目录}/排版文档/quality_report.html",
   "status": "success",
   "statistics": {
@@ -87,11 +108,21 @@ description: "Generates final formatted Word document from complete exam JSON. I
 ```
 
 ## Call Format
+
+版式一：
 ```bash
-python scripts/typeset_exam.py --json {工作目录}/试卷数据/final_exam.json --template assets/template.dotx --images {工作目录}/清洗产物/images/ --output {工作目录}/{试卷名称}-排版后.docx --report-dir {工作目录}/排版文档/
+python scripts/typeset_exam.py --json {工作目录}/试卷数据/final_exam.json --template assets/template.dotx --images {工作目录}/清洗产物/images/ --output {工作目录}/{试卷名称}-版式一.docx --report-dir {工作目录}/排版文档/ --log {工作目录}/排版文档/typeset_v1_log.txt --format v1
 ```
 
+版式二：
+```bash
+python scripts/typeset_exam.py --json {工作目录}/试卷数据/final_exam.json --template assets/template.dotx --images {工作目录}/清洗产物/images/ --output {工作目录}/{试卷名称}-版式二.docx --report-dir {工作目录}/排版文档/ --log {工作目录}/排版文档/typeset_v2_log.txt --format v2
+```
+
+两个命令可并行执行以节省时间。
+
 ## Verification
-- `{工作目录}/{试卷名称}-排版后.docx` 必须可被 Microsoft Word 或 WPS 正常打开
+- `{工作目录}/{试卷名称}-版式一.docx` 必须可被 Microsoft Word 或 WPS 正常打开
+- `{工作目录}/{试卷名称}-版式二.docx` 必须可被 Microsoft Word 或 WPS 正常打开
 - 质检报告 `{工作目录}/排版文档/quality_report.html` 中的统计数字与 JSON 数据一致
 - 所有图片出现在预期位置（与占位符 `location_type` 一致）

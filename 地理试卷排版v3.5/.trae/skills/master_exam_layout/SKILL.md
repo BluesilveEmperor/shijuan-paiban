@@ -341,19 +341,26 @@ python scripts/check_compliance.py --work-dir {工作目录} --step step5 --json
 | 项目 | 内容 |
 |------|------|
 | **Skill** | `typeset_exam` |
-| **任务** | 调用排版脚本生成最终 Word 文档 |
+| **任务** | 调用排版脚本并行生成版式一和版式二两个 Word 文档 |
 | **输入** | `试卷数据/final_exam.json` + `assets/template.dotx` + `清洗产物/images/` |
-| **预期产物** | `{试卷名称}-排版后.docx` + `排版文档/quality_report.html` + `排版文档/typeset_log.txt` |
+| **预期产物** | `{试卷名称}-版式一.docx` + `{试卷名称}-版式二.docx` + `排版文档/quality_report.html` + `排版文档/typeset_v1_log.txt` + `排版文档/typeset_v2_log.txt` |
 
-**执行指令**：
+**执行指令**（两个命令可并行执行）：
 
+版式一（标准版式）：
 ```powershell
-python scripts/typeset_exam.py --json {工作目录}/试卷数据/final_exam.json --template assets/template.dotx --images {工作目录}/清洗产物/images/ --output {工作目录}/{试卷名称}-排版后.docx --report-dir {工作目录}/排版文档/ --log {工作目录}/排版文档/typeset_log.txt
+python scripts/typeset_exam.py --json {工作目录}/试卷数据/final_exam.json --template assets/template.dotx --images {工作目录}/清洗产物/images/ --output {工作目录}/{试卷名称}-版式一.docx --report-dir {工作目录}/排版文档/ --log {工作目录}/排版文档/typeset_v1_log.txt --format v1
+```
+
+版式二（封面版式）：
+```powershell
+python scripts/typeset_exam.py --json {工作目录}/试卷数据/final_exam.json --template assets/template.dotx --images {工作目录}/清洗产物/images/ --output {工作目录}/{试卷名称}-版式二.docx --report-dir {工作目录}/排版文档/ --log {工作目录}/排版文档/typeset_v2_log.txt --format v2
 ```
 
 **产物检查**：
-- [ ] 脚本退出码为 0
-- [ ] `{试卷名称}-排版后.docx` 存在且文件大小 > 0
+- [ ] 两个脚本退出码均为 0
+- [ ] `{试卷名称}-版式一.docx` 存在且文件大小 > 0
+- [ ] `{试卷名称}-版式二.docx` 存在且文件大小 > 0
 - [ ] `排版文档/quality_report.html` 存在
 
 **合规检查**：
@@ -380,7 +387,10 @@ python scripts/check_compliance.py --work-dir {工作目录} --step step6
     "step5c_map_images_ai_fallback": "skipped (no unmapped items)",
     "step6_typeset_exam": "success"
   },
-  "final_output": "{工作目录}/{试卷名称}-排版后.docx",
+  "final_output": {
+    "format_v1": "{工作目录}/{试卷名称}-版式一.docx",
+    "format_v2": "{工作目录}/{试卷名称}-版式二.docx"
+  },
   "quality_report": "{工作目录}/排版文档/quality_report.html",
   "track_statistics": {
     "code_mapped": 6,

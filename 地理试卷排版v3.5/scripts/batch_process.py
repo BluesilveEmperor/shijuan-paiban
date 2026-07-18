@@ -230,7 +230,7 @@ class BatchProcessor:
     # ========================================================================
 
     def run_step6(self, exam_name: str) -> Dict:
-        """执行 Step6 排版。
+        """执行 Step6 排版（并行生成版式一和版式二）。
 
         前提：output/{exam_name}/试卷数据/final_exam.json 必须存在（由 AI Step2-5 产出）。
 
@@ -241,9 +241,15 @@ class BatchProcessor:
         final_json = os.path.join(exam_dir, "试卷数据", "final_exam.json")
         template = os.path.join(PROJECT_DIR, "assets", "template.dotx")
         images_dir = os.path.join(exam_dir, "清洗产物", "images")
-        output_docx = os.path.join(exam_dir, f"{exam_name}-排版后.docx")
-        log_path = os.path.join(exam_dir, "排版文档", "typeset_log.txt")
         report_dir = os.path.join(exam_dir, "排版文档")
+
+        # 版式一输出
+        output_docx_v1 = os.path.join(exam_dir, f"{exam_name}-版式一.docx")
+        log_path_v1 = os.path.join(exam_dir, "排版文档", "typeset_v1_log.txt")
+
+        # 版式二输出
+        output_docx_v2 = os.path.join(exam_dir, f"{exam_name}-版式二.docx")
+        log_path_v2 = os.path.join(exam_dir, "排版文档", "typeset_v2_log.txt")
 
         os.makedirs(report_dir, exist_ok=True)
 
@@ -267,45 +273,78 @@ class BatchProcessor:
                 result["errors"].append(f"模板文件不存在: {template}")
                 return result
 
-            # 执行排版
+            # 并行执行版式一和版式二排版
             import subprocess
-            rc = subprocess.run(
-                [
-                    sys.executable,
-                    os.path.join(SCRIPT_DIR, "typeset_exam.py"),
-                    "--json", final_json,
-                    "--template", template,
-                    "--images", images_dir if os.path.isdir(images_dir) else "",
-                    "--output", output_docx,
-                    "--log", log_path,
-                    "--report-dir", report_dir,
-                ],
-                capture_output=True,
-                text=True,
-                cwd=PROJECT_DIR,
-            )
 
-            if rc.returncode != 0:
-                result["errors"].append(f"typeset_exam.py 退出码 {rc.returncode}")
-                result["errors"].append(rc.stderr.strip())
-                return result
+            scripts_dir = SCRIPT_DIR
+            typeset_script = os.path.join(scripts_dir, "typeset_exam.py")
 
-            if not os.path.exists(output_docx) or os.path.getsize(output_docx) == 0:
-                result["errors"].append("排版输出文件为空或不存在")
-                return result
+            # 构建版式一的命令
+            cmd_v1 = [
+                sys.executable, typeset_script,
+                "--json", final_json,
+                "--template", template,
+                "--output", output_docx_v1,
+                "--log", log_path_v1,
+                "--report-dir", report_dir,
+                "--format", "v1",
+            ]
+            if os.path.isdir(images_dir):
+                cmd_v1.insert(6, images_dir)
+                cmd_v1.insert(6, "--images")
 
-            # 读取质检报告统计
-            quality_report = os.path.join(exam_dir, "排版文档", "quality_report.html")
-            log_errors = self._read_log_errors(log_path)
+            # 构建版式二的命令
+            cmd_v2 = [
+                sys.executable, typeset_script,
+                "--json", final_json,
+                "--template", template,
+                "--output", output_docx_v2,
+                "--log", log_path_v2,
+                "--report-dir", report_dir,
+                "--format", "v2",
+            ]
+            if os.path.isdir(images_dir):
+                cmd_v2.insert(6, images_dir)
+                cmd_v2.insert(6, "--images")
 
-            result["success"] = True
+            # 并行启动两个子进程
+            proc_v1 = subprocess.Popen(cmd_v1, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            proc_v2 = subprocess.Popen(cmd_v2, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+            # 等待两个进程完成
+            stdout_v1, stderr_v1 = proc_v1.communicate()
+            stdout_v2, stderr_v2 = proc_v2.communicate()
+
+            # 检查版式一结果
+            v1_success = proc_v1.returncode == 0 and os.path.exists(output_docx_v1) and os.path.getsize(output_docx_v1) > 0
+            if not v1_success:
+                result["errors"].append(f"版式一 排版失败 (退出码 {proc_v1.returncode})")
+                if stderr_v1:
+                    result["errors"].append(stderr_v1.strip()[:500])
+
+            # 检查版式二结果
+            v2_success = proc_v2.returncode == 0 and os.path.exists(output_docx_v2) and os.path.getsize(output_docx_v2) > 0
+            if not v2_success:
+                result["errors"].append(f"版式二 排版失败 (退出码 {proc_v2.returncode})")
+                if stderr_v2:
+                    result["errors"].append(stderr_v2.strip()[:500])
+
+            # 整体成功条件：两个版式都成功
+            all_success = v1_success and v2_success
+
+            # 读取日志中的错误
+            log_errors_v1 = self._read_log_errors(log_path_v1) if v1_success else []
+            log_errors_v2 = self._read_log_errors(log_path_v2) if v2_success else []
+            all_log_errors = log_errors_v1 + log_errors_v2
+
+            result["success"] = all_success
             result["statistics"] = {
-                "output_size_kb": round(os.path.getsize(output_docx) / 1024, 1),
-                "quality_report": os.path.exists(quality_report),
-                "log_errors": len(log_errors),
+                "v1_output_size_kb": round(os.path.getsize(output_docx_v1) / 1024, 1) if v1_success else 0,
+                "v2_output_size_kb": round(os.path.getsize(output_docx_v2) / 1024, 1) if v2_success else 0,
+                "log_errors": len(all_log_errors),
             }
-            if log_errors:
-                result["errors"].extend(log_errors[:5])
+            if all_log_errors:
+                result["errors"].extend(all_log_errors[:5])
 
         except Exception as e:
             result["errors"].append(f"Step6 异常: {str(e)}")

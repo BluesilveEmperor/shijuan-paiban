@@ -34,7 +34,7 @@
 | "阅读图文材料" | 非选择题标准引导语 | `stem` |
 | "下图示意..." | 材料正文的一部分 | `content` |
 | ①②③④在选择题下方 | 子选项 | `sub_options` |
-| ①②③在非选择题子问题中 | 拆分为独立子问题 | `subquestions`，`label` = "(N)-①" |
+| ①②③在非选择题子问题中 | 拆分为：父级子问题 + 子条目，父级保留原 label，子条目用纯圈码 `"①"` | `subquestions` |
 | 只有一个子问题 | `label` 为空字符串 | `""` |
 | "材料一：""材料二：" | 提取到 `title`（去冒号、去`【】`），`title_style: "inline"` | `material.title` + `material.title_style` |
 | 注意事项条目 | `content` 不含序号，序号在 `number` 字段 | `notes_items` |
@@ -44,7 +44,7 @@
 | 材料含"材料一/二"标记 | 按标记拆分为多个 `material` 对象，标题提取为 `title` | `materials[]` |
 | 选择题组共享材料 | 材料放在第一题的 `materials` 中 | 第一题的 `materials` |
 | 选择题子选项（①②③④） | 从 `stem` 中移除，提取到 `sub_options` | `sub_options` |
-| 非选择题子问题含①②③ | 按序号拆分为独立子问题，`label` = "(N)-①" | `subquestions` |
+| 非选择题子问题含①②③ | 拆分为父级子问题(`label`=原编号) + 子条目(`label`=纯圈码) | `subquestions` |
 | "（如下图）"在材料正文中 | 保留在 `content` 中，提示图片插入位置 | `material.content` |
 | 材料引用"图X""图Y"多张图 | 创建多个占位符，需图片分析确认是否合并 | Step3 占位符 |
 | 题干无"如图"但有图片 | 依赖 `content.md` 中 `{{image}}` 标记判断归属 | Step3 占位符 |
@@ -61,3 +61,7 @@
 | 子问题中【图片位置】标记 | 图片插入到该子问题题干后 | Step3 占位符位置 |
 | 选项含【图片位置】标记 | 图片替代选项文字（如A/B/C/D为图） | Step3 占位符位置 |
 | `{{table:table_NNN}}` 占位符 | 表格插入到占位符位置，使用 segments 结构 | Step2 表格 segments |
+| 图片/表格后的"注：""（注：）""注释：" | 识别为**注释**，作为独立 text segment，**紧跟在表格/图片 segment 之后**，不可合并到材料正文 content 中 | `material.segments[]` (text) |
+| 注释含 ①②③④ 序号 | **每个序号必须用 `\n` 分隔**（如 `"注：①XXX\n②YYY"`），保证排版时按序号换行渲染 | `segment.content` |
+| 注释 segment 位置 | 注释必须出现在被注释的表格/图片 segment **之后**，不允许放在表格之前 | `material.segments[]` 顺序 |
+| 注释字体语义 | 注释属于表格/图片的补充说明，**不是材料正文**——不允许合并到 `content` 字段 | `material.content` 保持不含注释 |
