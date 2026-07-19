@@ -38,7 +38,7 @@ PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
 sys.path.insert(0, SCRIPT_DIR)
 sys.path.insert(0, PROJECT_DIR)
 
-from utils import docx_to_markdown, check_pending_symbols
+from utils import docx_to_markdown, check_pending_symbols, resolve_output_root
 
 # ============================================================================
 # 配置
@@ -59,6 +59,8 @@ class BatchProcessor:
 
     def __init__(self, output_dir: str):
         self.output_dir = os.path.abspath(output_dir)
+        # 初始化输出目录（自动创建、权限验证）
+        self._init_output_dir()
         self.summary = {
             "batch_id": datetime.now().strftime("%Y%m%d_%H%M%S"),
             "started_at": datetime.now().isoformat(),
@@ -83,6 +85,49 @@ class BatchProcessor:
                     if "[ERROR]" in line or "[CRITICAL]" in line:
                         errors.append(line.strip())
         return errors
+
+    def _init_output_dir(self):
+        """初始化输出目录：确保存在且可写。
+
+        首次运行自动创建，后续运行复用已有目录。
+        若目录被删除，重新创建即可。
+        """
+        try:
+            os.makedirs(self.output_dir, exist_ok=True)
+            # 验证可写
+            test_file = os.path.join(self.output_dir, '.write_test_tmp')
+            with open(test_file, 'w') as f:
+                f.write('test')
+            os.remove(test_file)
+        except PermissionError:
+            print(f"[错误] 权限不足，无法写入输出目录: {self.output_dir}", file=sys.stderr)
+            print("请检查文件夹权限，或尝试以管理员身份运行程序。", file=sys.stderr)
+            sys.exit(1)
+        except OSError as e:
+            print(f"[错误] 输出目录初始化失败: {self.output_dir}", file=sys.stderr)
+            print(f"  错误详情: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    def _monitor_file_output(self, file_path: str, operation: str = "写入") -> bool:
+        """监控文件输出状态，失败时输出明确错误提示。
+
+        Args:
+            file_path: 目标文件路径
+            operation: 操作描述（如"写入"、"保存"）
+
+        Returns:
+            bool: 文件是否成功写入
+        """
+        if not os.path.exists(file_path):
+            print(f"[错误] {operation}失败，文件未生成: {file_path}", file=sys.stderr)
+            return False
+
+        file_size = os.path.getsize(file_path)
+        if file_size == 0:
+            print(f"[警告] {operation}完成但文件为空: {file_path}", file=sys.stderr)
+            return True
+
+        return True
 
     # ========================================================================
     # Step 1: 清洗（全自动）
@@ -216,6 +261,15 @@ class BatchProcessor:
             }
             result["warnings"].extend(symbol_result.get("warnings", [])[:5])
 
+            # 监控关键输出文件
+            for fpath, desc in [
+                (cleaned_docx, "清洗后文档"),
+                (cleaned_no_images, "去图片文档"),
+                (content_md, "Markdown正文"),
+            ]:
+                if not self._monitor_file_output(fpath, desc):
+                    result["warnings"].append(f"{desc}输出异常: {fpath}")
+
         except Exception as e:
             result["errors"].append(f"Step1 异常: {str(e)}")
             result["errors"].append(traceback.format_exc())
@@ -345,6 +399,14 @@ class BatchProcessor:
             }
             if all_log_errors:
                 result["errors"].extend(all_log_errors[:5])
+
+            # 监控排版输出文件
+            for fpath, desc in [
+                (output_docx_v1, "版式一文档"),
+                (output_docx_v2, "版式二文档"),
+            ]:
+                if not self._monitor_file_output(fpath, desc):
+                    result["errors"].append(f"{desc}输出失败: {fpath}")
 
         except Exception as e:
             result["errors"].append(f"Step6 异常: {str(e)}")
@@ -560,25 +622,38 @@ td{{padding:8px 12px;border-bottom:1px solid #ecf0f1}}
 # ============================================================================
 
 def main():
+    # 解析默认输出目录（桌面/排版结果）
+    try:
+        default_output_dir = resolve_output_root()
+    except RuntimeError as e:
+        print(f"[错误] {e}", file=sys.stderr)
+        default_output_dir = "output/"
+
     parser = argparse.ArgumentParser(
         description="地理试卷批量处理 v3.0 - Step1 清洗 + Step6 排版（Step2-5 由 AI 执行）",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
-  python batch_process.py --input-dir "v2.0/参考/" --output-dir "output/"
-  python batch_process.py --files "试卷1.docx" "试卷2.docx" --output-dir "output/"
+  python batch_process.py --input-dir "v2.0/参考/"
+  python batch_process.py --files "试卷1.docx" "试卷2.docx"
   python batch_process.py --input-dir "v2.0/参考/" --step1-only
-  python batch_process.py --step6-only --output-dir "output/" --exam-names "S1" "S2"
+  python batch_process.py --step6-only --exam-names "S1" "S2"
+
+默认输出目录为桌面下的"排版结果"文件夹，也可通过 --output-dir 手动指定。
         """
     )
     parser.add_argument("--input-dir", "-d", help="输入目录（含 .docx 文件）")
     parser.add_argument("--files", "-f", nargs="+", help="指定文件列表")
-    parser.add_argument("--output-dir", "-o", default="output/", help="输出根目录")
+    parser.add_argument("--output-dir", "-o", default=default_output_dir,
+                        help=f"输出根目录（默认: 桌面/排版结果）")
     parser.add_argument("--step1-only", action="store_true", help="仅执行 Step1（清洗）")
     parser.add_argument("--step6-only", action="store_true", help="仅执行 Step6（排版）")
     parser.add_argument("--exam-names", nargs="+", help="用于 --step6-only 时指定试卷名称列表")
 
     args = parser.parse_args()
+
+    # 显示输出目录信息
+    print(f"输出目录: {os.path.abspath(args.output_dir)}")
 
     # 收集输入文件
     source_files = []

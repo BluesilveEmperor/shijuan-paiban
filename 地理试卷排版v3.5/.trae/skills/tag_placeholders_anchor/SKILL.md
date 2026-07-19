@@ -1,6 +1,6 @@
 ---
 name: "tag_placeholders_anchor"
-description: "Create image placeholders only for anchor/floating images in the exam structure. Uses anchor image analysis results to determine correct positions. Does NOT create placeholders for inline images."
+description: "Create image placeholders for anchor/floating images using incremental Edit (v3.6). Must copy structure.json first, then Edit per placeholder. Invoke as Step3 after Step2 and Step4 complete."
 ---
 
 # Step3: tag_placeholders_anchor — anchor 浮动图占位（增量编辑模式）

@@ -40,6 +40,7 @@ from datetime import datetime
 from docx import Document
 from docx.shared import Cm, Emu, Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.section import WD_SECTION
 from docx.oxml.ns import qn as docx_qn
 from docx.oxml import OxmlElement
 from lxml import etree
@@ -233,11 +234,19 @@ def load_template(template_path):
 # ============================================================================
 
 def _add_page_number_footer(doc):
-    """为文档所有节添加页脚：第 X 页 共 X 页，小四(12pt)，数字 Times New Roman，下方居中。
+    """为文档节添加页脚页码。
+
+    多节文档（版式二封面+正文）：
+      - 封面节（第一节）不显示页码
+      - 正文节页码从 1 开始重新计数
+    单节文档（版式一）：所有页显示页码。
 
     使用 Word PAGE 和 NUMPAGES 域实现动态页码，打开文档后自动更新。
     """
-    for section in doc.sections:
+    sections = doc.sections
+    has_multi_sections = len(sections) > 1
+
+    for idx, section in enumerate(sections):
         footer = section.footer
         footer.is_linked_to_previous = False
 
@@ -249,6 +258,19 @@ def _add_page_number_footer(doc):
 
         p = footer.paragraphs[0]
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+        # 版式二封面节（第一节）：空页脚，不显示页码
+        if has_multi_sections and idx == 0:
+            continue
+
+        # 版式二正文节（第二节及以后）：页码从 1 开始
+        if has_multi_sections and idx == 1:
+            sectPr = section._sectPr
+            for existing in sectPr.findall(docx_qn('w:pgNumType')):
+                sectPr.remove(existing)
+            pgNumType = OxmlElement('w:pgNumType')
+            pgNumType.set(docx_qn('w:start'), '1')
+            sectPr.append(pgNumType)
 
         # 确保段落有 pPr
         pPr = p._element.find(docx_qn('w:pPr'))
@@ -3148,10 +3170,20 @@ def _generate_cover(doc, meta, sections, logger):
     # subtitle → 在"考试名称"行中以宋体显示
     # subject  → 在"科目名称"行中以黑体显示
     # 若两者相同，则 subtitle 从考试名称行中排除，只保留 subject 的黑体渲染
+    # 此外，title 末尾可能已包含科目名称（如"浙江省选考地理"），
+    # 需去除末尾的 subject 后缀以避免科目名在考试名称行和科目名称行重复显示
     exam_title_lines = []
     if title:
         # 支持 title 中的 \n 作为建议性换行标记（由 tag_structure 的 AI 判断插入）
-        exam_title_lines.extend(line for line in title.split('\n') if line.strip())
+        for line in title.split('\n'):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            # 若该行以 subject 结尾，去除科目后缀，避免与科目名称行重复
+            if subject and stripped.endswith(subject):
+                stripped = stripped[:-len(subject)].strip()
+            if stripped:
+                exam_title_lines.append(stripped)
     if subtitle and subtitle.strip() != subject.strip():
         exam_title_lines.append(subtitle)
 
@@ -3215,38 +3247,39 @@ def _generate_cover(doc, meta, sections, logger):
                 cant_split = OxmlElement('w:cantSplit')
                 trPr.append(cant_split)
 
-    # --- 答题卡与考生信息之间的空行 ---
-    p_gap = doc.add_paragraph()
-    p_gap.paragraph_format.space_before = Pt(0)
-    p_gap.paragraph_format.space_after = Pt(0)
-    p_gap.paragraph_format.line_spacing = 1.15
-    p_gap.paragraph_format.keep_with_next = True
+    # --- 答题卡与考生信息之间的空行（增大间距，使考生信息位于封面最下方） ---
+    for _ in range(6):
+        p_gap = doc.add_paragraph()
+        p_gap.paragraph_format.space_before = Pt(0)
+        p_gap.paragraph_format.space_after = Pt(0)
+        p_gap.paragraph_format.line_spacing = 1.15
 
-    # --- 考生信息行：姓名 / 班级 / 分数 ---
-    p_info = doc.add_paragraph()
-    p_info.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_info.paragraph_format.space_before = Pt(0)
-    p_info.paragraph_format.line_spacing = 1.5
+    # --- 考生信息行：姓名 / 班级 / 分数（表格三等分铺满整行） ---
+    info_table = doc.add_table(rows=1, cols=3)
+    try:
+        info_table.style = 'Table Normal'
+    except KeyError:
+        pass
+    info_table.autofit = False
+    info_table.allow_autofit = False
 
-    # "姓名：" + 留白 + "班级：" + 留白 + "分数："
-    run_name = p_info.add_run('姓名：__________')
-    _set_run_font(run_name, cn_font='宋体', en_font='Times New Roman', size_pt=14)
+    info_col_width = PAGE_CONTENT_WIDTH_CM / 3
+    labels = ['姓名：__________', '班级：__________', '分数：__________']
+    for i, label in enumerate(labels):
+        cell = info_table.rows[0].cells[i]
+        cell.width = Cm(info_col_width)
+        cell.text = ''
+        p_cell = cell.paragraphs[0]
+        p_cell.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_cell.paragraph_format.space_before = Pt(0)
+        p_cell.paragraph_format.space_after = Pt(0)
+        run = p_cell.add_run(label)
+        _set_run_font(run, cn_font='宋体', en_font='Times New Roman', size_pt=14)
+        _set_answer_cell_border(cell, has_border=False)
 
-    run_spacer1 = p_info.add_run('        ')
-    _set_run_font(run_spacer1, cn_font='宋体', size_pt=14)
-
-    run_class = p_info.add_run('班级：__________')
-    _set_run_font(run_class, cn_font='宋体', en_font='Times New Roman', size_pt=14)
-
-    run_spacer2 = p_info.add_run('        ')
-    _set_run_font(run_spacer2, cn_font='宋体', size_pt=14)
-
-    run_score = p_info.add_run('分数：__________')
-    _set_run_font(run_score, cn_font='宋体', en_font='Times New Roman', size_pt=14)
-
-    # --- 封面与正文之间的分页 ---
-    doc.add_page_break()
-    logger.info('  封面→正文分页已添加')
+    # --- 封面与正文之间的分节（封面无页码，正文页码从1开始） ---
+    doc.add_section(WD_SECTION.NEW_PAGE)
+    logger.info('  封面→正文分节已添加')
 
 
 # ============================================================================

@@ -1,6 +1,6 @@
 ---
 name: "pipeline_token_saver"
-description: "Optimizes the v3.5 pipeline to avoid regenerating large JSON files. AI only outputs deltas (incremental changes), Python scripts handle merging. Invoke when running the exam formatting pipeline to save 60-80% tokens on Steps 3 and 5."
+description: "Reference document for v3.6 token optimization strategies (incremental editing, script-first, delta output). Not a pipeline step — its content has been integrated into master_exam_layout. Read for background only."
 ---
 
 # Pipeline Token Saver — 增量 JSON 优化

@@ -3261,10 +3261,20 @@ def _generate_cover(doc, meta, sections, logger):
     # subtitle → 在"考试名称"行中以宋体显示
     # subject  → 在"科目名称"行中以黑体显示
     # 若两者相同，则 subtitle 从考试名称行中排除，只保留 subject 的黑体渲染
+    # 此外，title 末尾可能已包含科目名称（如"浙江省选考地理"），
+    # 需去除末尾的 subject 后缀以避免科目名在考试名称行和科目名称行重复显示
     exam_title_lines = []
     if title:
         # 支持 title 中的 \n 作为建议性换行标记（由 tag_structure 的 AI 判断插入）
-        exam_title_lines.extend(line for line in title.split('\n') if line.strip())
+        for line in title.split('\n'):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            # 若该行以 subject 结尾，去除科目后缀，避免与科目名称行重复
+            if subject and stripped.endswith(subject):
+                stripped = stripped[:-len(subject)].strip()
+            if stripped:
+                exam_title_lines.append(stripped)
     if subtitle and subtitle.strip() != subject.strip():
         exam_title_lines.append(subtitle)
 

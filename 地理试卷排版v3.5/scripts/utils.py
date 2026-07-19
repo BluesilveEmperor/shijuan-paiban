@@ -1123,6 +1123,154 @@ def _extract_wmf_exttextout(data):
     return None
 
 
+# =====================================================================
+# 输出目录管理
+# =====================================================================
+
+# 默认输出文件夹名称（位于桌面根目录下）
+DEFAULT_OUTPUT_FOLDER = "排版结果"
+
+
+def resolve_output_root(folder_name=None):
+    """解析并准备输出根目录（桌面下的指定文件夹）。
+
+    首次运行时自动在桌面创建文件夹，后续运行复用已有文件夹。
+    若文件夹被删除，重新创建即可。
+
+    Args:
+        folder_name: 文件夹名称，默认为 DEFAULT_OUTPUT_FOLDER ("排版结果")
+
+    Returns:
+        str: 输出根目录的绝对路径
+
+    Raises:
+        RuntimeError: 当桌面路径无法定位或目录创建/写入失败时
+    """
+    if folder_name is None:
+        folder_name = DEFAULT_OUTPUT_FOLDER
+
+    # 1. 定位桌面路径
+    desktop_path = _get_desktop_path()
+    if not desktop_path or not os.path.isdir(desktop_path):
+        raise RuntimeError(
+            f"无法定位桌面路径（解析结果: {desktop_path}）。"
+            "请检查系统环境或手动指定输出目录。"
+        )
+
+    # 2. 构建输出根目录路径
+    output_root = os.path.join(desktop_path, folder_name)
+
+    # 3. 自动创建目录（如不存在）
+    try:
+        os.makedirs(output_root, exist_ok=True)
+    except PermissionError:
+        raise RuntimeError(
+            f"权限不足，无法创建输出目录: {output_root}\n"
+            "请检查文件夹权限，或尝试以管理员身份运行程序。"
+        )
+    except OSError as e:
+        raise RuntimeError(
+            f"创建输出目录失败: {output_root}\n错误: {e}"
+        )
+
+    # 4. 验证目录可写
+    _verify_dir_writable(output_root)
+
+    return output_root
+
+
+def _get_desktop_path():
+    """跨平台获取桌面路径。
+
+    优先级:
+      1. Windows: USERPROFILE + Desktop / OneDrive/Desktop
+      2. macOS/Linux: XDG_DESKTOP_DIR 或 ~/Desktop
+
+    Returns:
+        str or None: 桌面目录绝对路径，无法定位时返回 None
+    """
+    # Windows: 尝试 OneDrive 桌面（很多用户开启了 OneDrive）
+    userprofile = os.environ.get('USERPROFILE', '')
+    if userprofile:
+        # OneDrive 桌面
+        onedrive = os.environ.get('OneDrive', '')
+        if onedrive:
+            onedrive_desktop = os.path.join(onedrive, 'Desktop')
+            if os.path.isdir(onedrive_desktop):
+                return onedrive_desktop
+        # 标准 Desktop
+        standard_desktop = os.path.join(userprofile, 'Desktop')
+        if os.path.isdir(standard_desktop):
+            return standard_desktop
+
+    # XDG 标准（Linux/macOS）
+    xdg_desktop = os.environ.get('XDG_DESKTOP_DIR', '')
+    if xdg_desktop and os.path.isdir(xdg_desktop):
+        return xdg_desktop
+
+    # 回退: ~/Desktop
+    home = os.path.expanduser('~')
+    fallback = os.path.join(home, 'Desktop')
+    if os.path.isdir(fallback):
+        return fallback
+
+    return None
+
+
+def _verify_dir_writable(dir_path):
+    """验证目录是否可写入，失败时抛出 RuntimeError。
+
+    Args:
+        dir_path: 待验证的目录路径
+
+    Raises:
+        RuntimeError: 目录不可写时
+    """
+    test_file = os.path.join(dir_path, '.write_test_tmp')
+    try:
+        with open(test_file, 'w') as f:
+            f.write('test')
+        os.remove(test_file)
+    except (PermissionError, OSError) as e:
+        raise RuntimeError(
+            f"输出目录不可写入: {dir_path}\n"
+            f"错误: {e}\n"
+            "请检查文件夹权限，或尝试以管理员身份运行程序。"
+        )
+
+
+def ensure_output_subdirs(output_root, subdirs=None):
+    """确保输出根目录下的子目录全部存在。
+
+    Args:
+        output_root: 输出根目录绝对路径
+        subdirs: 子目录名称列表，默认为 ["清洗产物", "中间数据", "试卷数据", "排版文档"]
+
+    Returns:
+        dict: {子目录名: 绝对路径}
+
+    Raises:
+        RuntimeError: 任何子目录创建失败时
+    """
+    if subdirs is None:
+        subdirs = ["清洗产物", "中间数据", "试卷数据", "排版文档"]
+
+    paths = {}
+    errors = []
+    for name in subdirs:
+        path = os.path.join(output_root, name)
+        try:
+            os.makedirs(path, exist_ok=True)
+            paths[name] = path
+        except (PermissionError, OSError) as e:
+            errors.append(f"创建子目录失败: {path} ({e})")
+
+    if errors:
+        raise RuntimeError("输出目录初始化失败:\n" + "\n".join(errors))
+
+    return paths
+
+
 def _extract_wmf_mathml(data):
     """从 WMF 末尾搜索并解析 MathML XML，提取文本。"""
     try:

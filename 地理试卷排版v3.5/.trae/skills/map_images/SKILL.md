@@ -1,6 +1,6 @@
 ---
 name: "map_images"
-description: "Fallback skill for image mapping correction. Primary path is map_images.py script. AI only intervenes when the script produces unmapped items or low-confidence results. Invoke as Step5c only if Step5a (script) has unresolved issues."
+description: "AI fallback for image mapping when map_images.py has unmapped items. Outputs only delta overrides (image_mapping_overrides.json). Invoke as Step5c only if Step5a script reports unresolved issues."
 ---
 
 # Step5c: map_images — AI 兜底修正（v3.6 脚本优先模式）

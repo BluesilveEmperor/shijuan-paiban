@@ -1,6 +1,6 @@
 ---
 name: "master_exam_layout"
-description: "Orchestrates the 6-step dual-track geography exam formatting pipeline v3.6. Step3 uses incremental Edit (no full JSON rewrite). Step5 runs map_images.py script first, AI only intervenes for unmapped items. Invoke when user provides a raw exam .docx for full pipeline formatting."
+description: "Orchestrates the 6-step exam formatting pipeline (v3.6). Uses incremental Edit for Step3 and script-first for Step5. Invoke when user provides a raw .docx for full pipeline formatting."
 ---
 
 ## Role
@@ -38,7 +38,13 @@ description: "Orchestrates the 6-step dual-track geography exam formatting pipel
 
 ### 前置：创建工作目录
 
-提取试卷名称 `os.path.splitext(os.path.basename(input_file))[0]`，工作目录为 `output/{试卷名称}/`。
+提取试卷名称 `os.path.splitext(os.path.basename(input_file))[0]`，工作目录为 `~/Desktop/排版结果/{试卷名称}/`（即桌面根目录下的"排版结果"文件夹内）。
+
+**输出目录规则**：
+- 首次运行时，自动在桌面创建"排版结果"文件夹，所有输出按原有内部结构保存
+- 后续运行复用已有"排版结果"文件夹，新输出追加或更新
+- 若文件夹被删除，自动重新创建
+- 使用 `scripts/utils.py` 的 `resolve_output_root()` 解析桌面路径并验证权限
 
 确认存在以下目录，不存在则创建：
 
@@ -443,7 +449,8 @@ python scripts/check_compliance.py --work-dir {工作目录} --step step6
 
 主编排收到指令后：
 1. 确认输入文件存在
-2. 创建工作目录及四个子目录
-3. 逐步骤调度执行
-4. 每步完成后报告状态
-5. 全部完成后输出汇总报告
+2. 调用 `resolve_output_root()` 确认桌面"排版结果"文件夹可访问
+3. 创建工作目录（`排版结果/{试卷名称}/`）及四个子目录
+4. 逐步骤调度执行
+5. 每步完成后报告状态
+6. 全部完成后输出汇总报告
