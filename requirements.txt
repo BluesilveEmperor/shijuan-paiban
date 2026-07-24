@@ -1,0 +1,13 @@
+# 地理试卷排版系统 v3.6 - Python 依赖
+
+# Word 文档处理
+python-docx>=0.8.11
+
+# XML 处理
+lxml>=4.9.0
+
+# JSON Schema 校验（如需要）
+jsonschema>=4.0.0
+
+# 图片处理（如需要 PIL）
+Pillow>=9.0.0
