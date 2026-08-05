@@ -1,5 +1,5 @@
 ---
-name: pdf-docx-latex
+name: shijuan-paiban
 description: >-
   将试卷文件（DOCX 或 PDF）自动转换为 LaTeX 排版并编译为 PDF。
   支持两种输入格式：

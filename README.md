@@ -1,4 +1,4 @@
-# pdf-docx-latex
+# shijuan-paiban
 
 试卷文件（PDF / DOCX）自动转换为 LaTeX 排版并编译为 PDF 的 Skill。
 
@@ -34,8 +34,8 @@
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/BluesilveEmperor/pdf-docx-latex.git
-cd pdf-docx-latex
+git clone https://github.com/BluesilveEmperor/shijuan-paiban.git
+cd shijuan-paiban
 
 # 2. 安装通用依赖
 pip install Pillow
@@ -175,7 +175,7 @@ MinerU SDK 自动提取图片，保存到输出目录。图片目录命名为 `I
 ## 文件结构
 
 ```
-pdf-docx-latex/
+shijuan-paiban/
 ├── README.md              # 本文件
 ├── SKILL.md               # Skill 主文档（完整工作流 + 嵌入式模板）
 ├── LICENSE                # MIT 许可证
