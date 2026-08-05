@@ -179,6 +179,10 @@ shijuan-paiban/
 ├── README.md              # 本文件
 ├── SKILL.md               # Skill 主文档（完整工作流 + 嵌入式模板）
 ├── LICENSE                # MIT 许可证
+├── docs/
+│   ├── 试卷排版技能工作流与排版细节.md    # 完整说明（Markdown 版）
+│   ├── 试卷排版技能工作流与排版细节.tex    # 完整说明（LaTeX 源文件）
+│   └── 试卷排版技能工作流与排版细节.pdf    # 完整说明（编译成品）
 ├── evals/
 │   └── evals.json         # 评估用例
 └── scripts/               # 辅助脚本（如有）
@@ -197,3 +201,4 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 
 - [MinerU 官网](https://mineru.net)
 - [math-reference-read](https://github.com/BluesilveEmperor/math-reference-read) — PDF 智能解析 Skill
+- [工作流与排版细节全解](docs/试卷排版技能工作流与排版细节.pdf) — 完整技能说明（含 [Markdown](docs/试卷排版技能工作流与排版细节.md) / [LaTeX](docs/试卷排版技能工作流与排版细节.tex) 源文件）
