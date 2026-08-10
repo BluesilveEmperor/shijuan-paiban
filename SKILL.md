@@ -18,7 +18,6 @@ compatibility:
     - Edit
   require_skills:
     - docx
-    - math-reference-read
 ---
 
 # 试卷 → LaTeX 自动排版
@@ -81,12 +80,6 @@ DOCX_SKILL_DIR=$(find ~/.claude/skills -maxdepth 2 -name "SKILL.md" -path "*/doc
 ```
 
 如果没找到，检查 `C:\Users\zhuge\.claude\skills\docx\` 是否存在。
-
-```bash
-MATH_SKILL_DIR=$(find ~/.claude/skills -maxdepth 2 -name "SKILL.md" -path "*/math-reference-read/SKILL.md" -exec dirname {} \; 2>/dev/null | head -1)
-```
-
-如果没找到，检查 `C:\Users\GLY\.claude\skills\math-reference-read\` 或 `C:\Users\GLY\math-reference-read\` 是否存在。
 
 ## 标准工作流（按顺序执行）
 
@@ -156,14 +149,15 @@ else:
 **使用 MinerU SDK 提取 PDF：**
 
 ```bash
-# 使用 math-reference-read skill 的配套脚本
-python "$MATH_SKILL_DIR/scripts/math_pdf_extract.py" \
+# 使用本 skill 内嵌的脚本（无需外部 math-reference-read skill）
+MATH_EXTRACT=$(find ~/.claude/skills -path "*/shijuan-paiban*/scripts/math_pdf_extract.py" 2>/dev/null | head -1)
+python "$MATH_EXTRACT" \
   "<pdf路径>" \
   --output-dir ./math-output \
-  --language en
+  --language ch
 ```
 
-> **注意**：中文试卷使用 `--language ch`。
+> **注意**：中文试卷使用 `--language ch`（已设为默认示例），英文论文用 `--language en`。
 
 脚本会在 `./math-output/` 目录生成：
 - `<文件名>.md` — 最终的 Markdown 文件（核心产物）
@@ -171,7 +165,8 @@ python "$MATH_SKILL_DIR/scripts/math_pdf_extract.py" \
 
 **⚠️ Windows 编码兼容**：如遇 `UnicodeEncodeError: 'gbk'` 错误，加前缀：
 ```bash
-PYTHONIOENCODING=utf-8 python "$MATH_SKILL_DIR/scripts/math_pdf_extract.py" ...
+MATH_EXTRACT=$(find ~/.claude/skills -path "*/shijuan-paiban*/scripts/math_pdf_extract.py" 2>/dev/null | head -1)
+PYTHONIOENCODING=utf-8 python "$MATH_EXTRACT" ...
 ```
 
 **脚本参数说明：**

@@ -185,13 +185,14 @@ shijuan-paiban/
 │   └── 试卷排版技能工作流与排版细节.pdf    # 完整说明（编译成品）
 ├── evals/
 │   └── evals.json         # 评估用例
-└── scripts/               # 辅助脚本（如有）
+└── scripts/
+    └── math_pdf_extract.py  # MinerU SDK PDF→Markdown 提取脚本（内嵌，无需外部依赖）
 ```
 
 ## 依赖 Skill
 
 - **docx**：DOCX 解包脚本（`scripts/office/unpack.py`）
-- **math-reference-read**：MinerU SDK 提取脚本（`scripts/math_pdf_extract.py`）
+- **PDF 提取脚本已内嵌**：`scripts/math_pdf_extract.py`（封装 MinerU SDK，无需外部 math-reference-read skill）
 
 ## 许可证
 
@@ -200,5 +201,4 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 ## 相关链接
 
 - [MinerU 官网](https://mineru.net)
-- [math-reference-read](https://github.com/BluesilveEmperor/math-reference-read) — PDF 智能解析 Skill
 - [工作流与排版细节全解](docs/试卷排版技能工作流与排版细节.pdf) — 完整技能说明（含 [Markdown](docs/试卷排版技能工作流与排版细节.md) / [LaTeX](docs/试卷排版技能工作流与排版细节.tex) 源文件）
