@@ -1,0 +1,181 @@
+% ============================================================
+%  地理试卷 LaTeX 模板
+%  适用于高考地理/文科综合地理部分试卷排版
+%  说明：
+%    - 采用 12pt 字号 + 2.5cm 边距
+%    - 选择题选项使用 tasks 环境
+%    - 大题编号使用 enumitem 体系，支持多级嵌套
+%    - 支持图片 wrapfigure/minipage 环绕
+%    - 支持 TikZ 绘图（区域地图示意）
+% ============================================================
+
+\documentclass[12pt, a4paper, oneside]{ctexart}
+
+% ── 1. 数学与链接 ──
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage[bookmarks=true, colorlinks, citecolor=blue, linkcolor=black]{hyperref}
+
+% ── 2. 字体方案 ──
+\usepackage{newtxmath}
+
+% ── 3. 页面布局（2.5cm 边距） ──
+\usepackage[a4paper, margin=2.5cm, footskip=1cm]{geometry}
+
+% ── 4. 页眉页脚 ──
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{地理试题第\thepage 页（共\pageref{LastPage}页）}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ── 5. 表格与插图 ──
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{diagbox}
+\usepackage{makecell}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+% ── 6. 选择题选项（tasks 环境） ──
+\usepackage{tasks}
+\settasks{
+    label       = \Alph*.,
+    label-width = 1.8em,
+    item-indent = 2.4em,
+    label-offset = 0.5em,
+    column-sep  = 2em,
+    before-skip = 0pt,
+    after-skip  = 0pt
+}
+
+% ── 7. 大题编号（enumitem 体系，支持三级嵌套） ──
+\usepackage[shortlabels]{enumitem}
+\newlist{examenum}{enumerate}{3}
+\setlist[examenum,1]{label=\arabic*., leftmargin=2em, itemsep=0.3em, parsep=0em}
+\setlist[examenum,2]{label=(\arabic*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+\setlist[examenum,3]{label=(\roman*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+
+% ── 8. 自定义命令 ──
+
+% 下划线填空（用于填空题）
+\newcommand{\blank}{\underline{\hspace{2cm}}}
+
+% 大标题辅助命令
+\newcommand{\subjecttitle}[1]{{\fontsize{24pt}{22pt}\selectfont\centering\textbf{#1}\par}}
+\newcommand{\subtitle}[1]{{\fontsize{16pt}{16pt}\selectfont\centering #1\par}}
+
+% 图片插入命令（地理图表）
+\newcommand{\geoimg}[2][0.35]{%
+  \includegraphics[width=#1\textwidth,keepaspectratio]{#2}%
+}
+
+% ── 9. 正文开始 ──
+\begin{document}
+
+% ── 试卷标题区 ──
+\begin{center}
+    \LARGE{\textbf{202X年普通高等学校招生全国统一考试\\地理}}
+\end{center}
+
+\vspace{0.5em}
+
+% ── 注意事项 ──
+\noindent\textbf{注意事项}：
+
+1．答卷前，考生务必将自己的姓名、准考证号填写在答题卡上。
+
+2．回答选择题时，选出每小题答案后，用铅笔把答题卡上对应题目的答案标号涂黑。
+如需改动，用橡皮擦干净后，再选涂其它答案标号。回答非选择题时，将答案写在答题卡上，
+写在本试卷上无效。
+
+3．考试结束后，将本试卷和答题卡一并交回。
+
+\vspace{1em}
+
+% ══════════════════════════════════════════
+%  一、选择题（15 小题，每小题 3 分，共 45 分）
+% ══════════════════════════════════════════
+
+\noindent\textbf{一、选择题：本题共15小题，每小题3分，共45分。在每小题给出的四个选项中，
+只有一项是符合题目要求的。}
+
+\begin{enumerate}[itemsep=0.3em]
+    \item 下图为某区域等高线地形图。据此回答1～2题。
+
+    \begin{wrapfigure}{r}{0.35\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{media/img_001.png}
+    \captionof{figure}{某区域等高线地形图}
+    \end{wrapfigure}
+
+    \item 图中①②③④四地中，海拔最高的是
+    \begin{tasks}(4)
+        \task ①
+        \task ②
+        \task ③
+        \task ④
+    \end{tasks}
+
+    \item 图中河流流向为
+    \begin{tasks}(4)
+        \task 自东向西
+        \task 自西向东
+        \task 自南向北
+        \task 自北向南
+    \end{tasks}
+\end{enumerate}
+
+% ══════════════════════════════════════════
+%  二、非选择题（共 55 分）
+% ══════════════════════════════════════════
+
+\noindent\textbf{二、非选择题：共55分。第16～18题为必考题，每个试题考生都必须作答。}
+
+\begin{examenum}[start=16, itemsep=2.5cm]
+    \item （12分）阅读图文材料，完成下列要求。
+
+    \begin{wrapfigure}{r}{0.35\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{media/img_002.png}
+    \captionof{figure}{某区域地理事物分布图}
+    \end{wrapfigure}
+
+    材料一：某区域位于北纬30°～40°之间，地势西高东低，气候多样。
+
+    \begin{examenum}
+        \item 简述该区域地形特征。（4分）
+        \item 分析该区域气候类型及成因。（4分）
+        \item 说明该区域主要生态环境问题及治理措施。（4分）
+    \end{examenum}
+
+    \item （15分）阅读图文材料，完成下列要求。
+
+    材料二：下表为甲、乙、丙三地气候数据统计表。
+
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    地点 & 年均温(℃) & 年降水量(mm) & 气候类型 \\
+    \hline
+    甲 & 15.2 & 850 & 亚热带季风气候 \\
+    \hline
+    乙 & 8.6 & 420 & 温带大陆性气候 \\
+    \hline
+    丙 & 22.1 & 1560 & 热带季风气候 \\
+    \hline
+    \end{tabular}
+    \end{table}
+
+    \begin{examenum}
+        \item 判断甲、乙、丙三地所属的气候类型。（3分）
+        \item 分析三地气候差异的主要成因。（6分）
+        \item 说明气候对三地农业生产的影响。（6分）
+    \end{examenum}
+\end{examenum}
+
+\end{document}

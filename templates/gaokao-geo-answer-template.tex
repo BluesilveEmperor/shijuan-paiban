@@ -1,0 +1,120 @@
+% ============================================
+% 地理参考答案 LaTeX 模板
+%  适用于高考地理试卷的答案解析排版
+% 使用 XeLaTeX 编译
+% ============================================
+\documentclass[12pt,a4paper]{ctexart}
+
+% ========== 页面布局 ==========
+\usepackage[top=2cm,bottom=2cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% ========== 列表 ==========
+\usepackage{enumitem}
+
+% ========== 数学公式 ==========
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+
+% ========== 插图 ==========
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+% ========== 颜色 ==========
+\usepackage{xcolor}
+
+% ========== 表格 ==========
+\usepackage{array,booktabs,caption}
+
+% ========== 页眉页脚 ==========
+\usepackage{fancyhdr}
+\setlength{\headheight}{13.6pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\small 202X年普通高等学校招生全国统一考试\,$\cdot$\,地理\quad 参考答案}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ========== 超链接 ==========
+\usepackage[hidelinks]{hyperref}
+
+% ========== 自定义命令 ==========
+
+% 【答案】红色加粗
+\newcommand{\daan}[1]{{\color{red}\textbf{【答案】#1}}}
+
+% 【解析】灰色前缀，正文用楷体
+\newcommand{\jieti}{\par{\color{gray!60!black}\textbf{【解析】}}}
+
+% 【详解】蓝色前缀
+\newcommand{\xijie}{\par{\color{blue!60!black}\textbf{【详解】}}}
+
+% 【小问1详解】、【小问2详解】
+\newcommand{\xiaoI}{\par{\color{blue!60!black}\textbf{【小问 1 详解】}}}
+\newcommand{\xiaoII}{\par{\color{blue!60!black}\textbf{【小问 2 详解】}}}
+
+% 插入公式图片（WMF 转为 PNG）
+\newcommand{\eqimg}[2][0.5]{%
+  \includegraphics[width=#1\textwidth,keepaspectratio]{#2}%
+}
+
+% 虚数单位和自然底数
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\me}{\mathrm{e}}
+
+% ========== 正文 ==========
+\begin{document}
+
+% 标题区
+\begin{center}
+    {\large\textbf{绝密\,$\bigstar$\,启用前\qquad 试卷类型：A}}
+    \vspace{1em}
+    {\Large\textbf{202X年普通高等学校招生全国统一考试}}
+    \vspace{0.5em}
+    {\huge\textbf{地\ \ 理}}
+    \vspace{1em}
+    {\large\textbf{参考答案}}
+    \vspace{0.5em}
+    \hrule
+\end{center}
+
+% ══════════════════════════════════════
+%  一、选择题（15 小题，共 45 分）
+% ══════════════════════════════════════
+\section*{一、选择题}
+本题共 15 小题，每小题 3 分，共 45 分。在每小题给出的四个选项中，
+只有一项是符合题目要求的。
+
+\begin{enumerate}
+    \item 题目文本
+    \begin{flushleft}
+        A.\ \eqimg[0.15]{imageN.png}\quad
+        B.\ \eqimg[0.15]{imageN.png}\quad
+        C.\ \eqimg[0.15]{imageN.png}\quad
+        D.\ \eqimg[0.15]{imageN.png}
+    \end{flushleft}
+    \daan{B}
+    \jieti 解析内容.
+    \xijie 详解内容.
+\end{enumerate}
+
+% ══════════════════════════════════════
+%  二、非选择题（共 55 分）
+% ══════════════════════════════════════
+\section*{二、非选择题}
+共 55 分。第 16～18 题为必考题，每个试题考生都必须作答。
+
+\begin{enumerate}[resume]
+    \item （12分）题目描述．
+    \begin{enumerate}
+        \item 第1问；
+        \item 第2问．
+    \end{enumerate}
+    \daan{(1) 答案\quad (2) 答案}
+    \jieti 解析内容.
+    \xiaoI 第1问详解.
+    \xiaoII 第2问详解.
+\end{enumerate}
+
+\end{document}

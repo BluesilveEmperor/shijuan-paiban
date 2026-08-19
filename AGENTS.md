@@ -53,12 +53,14 @@ Step6: typeset_exam        → 排版后 .docx                        (脚本)
 ## 目录结构
 
 ```
-地理试卷排版v3.5/
+GeoPaperFormat/
+├── SKILL.md           # 顶层入口（唯一入口，融合总览+调度+约定）
+├── references/        # 流水线步骤详细规则（01-06）
 ├── scripts/           # Python 脚本（禁止修改，禁止在工作目录创建 .py）
 ├── schemas/           # exam_paper.schema.json 统一数据契约
 ├── templates/         # 打标参考模板和案例
 ├── assets/            # template.dotx 样式模板
-└── .trae/skills/      # Trae IDE 技能定义（SKILL.md 格式）
+└── .trae.backup/      # 旧版 8 技能备份（不再使用）
 ```
 
 ## 严格禁止的行为

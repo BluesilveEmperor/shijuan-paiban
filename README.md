@@ -11,27 +11,28 @@
 - **Schema 校验**：统一的 JSON 数据契约，确保每步产物符合规范
 - **双版本输出**：同时生成标准版式和封面版式两个版本
 
-## 技能列表
+## 技能结构
 
-本项目包含 8 个技能模块：
+本项目采用**单入口 + 内部步骤**结构，顶层 `SKILL.md` 是唯一入口，6 个 reference 文档描述各步骤详细规则。
 
-### 主技能
+### 顶层入口
 
-| 技能名称 | 功能 | 触发条件 |
-|---------|------|---------|
-| **geo-exam-formatting** | 完整的地理试卷排版流水线（v3.6） | 用户提供原始地理试卷 .docx 文件时 |
-| **master-exam-layout** | 编排 6 步试卷排版流水线 | 用户需要对完整流水线进行排版时 |
+| 文件 | 功能 |
+|------|------|
+| **SKILL.md** | 唯一入口，融合流水线总览 + 编排调度 + 运行约定，agent 只需识别此文件 |
 
-### 子技能（流水线步骤）
+### 流水线步骤文档（references/）
 
-| 技能名称 | 步骤 | 功能 | 触发条件 |
-|---------|-----|------|---------|
-| **clean-exam** | Step1 | 清洗原始 .docx，提取文本和图片 | 启动试卷排版流水线时 |
-| **tag-structure** | Step2 | 识别试卷结构（分区/题号/选项等） | Step1 完成后 |
-| **tag-placeholders-anchor** | Step3 | 为 anchor 浮动图创建占位符 | Step2 完成且存在 anchor 图片时 |
-| **tag-images-anchor** | Step4 | 理解 anchor 浮动图内容 | 可与 Step2 并行，存在 anchor 图片时 |
-| **map-images** | Step5 | 双轨映射图片到占位符 | Step3/Step4 完成后 |
-| **typeset-exam** | Step6 | 生成最终排版 Word 文档 | Step5 完成后 |
+| 文件 | 步骤 | 功能 | 触发条件 |
+|------|-----|------|---------|
+| **01-clean-exam.md** | Step1 | 清洗原始 .docx，提取文本和图片 | 启动试卷排版流水线时 |
+| **02-tag-structure.md** | Step2 | 识别试卷结构（分区/题号/选项等） | Step1 完成后 |
+| **03-tag-placeholders-anchor.md** | Step3 | 为 anchor 浮动图创建占位符（增量编辑） | Step2 完成且存在 anchor 图片时 |
+| **04-tag-images-anchor.md** | Step4 | 理解 anchor 浮动图内容 | 可与 Step2 并行，存在 anchor 图片时 |
+| **05-map-images.md** | Step5c | AI 兜底修正未映射项（仅 delta） | Step5a 脚本映射有未映射项时 |
+| **06-typeset-exam.md** | Step6 | 生成最终排版 Word 文档（双版本） | Step5 完成后 |
+
+> 兼容说明：`.trae/skills/` 目录保留旧版 8 技能定义供本地 Trae IDE 使用，验证新结构后将移除。
 
 ## 技术栈
 
@@ -88,21 +89,21 @@ python scripts/typeset_exam.py --json <final.json> --template assets/template.do
 ## 项目结构
 
 ```
-地理试卷排版v3.5/
-├── .trae/
-│   └── skills/              # 技能定义目录（符合 skill 规范）
-│       ├── clean-exam/      # Step1: 清洗技能
-│       ├── geo-exam-formatting/  # 主技能（完整流水线）
-│       ├── map-images/      # Step5: 映射技能
-│       ├── master-exam-layout/  # 编排技能
-│       ├── tag-images-anchor/  # Step4: anchor 图理解
-│       ├── tag-placeholders-anchor/  # Step3: anchor 图占位
-│       ├── tag-structure/   # Step2: 结构打标
-│       └── typeset-exam/    # Step6: 排版技能
+GeoPaperFormat/
+├── SKILL.md                 # 顶层入口（唯一入口，融合总览+调度+约定）
+├── references/              # 流水线步骤详细规则
+│   ├── 01-clean-exam.md            # Step1 清洗
+│   ├── 02-tag-structure.md         # Step2 结构打标
+│   ├── 03-tag-placeholders-anchor.md  # Step3 anchor 占位（增量编辑）
+│   ├── 04-tag-images-anchor.md     # Step4 anchor 图理解
+│   ├── 05-map-images.md            # Step5c AI 兜底修正
+│   └── 06-typeset-exam.md          # Step6 排版
 ├── scripts/                 # Python 脚本（禁止修改）
 ├── schemas/                 # JSON Schema 定义
 ├── templates/               # 打标参考模板和案例
-├── assets/                  # 样式模板
+├── assets/                  # 样式模板（template.dotx）
+├── .trae/skills/            # 旧版 8 技能定义（兼容本地 Trae IDE，验证后移除）
+├── AGENTS.md                # AI 代理统一指令
 ├── requirements.txt         # Python 依赖
 └── README.md                # 本文档
 ```
@@ -164,6 +165,42 @@ python scripts/typeset_exam.py --json <final.json> --template assets/template.do
 - **符号小图**（< 2KB）：标记 `{{symbol:img_xxx}}`，不做内容映射
 - **图片尺寸**：基准 = 原卷 extent 真值（来自 `image_manifest.json`）；原宽 < 6cm 才放大到 12cm
 - **一行多图**：用 `image_manifest.json` 的 `paragraph_index` 判断同段落，横排嵌入
+
+## ZIP 分发与打包
+
+本项目支持作为单入口 skill 包以 ZIP 形式分发。打包时 agent 只需识别 `SKILL.md` 作为唯一入口。
+
+### 打包方式
+
+**方式一：含外层目录（推荐）**
+
+```powershell
+# zip 内部结构：GeoPaperFormat/SKILL.md, GeoPaperFormat/references/, ...
+Compress-Archive -Path .\SKILL.md, .\references, .\scripts, .\schemas, .\templates, .\assets, .\requirements.txt, .\README.md -DestinationPath GeoPaperFormat.zip
+```
+
+**方式二：flat 包（zip 根目录直接是 SKILL.md）**
+
+```powershell
+# zip 内部结构：SKILL.md, references/, scripts/, ...
+Compress-Archive -Path .\SKILL.md, .\references, .\scripts, .\schemas, .\templates, .\assets, .\requirements.txt, .\README.md -DestinationPath GeoPaperFormat-flat.zip
+```
+
+### 打包前检查清单
+
+```
+[ ] 根目录存在 SKILL.md（含 name 和 description frontmatter）
+[ ] references/ 包含 6 个步骤文档（01-06）
+[ ] scripts/ 中被引用的脚本全部存在
+[ ] assets/template.dotx 存在
+[ ] schemas/exam_paper.schema.json 存在
+[ ] templates/ 中的示例文件存在
+[ ] requirements.txt 包含脚本运行所需依赖
+```
+
+### 打包后验证
+
+解压后确认能直接找到 `SKILL.md`，且其中引用的 `references/`、`scripts/`、`schemas/`、`templates/`、`assets/` 路径均从 skill 根目录出发。
 
 ## 许可证
 
