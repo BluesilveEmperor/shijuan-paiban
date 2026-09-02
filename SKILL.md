@@ -82,6 +82,51 @@ DOCX_SKILL_DIR=$(find ~/.claude/skills -maxdepth 2 -name "SKILL.md" -path "*/doc
 
 如果没找到，检查 `C:\Users\zhuge\.claude\skills\docx\` 是否存在。
 
+## 使用前环境检查
+
+**⚠️ 在执行任何操作前，必须检查以下环境是否就绪：**
+
+```bash
+# 1. 检查 XeLaTeX 是否可用
+xelatex --version 2>/dev/null || echo "[ERROR] XeLaTeX 未安装，请安装 TeX Live 或 MiKTeX"
+
+# 2. 检查 pandoc 是否可用
+pandoc --version 2>/dev/null || echo "[ERROR] pandoc 未安装"
+
+# 3. 检查 Python 是否可用
+python --version 2>/dev/null || python3 --version 2>/dev/null || echo "[ERROR] Python 未安装"
+
+# 4. 检查 Pillow 是否已安装（DOCX 输入需要）
+python -c "from PIL import Image; print('[OK] Pillow 已安装')" 2>/dev/null || echo "[WARN] Pillow 未安装，DOCX 的 WMF→PNG 转换需要它"
+
+# 5. 检查 MinerU SDK 是否已安装（PDF 输入需要）
+python -c "import mineru; print('[OK] MinerU SDK 已安装')" 2>/dev/null || echo "[WARN] MinerU SDK 未安装，PDF 输入需要它"
+
+# 6. 检查 MinerU 配置文件（PDF 输入需要）
+if [ -f ~/.mineru/config.yaml ]; then
+    echo "[OK] MinerU 配置文件存在"
+else
+    echo "[WARN] MinerU 配置文件不存在，PDF 输入需要配置"
+fi
+```
+
+**环境检查输出示例：**
+```
+[OK] XeLaTeX 已安装
+[OK] pandoc 已安装
+[OK] Python 3.10.0
+[OK] Pillow 已安装
+[OK] MinerU SDK 已安装
+[OK] MinerU 配置文件存在
+```
+
+**如果检查失败：**
+- 缺少 XeLaTeX → 提示用户安装 TeX Live 或 MiKTeX
+- 缺少 pandoc → 提示用户安装 pandoc
+- 缺少 Python → 提示用户安装 Python 3.8+
+- 缺少 Pillow → 提示用户运行 `pip install Pillow`
+- 缺少 MinerU SDK → 提示用户运行 `pip install mineru-open-sdk` 并配置 Token
+
 ## 标准工作流（按顺序执行）
 
 ### 1. 读取文件 → 看结构
@@ -1244,4 +1289,54 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 \end{enumerate}
 
 \end{document}
+```
 
+## 输出完成后检查仓库更新
+
+**⚠️ 在完成所有输出后，必须检查技能仓库是否有更新：**
+
+```bash
+# 1. 获取当前本地版本
+LOCAL_VERSION=$(git -C "<skill目录>" rev-parse HEAD 2>/dev/null || echo "unknown")
+echo "[INFO] 当前本地版本: $LOCAL_VERSION"
+
+# 2. 获取远程仓库最新版本
+git -C "<skill目录>" fetch origin 2>/dev/null
+
+# 3. 比较本地与远程
+REMOTE_VERSION=$(git -C "<skill目录>" rev-parse origin/main 2>/dev/null || git -C "<skill目录>" rev-parse origin/master 2>/dev/null || echo "unknown")
+
+if [ "$LOCAL_VERSION" = "$REMOTE_VERSION" ]; then
+    echo "[OK] 技能已是最新版本"
+else
+    echo "[UPDATE] 技能有新版本可用！"
+    echo "[INFO] 本地版本: $LOCAL_VERSION"
+    echo "[INFO] 远程版本: $REMOTE_VERSION"
+    echo "[INFO] 更新命令: cd <skill目录> && git pull"
+fi
+```
+
+**检查逻辑：**
+1. 获取本地 HEAD 的 commit hash
+2. 从远程仓库获取最新 commit hash
+3. 比较两者是否一致
+4. 如果不一致，提示用户有新版本可用
+
+**输出示例（无更新）：**
+```
+[INFO] 当前本地版本: c4b3453
+[OK] 技能已是最新版本
+```
+
+**输出示例（有更新）：**
+```
+[INFO] 当前本地版本: c4b3453
+[UPDATE] 技能有新版本可用！
+[INFO] 本地版本: c4b3453
+[INFO] 远程版本: a1b2c3d
+[INFO] 更新命令: cd <skill目录> && git pull
+```
+
+**仓库地址：**
+- GitHub: `https://github.com/BluesilveEmperor/shijuan-paiban`
+- GitCode: `https://gitcode.com/GLY-NXD/shijuan-paiban`
