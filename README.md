@@ -256,7 +256,7 @@ shijuan-paiban/
 ## 依赖 Skill
 
 - **docx**：DOCX 解包脚本（`scripts/office/unpack.py`）
-- **PDF 提取脚本已内嵌**：`scripts/math_pdf_extract.py`（封装 MinerU SDK，无需外部 math-reference-read skill）
+- **PDF 提取脚本已内嵌**：`scripts/math_pdf_extract.py`（封装 MinerU SDK）
 
 ## 许可证
 
