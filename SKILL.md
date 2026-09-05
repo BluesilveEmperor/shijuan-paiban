@@ -82,35 +82,79 @@ DOCX_SKILL_DIR=$(find ~/.claude/skills -maxdepth 2 -name "SKILL.md" -path "*/doc
 
 如果没找到，检查 `C:\Users\zhuge\.claude\skills\docx\` 是否存在。
 
-## 使用前环境检查
+## 使用前环境检查（必须首先执行）
 
-**⚠️ 在执行任何操作前，必须检查以下环境是否就绪：**
+**⚠️ 在执行任何操作前，必须检查以下环境是否就绪，缺少的必须引导用户配置：**
+
+### 检查命令
 
 ```bash
 # 1. 检查 XeLaTeX 是否可用
-xelatex --version 2>/dev/null || echo "[ERROR] XeLaTeX 未安装，请安装 TeX Live 或 MiKTeX"
+xelatex --version 2>/dev/null && echo "[OK] XeLaTeX 已安装" || echo "[ERROR] XeLaTeX 未安装"
 
 # 2. 检查 pandoc 是否可用
-pandoc --version 2>/dev/null || echo "[ERROR] pandoc 未安装"
+pandoc --version 2>/dev/null && echo "[OK] pandoc 已安装" || echo "[ERROR] pandoc 未安装"
 
 # 3. 检查 Python 是否可用
 python --version 2>/dev/null || python3 --version 2>/dev/null || echo "[ERROR] Python 未安装"
 
 # 4. 检查 Pillow 是否已安装（DOCX 输入需要）
-python -c "from PIL import Image; print('[OK] Pillow 已安装')" 2>/dev/null || echo "[WARN] Pillow 未安装，DOCX 的 WMF→PNG 转换需要它"
+python -c "from PIL import Image; print('[OK] Pillow 已安装')" 2>/dev/null || echo "[WARN] Pillow 未安装"
 
 # 5. 检查 MinerU SDK 是否已安装（PDF 输入需要）
-python -c "import mineru; print('[OK] MinerU SDK 已安装')" 2>/dev/null || echo "[WARN] MinerU SDK 未安装，PDF 输入需要它"
+python -c "import mineru; print('[OK] MinerU SDK 已安装')" 2>/dev/null || echo "[WARN] MinerU SDK 未安装"
 
 # 6. 检查 MinerU 配置文件（PDF 输入需要）
 if [ -f ~/.mineru/config.yaml ]; then
     echo "[OK] MinerU 配置文件存在"
 else
-    echo "[WARN] MinerU 配置文件不存在，PDF 输入需要配置"
+    echo "[WARN] MinerU 配置文件不存在"
 fi
+
+# 7. 检查 Git 是否安装（双仓库更新需要）
+git --version 2>/dev/null && echo "[OK] Git 已安装" || echo "[WARN] Git 未安装"
 ```
 
-**环境检查输出示例：**
+### 检查结果处理
+
+| 检查项 | 缺少时的处理 |
+|--------|-------------|
+| XeLaTeX | **必须安装**：提示用户安装 [TeX Live](https://tug.org/texlive/) 或 [MiKTeX](https://miktex.org/) |
+| pandoc | **必须安装**：提示用户安装 [pandoc](https://pandoc.org/installing.html) |
+| Python | **必须安装**：提示用户安装 Python 3.8+ |
+| Pillow | **DOCX输入需要**：运行 `pip install Pillow` |
+| MinerU SDK | **PDF输入需要**：运行 `pip install mineru-open-sdk` |
+| MinerU 配置 | **PDF输入需要**：引导用户配置 Token |
+
+### MinerU SDK 配置引导（PDF输入必须）
+
+如果用户需要处理 PDF 文件但未配置 MinerU SDK，必须主动引导完成配置：
+
+> "使用 MinerU SDK 解析 PDF 需要配置 API Token。
+>
+> 请执行以下步骤：
+>
+> 1. 确保已安装 mineru-open-sdk：
+>    ```bash
+>    pip install mineru-open-sdk
+>    ```
+>
+> 2. 创建配置文件：
+>    ```bash
+>    mkdir -p ~/.mineru
+>    ```
+>
+> 3. 编辑 `~/.mineru/config.yaml`，写入：
+>    ```yaml
+>    token: '你的API密钥'
+>    ```
+>
+> 4. 如果还没有密钥，请前往 https://mineru.net/apiManage/token 注册获取（免费）。
+>
+> 配置完成后重新运行即可。"
+
+### 环境检查输出示例
+
 ```
 [OK] XeLaTeX 已安装
 [OK] pandoc 已安装
@@ -120,12 +164,7 @@ fi
 [OK] MinerU 配置文件存在
 ```
 
-**如果检查失败：**
-- 缺少 XeLaTeX → 提示用户安装 TeX Live 或 MiKTeX
-- 缺少 pandoc → 提示用户安装 pandoc
-- 缺少 Python → 提示用户安装 Python 3.8+
-- 缺少 Pillow → 提示用户运行 `pip install Pillow`
-- 缺少 MinerU SDK → 提示用户运行 `pip install mineru-open-sdk` 并配置 Token
+**⚠️ 重要：只有所有必须项（XeLaTeX、pandoc、Python）都通过后，才能继续执行后续步骤。可选项（Pillow、MinerU SDK）根据输入文件类型决定是否需要。**
 
 ## 标准工作流（按顺序执行）
 
@@ -338,11 +377,12 @@ cp -r ./math-output/<图片子目录> "<docx所在目录>/{图片目录}/"
 
 两个模板均无需读取外部文件，直接从下方嵌入式模板库中取用。
 
-### 专题卷 & 周练卷模板选择规则（新增）
+### 专题卷 & 周练卷 & 错题卷模板选择规则（新增）
 
 - 文件名含 **"专题"** 或 **"专项"** → 自动使用 **zhuanti 系列模板**（四件套：student/teacher/onepage/content）
 - 文件名含 **"周练"** 或 **"周测"** 或 **"周考"** → 自动使用 **zhoukan 系列模板**（四件套：student/teacher/onepage/content）
-- 用户显式指定 `--template zhuanti` 或 `--template zhoukan` → 强制使用对应模板
+- 文件名含 **"错题"** 或 **"纠错"** 或 **"订正"** → 自动使用 **cuoti 系列模板**（三件套：student/teacher/content）
+- 用户显式指定 `--template zhuanti` 或 `--template zhoukan` 或 `--template cuoti` → 强制使用对应模板
 - 周练卷模式由参数 `--mode limited|homework` 控制（默认 limited，限时训练 30-45 分钟）
 - 专题卷分层名称由参数 `--tier-names "基础,提高,拔高"` 控制（默认三层，支持 2-4 层）
 - 周练卷题量由参数 `--mcq --msq --blank --saq` 显式指定（无默认值，必须由用户提供）
@@ -467,7 +507,7 @@ if tex_path:
 - 选择题选项 → 用模板已有的 `tasks` 环境。内容长时 2 列，简短时 4 列
 - 大题多问 → 用模板已有的 `examenum` 或嵌套 `enumerate`
 - 填空题空位 → 用 `\blank`（如果模板定义）或 `\underline{\hspace{2cm}}`
-- 大题编号：选择题用 `\begin{enumerate}`，多选题用 `\begin{enumerate}[start=9]`，填空题用 `\begin{enumerate}[start=13]`，解答题用 `\begin{examenum}[start=17, itemsep=2.5cm]`
+- 大题编号：选择题用 `\begin{enumerate}`（从 1 开始），多选题用 `\begin{enumerate}[start=9]`，填空题用 `\begin{enumerate}[start=13]`，解答题起始编号 = 单选题数 + 多选题数 + 填空题数 + 1（如 8+3+3=14 题后从 15 开始：`\begin{examenum}[start=15, itemsep=2.5cm]`）
 
 **图片插入规则（所有图片宽度不得超过 `0.35\textwidth`，图片显示在题目内容右侧）：**
 
@@ -500,6 +540,18 @@ if tex_path:
   \includegraphics[width=\linewidth]{file.png}
   \captionof{figure}{图注}
   \end{minipage}
+  ```
+
+- **单张插图（无子问）** → 题目只有一张图、没有 examenum 子问时，用 `float` 包的 `[H]` 定位 + `\raggedleft` 靠右：
+  ```latex
+  \item （13分）如图所示，在四棱锥 $P-ABCD$ 中...
+
+  \medskip
+  \begin{figure}[H]
+  \raggedleft
+  \includegraphics[width=0.35\textwidth]{file.png}
+  \caption{第15题图}
+  \end{figure}
   ```
 
 - **TikZ 图** → 用 `\resizebox{0.35\textwidth}{!}{...}` 控制宽度
@@ -541,14 +593,30 @@ if tex_path:
 - 教师版不受试卷标注页数约束，通常控制在 7 页内即可
 - 教师版不需要 `itemsep=2.5cm`（因为分页已替代间隙作用），生成时移除该设置
 
-### 5. 生成教师版 → 解答题每题分页
+### 5. 生成教师版 → 两种模式
 
 **注意：答案文档（文件名含"答案"）跳过此步，不需要生成教师版。**
 
-试题文档的教师版生成规则：
+试题文档提供 **两种教师版模式**，由参数 `--mode` 选择：
+
+| 模式 | 说明 | 适用场景 |
+|------|------|---------|
+| `onepage`（默认） | 解答题每题独占一页 | 课堂测试、考试模拟 |
+| `space` | 每道解答题下方留 4em 答题空间 | 课后作业、练习册 |
+
+**通用规则（两种模式均遵守）：**
 - **前面三个大题（一～三）不分页**，连续排版
-- **解答题（四大题）每题单独分页**（Q17跟在四、解答题标题后，Q18~Q22 各起新页）
+- **教师版不受试卷标注页数约束**
+
+**模式 A：`onepage`（一题一页）**
+- Q17 跟在「四、解答题」标题后，Q18 起每题独占一页
 - 受页数限制时，Q22 可不分页紧接 Q21 后（Q21 通常已独占一页）
+- 移除 `itemsep=2.5cm`（分页已替代间隙作用）
+
+**模式 B：`space`（答题空间）**
+- 不强制分页，保持题目连续排版
+- 保留 `itemsep=2.5cm` 作为题目间距
+- 每道解答题的 **末尾**（`\end{examenum}` 外层 item 结束后）插入 `\vspace{4em}` 作为答题空间
 
 **⚠️ 重要：Python 字符串转义陷阱**
 
@@ -560,7 +628,7 @@ if tex_path:
 
 ```python
 # ✅ 正确写法
-start_marker = r"\begin{examenum}[start=17, itemsep=2.5cm]"
+start_marker = r"\begin{examenum}[start=15, itemsep=2.5cm]"
 end_marker = r"\end{examenum}"
 content.find(start_marker)       # 用 raw string
 content.rfind(end_marker)        # 用 raw string
@@ -570,14 +638,21 @@ line.lstrip().startswith(r"\item ")  # 用 raw string
 # "\\begin{examenum}"   → 匹配的是 \x08egin{examenum}
 ```
 
-**教师版 Python 脚本模板：**
+**教师版 Python 脚本模板（支持两种模式）：**
 
 ```python
 # gen_teacher.py
+import sys
+
+# ── 模式选择：onepage（一题一页）或 space（4em 答题空间）──
+mode = sys.argv[1] if len(sys.argv) > 1 else "onepage"  # "onepage" 或 "space"
+
 with open("学生版.tex", "r", encoding="utf-8") as f:
     content = f.read()
 
-start_marker = r"\begin{examenum}[start=17, itemsep=2.5cm]"
+# ⚠️ start 值需与实际解答题起始编号一致（= 单选题数 + 多选题数 + 填空题数 + 1）
+start_num = 15  # 示例：8+3+3 配置，请根据实际题量调整
+start_marker = rf"\begin{{examenum}}[start={start_num}, itemsep=2.5cm]"
 end_marker = r"\end{examenum}"
 
 start_idx = content.find(start_marker)
@@ -591,15 +666,23 @@ new_lines = []
 
 for line in lines:
     # 嵌套深度跟踪：遇到内层 \begin{examenum} 时 depth++
-    if r"\begin{examenum}" in line and r"[start=17, itemsep=2.5cm]" not in line:
+    if r"\begin{examenum}" in line and f"[start={start_num}" not in line:
         depth += 1
     elif r"\end{examenum}" in line:
         if depth > 0:
             depth -= 1
+        else:
+            # 外层 examenum 结束 → 在此处插入分页或答题空间
+            new_lines.append(line)
+            if mode == "onepage":
+                new_lines.append(r"\newpage")
+            elif mode == "space":
+                new_lines.append(r"\vspace{4em}")
+            continue
 
-    # 外层 \item 检测：depth==0 时才是外层的 item
+    # 外层 \item 检测：depth==0 时才是外层的 item（onepage 模式加分页）
     stripped = line.lstrip()
-    if stripped.startswith(r"\item ") and depth == 0:
+    if mode == "onepage" and stripped.startswith(r"\item ") and depth == 0:
         item_count += 1
         if item_count >= 2:   # Q18 起分页
             new_lines.append(r"\newpage")
@@ -608,16 +691,27 @@ for line in lines:
 
 modified_block = '\n'.join(new_lines)
 
-# 教师版去掉 itemsep（分页替代了间隙）
-modified_block = modified_block.replace(
-    "[start=17, itemsep=2.5cm]", "[start=17]"
-)
+# onepage 模式：去掉 itemsep（分页替代了间隙）
+if mode == "onepage":
+    modified_block = modified_block.replace(
+        f"[start={start_num}, itemsep=2.5cm]", f"[start={start_num}]"
+    )
 
+suffix = "-教师版" if mode == "onepage" else "-教师版-答题空间"
 new_content = content[:start_idx] + modified_block + \
               content[end_idx + len(end_marker):]
 
-with open("教师版.tex", "w", encoding="utf-8") as f:
+with open(f"{suffix}.tex", "w", encoding="utf-8") as f:
     f.write(new_content)
+```
+
+**使用方式：**
+```bash
+# 模式 A：一题一页（默认）
+python gen_teacher.py onepage
+
+# 模式 B：4em 答题空间
+python gen_teacher.py space
 ```
 
 ### 6. 编译 → 验证
@@ -631,14 +725,21 @@ xelatex -interaction=nonstopmode "<输出文件名>.tex"
 xelatex -interaction=nonstopmode "<输出文件名>.tex"
 grep -E "Overfull|Error" "<输出文件名>.log" | grep -v "infwarerr"
 
-# 教师版
+# 教师版（两种模式都编译）
+# 模式 A：一题一页
 xelatex -interaction=nonstopmode "<输出文件名>-教师版.tex"
 xelatex -interaction=nonstopmode "<输出文件名>-教师版.tex"
 grep -E "Overfull|Error" "<输出文件名>-教师版.log" | grep -v "infwarerr"
 
+# 模式 B：答题空间
+xelatex -interaction=nonstopmode "<输出文件名>-教师版-答题空间.tex"
+xelatex -interaction=nonstopmode "<输出文件名>-教师版-答题空间.tex"
+grep -E "Overfull|Error" "<输出文件名>-教师版-答题空间.log" | grep -v "infwarerr"
+
 # 确认页数
 pdfinfo "<输出文件名>.pdf" 2>/dev/null | grep Pages
 pdfinfo "<输出文件名>-教师版.pdf" 2>/dev/null | grep Pages
+pdfinfo "<输出文件名>-教师版-答题空间.pdf" 2>/dev/null | grep Pages
 ```
 
 **答案文档 → 只编译一个版本：**
@@ -652,7 +753,8 @@ pdfinfo "<输出文件名>.pdf" 2>/dev/null | grep Pages
 
 **验证要点：**
 - 学生版/答案版页数应与试卷标注一致（如"本试卷共4页"）
-- 教师版页数不超过 7 页
+- 教师版（onepage）页数不超过 7 页
+- 教师版（space）每题下方有 4em 答题空间
 - 解答题编号正确
 - 答案文档的【答案】【解析】【详解】结构显示正确
 - 图片显示正常
@@ -663,10 +765,11 @@ rm -rf "<临时目录>"
 rm -f gen_teacher.py
 rm -f "<输出文件名>.aux" "<输出文件名>.log" "<输出文件名>.out"
 rm -f "<输出文件名>-教师版.aux" "<输出文件名>-教师版.log" "<输出文件名>-教师版.out"
+rm -f "<输出文件名>-教师版-答题空间.aux" "<输出文件名>-教师版-答题空间.log" "<输出文件名>-教师版-答题空间.out"
 ```
 
 保留：
-- **试题文档**：两个 `.tex` 源文件（学生版+教师版）、两个 `.pdf`、必要的 `.png` 图片
+- **试题文档**：三个 `.tex` 源文件（学生版+教师版+教师版-答题空间）、三个 `.pdf`、必要的 `.png` 图片
 - **答案文档**：一个 `.tex` 源文件、一个 `.pdf`、`{图片目录}/` 目录（含公式 PNG 图片）
 
 ### 8. 日志采集与上传
@@ -727,14 +830,16 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 |------|------|------|
 | `Overfull \hbox` | 公式或选项超宽 | 选项改 2 列；`\dfrac` 改 `\frac`；缩短公式 |
 | `Undefined control sequence` | 缺少宏包 | 在导言区添加 `\usepackage{...}` |
-| 图片错位/消失 | 列表环境中用了 `wrapfigure` | 改用 `minipage` 左右并排方案 |
+| 图片错位/消失 | 列表环境中用了 `wrapfigure` | 改用 `minipage` 左右并排方案（有子问）或 `[H]` + `\raggedleft`（单张无子问） |
+| 单张插图不靠右 | 题目只有一张图无子问，套用了 minipage 方案 | 用 `\begin{figure}[H]` + `\raggedleft` + `\includegraphics` 实现靠右 |
 | 页数超限 | 添加了 2.5cm 间隙 | 加 `\linespread{1.05}\selectfont` 压缩行距 |
 | Python 匹配不到 LaTeX 命令 | 字符串转义问题 | 必须用 raw string `r"\begin"` 而非 `"\\begin"` |
 | 教师版分页没生效 | Python 字符串中 `\b` 被当作退格符 | 所有含 `\b` 的字符串前加 `r` 前缀 |
+| 答题空间模式没有间距 | `space` 模式下 `\vspace{4em}` 未插入 | 检查脚本是否在 `\end{examenum}`（depth==0）后追加了 `\vspace{4em}` |
 | 中文不显示 | 非 ctex 模板 | 确认模板用 `ctexart` 或添加 `\usepackage{ctex}` |
 | 编译有 Missing $ | 花括号不匹配或中文在公式外 | 检查 `$...$` 配对 |
 | 分段函数不对齐 | `cases` 格式错误 | 每行用 `&` 对齐，`\\` 换行 |
-| 解答题编号从1开始 | 忘记设 start | 用 `\begin{examenum}[start=17]` |
+| 解答题编号从1开始 | 忘记设 start 或 start 值不对 | 用 `\begin{examenum}[start=单选题数+多选题数+填空题数+1]`（如 8+3+3 配置用 `start=15`） |
 | 答案文档中 WMF 图片过多（DOCX 输入） | 未批量转换 | 用 Python+Pillow 批量渲染 WMF→PNG，600 DPI，保存在 `{图片目录}/` |
 | 答案文档中图片不显示 | `\graphicspath` 与图片目录不匹配 | 确认 LaTeX 输出中 `\graphicspath{{目录/}}` 与实际图片目录名一致，WMF 需先转 PNG |
 | 答案的【答案】/【解析】不显示 | 模板未定义命令 | 确认引用了 gaokao-answer-template.tex，导言区有 \daan、\jieti 等定义 |
@@ -850,6 +955,178 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 排版周练 --mode limited --mcq 5 --msq 2 --blank 3 --saq 2 \
   --saq-item-sep "3cm" --mcq-cols 2
 ```
+
+### 周练卷生成工作流
+
+周练卷同样走参数化生成路径（不走标准 8 步工作流）：
+
+```
+用户说"帮我出一份周练卷" → 收集参数和题目
+    ↓
+1. 确认参数：mode、题量、日期、周次、知识点、题目内容
+    ↓
+2. 编写 zhoukan_content.tex 内容（按四大题结构填充题目）
+    ↓
+3. 运行 gen_paper.py --type zhoukan --vars vars.json --output xxx
+    ↓
+4. 编译生成 PDF（学生版 + 教师版 + 每题一页版）
+```
+
+**使用 gen_paper.py 脚本：**
+
+```bash
+# 准备变量 JSON 文件
+cat > zhoukan_vars.json << 'EOF'
+{
+    "weekNumber": "第5周",
+    "zhoukanDate": "2026-03-15",
+    "zhoukanClass": "高三(3)班",
+    "zhoukanStudent": "李四",
+    "zhoukanMode": "limited",
+    "suggestedTime": "40分钟",
+    "weekFocus": "导数概念与运算\\\\函数单调性\\\\切线方程",
+    "mcqCount": 4,
+    "msqCount": 1,
+    "blankCount": 2,
+    "saqCount": 1
+}
+EOF
+
+# 生成并编译
+python scripts/gen_paper.py --type zhoukan --vars zhoukan_vars.json --output week5_math
+```
+
+**输出文件：**
+- `week5_math_student.pdf` — 学生版（隐藏解答，留做题空间）
+- `week5_math_teacher.pdf` — 教师版（显示答案/评分/易错/周总结）
+- `week5_math_onepage.pdf` — 每题一页版
+
+---
+
+### 错题卷变量表
+
+| 变量 | 说明 | 默认值 | 备注 |
+|------|------|--------|------|
+| `cuotiTitle` | 错题卷标题 | 错题订正专练 | 如 "导数章节错题订正" |
+| `cuotiSubject` | 科目 | 数学 | |
+| `cuotiDate` | 日期 | 日期 | 学生版显示为填写线 |
+| `cuotiClass` | 班级 | 班级 | 学生版显示为填写线 |
+| `cuotiStudent` | 姓名 | 姓名 | 学生版显示为填写线 |
+| `cuotiSource` | 错题来源 | 错题来源 | 如 "第三章函数周测"、"2026年期中考试" |
+
+**页眉**：空
+**页脚**：`数学试题第\thepage 页 共\pageref{LastPage}页`（无括号）
+
+**错题卷结构（每道错题包含）：**
+1. **题目** — 原始错题呈现
+2. **错误解法**（灰色） — 展示典型错误过程
+3. **错因分析**（红色，教师版可见） — 分析错误原因
+4. **正确解法**（绿色，教师版可见） — 完整规范解答
+5. **方法总结**（棕色，教师版可见） — 归纳方法要点
+6. **同类变式**（青色，教师版可见） — 举一反三练习题
+
+### 错题卷调用示例
+
+```bash
+# 基本调用
+排版错题 --title "导数章节错题订正" --source "第三章周测" \
+  --date "2026-03-15" --class "3班" --name "李四"
+
+# 指定科目
+排版错题 --title "三角函数易错题" --subject "数学" \
+  --source "周末作业" --date "2026-03-16"
+```
+
+### 错题卷完整处理逻辑
+
+错题卷支持**图片/PDF 文件输入**，自动解析、分类、标注难度并排版：
+
+#### 处理流程
+
+```
+用户给出错题文件（图片/PDF）
+    ↓
+1. 上传文件到 MinerU 云端解析（如已有文本则跳过）
+    ↓
+2. 获取解析结果（Markdown + 图片）
+    ↓
+3. AI 分析每道错题：
+   ├── 判断题型：选择 / 判断 / 填空 / 解答
+   ├── 标注难度：★（1）到 ★★★★★（5）
+   └── 提取内容：题目 + 错误解法 + 错因 + 正确解法 + 变式
+    ↓
+4. 按难度从低到高排序
+    ↓
+5. 套用错题卷模板生成 cuoti_content.tex
+    ↓
+6. 运行 gen_paper.py 编译生成 PDF
+```
+
+#### 题型分类规则
+
+| 题型 | 识别特征 | 模板标签 |
+|------|---------|---------|
+| **选择** | 有 A/B/C/D 选项 | `\typeChoice`（蓝色） |
+| **判断** | 是/否、对/错、√/× | `\typeJudge`（橙色） |
+| **填空** | 有下划线空位 `\blank` | `\typeFill`（绿色） |
+| **解答** | 证明、计算、应用题 | `\typeSolve`（紫色） |
+
+#### 难度标签标准
+
+| 难度 | 星级 | 特征 |
+|------|------|------|
+| 1 | ★ | 基础概念、直接套用公式 |
+| 2 | ★★ | 一步变形、简单计算 |
+| 3 | ★★★ | 两步推理、综合应用 |
+| 4 | ★★★★ | 多步证明、分类讨论 |
+| 5 | ★★★★★ | 复杂综合、创新解题 |
+
+#### MinerU 解析步骤
+
+当用户给出图片或 PDF 文件时：
+
+```python
+# 检查 MinerU 配置（同标准工作流步骤 1-B）
+# 使用 MinerU SDK 提取内容和图片
+python scripts/math_pdf_extract.py "<文件路径>" \
+  --output-dir ./math-output --language ch
+```
+
+解析完成后，读取输出的 Markdown 文件，逐题分析。
+
+#### 使用 gen_paper.py 脚本
+
+```bash
+# 准备变量 JSON 文件
+cat > cuoti_vars.json << 'EOF'
+{
+    "cuotiTitle": "导数章节错题订正",
+    "cuotiGrade": "高三上学期",
+    "cuotiSource": "第三章 函数与导数 周测",
+    "cuotiDate": "2026-03-15",
+    "cuotiClass": "高三(3)班",
+    "cuotiStudent": "李四"
+}
+EOF
+
+# 生成并编译（先编写 cuoti_content.tex，再运行脚本）
+python scripts/gen_paper.py --type cuoti --vars cuoti_vars.json --output cuoti_chap3
+```
+
+**输出文件：**
+- `cuoti_chap3_student.pdf` — 学生版（隐藏错因分析和正确解法，留 5cm 订正空间）
+- `cuoti_chap3_teacher.pdf` — 教师版（完整显示错因/解法/总结/变式）
+
+#### 错题卷模板结构
+
+错题卷模板参考 `zuoye-paiban-math` 的 house style：
+
+- **页面**：1.5cm 边距，fancyhdr 三段页眉（年级日期 / 标题 / 班级姓名）
+- **题型标签**：彩色圆角矩形（蓝/橙/绿/紫）
+- **难度标签**：1-5 星可视化（黄色实心 + 灰色空心）
+- **错题结构**：题目 → 错误解法（灰色）→ solution 环境
+  - 学生版：solution 变为 5cm 留白
+  - 教师版：solution 显示错因（红）+ 正确解法（绿）+ 方法总结（棕）+ 变式（青）
 
 ---
 
@@ -1050,7 +1327,8 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 \noindent\textbf{四、解答题：本题共5小题，共77分。解答应写出文字说明、证明过程或演算步骤。}
 
 % 使用 examenum 环境（三级嵌套）组织大题
-\begin{examenum}
+% ⚠️ start 值 = 单选题数 + 多选题数 + 填空题数 + 1（示例为 8+3+3=14，故从 15 开始）
+\begin{examenum}[start=15, itemsep=2.5cm]
     \item （13分）已知数列 $\{a_n\}$ 中，$a_1=3$，$\dfrac{a_{n+1}}{n}=\dfrac{a_n}{n+1}+\dfrac{1}{n(n+1)}$.
     \begin{examenum}
         \item 证明：数列 $\{na_n\}$ 是等差数列；
@@ -1167,12 +1445,14 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 
 % ========== 页眉页脚 ==========
 \usepackage{fancyhdr}
+\usepackage{lastpage}
 \setlength{\headheight}{13.6pt}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[C]{\small 202X年普通高等学校招生全国统一考试\,$\cdot$\,数学\quad 参考答案}
-\fancyfoot[C]{\thepage}
+\fancyfoot[C]{数学试题第\thepage 页（共\pageref{LastPage}页）}
 \renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
 
 % ========== 超链接 ==========
 \usepackage[hidelinks]{hyperref}
@@ -1188,9 +1468,10 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 % 【详解】蓝色前缀
 \newcommand{\xijie}{\par{\color{blue!60!black}\textbf{【详解】}}}
 
-% 【小问1详解】、【小问2详解】
+% 【小问1详解】、【小问2详解】、【小问3详解】
 \newcommand{\xiaoI}{\par{\color{blue!60!black}\textbf{【小问 1 详解】}}}
 \newcommand{\xiaoII}{\par{\color{blue!60!black}\textbf{【小问 2 详解】}}}
+\newcommand{\xiaoIII}{\par{\color{blue!60!black}\textbf{【小问 3 详解】}}}
 
 % 插入公式图片（WMF 转为 PNG）
 \newcommand{\eqimg}[2][0.5]{%
@@ -1293,50 +1574,97 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 
 ## 输出完成后检查仓库更新
 
-**⚠️ 在完成所有输出后，必须检查技能仓库是否有更新：**
+**⚠️ 在完成所有输出后，必须检查技能仓库是否有更新。**
+
+### 第一步：检查并配置 Git
+
+使用 `scripts/setup_git.py` 检查 git 是否安装并配置：
 
 ```bash
-# 1. 获取当前本地版本
-LOCAL_VERSION=$(git -C "<skill目录>" rev-parse HEAD 2>/dev/null || echo "unknown")
-echo "[INFO] 当前本地版本: $LOCAL_VERSION"
-
-# 2. 获取远程仓库最新版本
-git -C "<skill目录>" fetch origin 2>/dev/null
-
-# 3. 比较本地与远程
-REMOTE_VERSION=$(git -C "<skill目录>" rev-parse origin/main 2>/dev/null || git -C "<skill目录>" rev-parse origin/master 2>/dev/null || echo "unknown")
-
-if [ "$LOCAL_VERSION" = "$REMOTE_VERSION" ]; then
-    echo "[OK] 技能已是最新版本"
-else
-    echo "[UPDATE] 技能有新版本可用！"
-    echo "[INFO] 本地版本: $LOCAL_VERSION"
-    echo "[INFO] 远程版本: $REMOTE_VERSION"
-    echo "[INFO] 更新命令: cd <skill目录> && git pull"
-fi
+python scripts/setup_git.py
 ```
 
-**检查逻辑：**
-1. 获取本地 HEAD 的 commit hash
-2. 从远程仓库获取最新 commit hash
-3. 比较两者是否一致
-4. 如果不一致，提示用户有新版本可用
+**脚本功能：**
+1. 检查 git 是否已安装
+2. 若未安装，使用嵌入的安装包 `scripts/installers/Git-2.54.0-64-bit.exe` 静默安装
+3. 安装失败时依次尝试 winget / scoop
+4. 按电脑名称自动配置用户名和邮箱：
+   - 用户名：`COMPUTERNAME`（如 `LAPTOP-5TD117V9`）
+   - 邮箱：`<computername>@users.noreply.github.com`
 
-**输出示例（无更新）：**
+**输出示例：**
 ```
-[INFO] 当前本地版本: c4b3453
-[OK] 技能已是最新版本
+[OK] Git 已安装: git version 2.54.0.windows.1
+[INFO] 电脑名称: LAPTOP-5TD117V9
+[INFO] 配置 Git 用户: LAPTOP-5TD117V9 <laptop-5td117v9@users.noreply.github.com>
+[OK] Git 配置完成
+[RESULT] Git 环境就绪
 ```
 
-**输出示例（有更新）：**
+### 第二步：双仓库并行检查更新
+
+使用 `scripts/update_repo.py` 从 GitHub 和 GitCode 同时检查更新：
+
+```bash
+# 仅检查是否有更新
+python scripts/update_repo.py --check
+
+# 检查并自动更新
+python scripts/update_repo.py
+
+# 强制重新 clone（忽略本地版本）
+python scripts/update_repo.py --force
 ```
-[INFO] 当前本地版本: c4b3453
-[UPDATE] 技能有新版本可用！
-[INFO] 本地版本: c4b3453
-[INFO] 远程版本: a1b2c3d
-[INFO] 更新命令: cd <skill目录> && git pull
-```
+
+**脚本功能：**
+1. 获取本地当前 commit hash
+2. 通过 `git ls-remote` 同时查询 GitHub 和 GitCode 的远程 commit
+3. 比较本地与远程，判断是否有更新
+4. 若有更新，**并行 clone** 两个仓库到临时目录
+5. **哪个先 clone 完成就用哪个**安装到技能目录
+6. 安装完成后清理临时目录
 
 **仓库地址：**
 - GitHub: `https://github.com/BluesilveEmperor/shijuan-paiban`
 - GitCode: `https://gitcode.com/GLY-NXD/shijuan-paiban`
+
+**输出示例（无更新）：**
+```
+[INFO] 本地版本: 53ad1820
+[INFO] github: 远程 53ad1820 → 最新
+[INFO] gitcode: 远程 53ad1820 → 最新
+[RESULT] 技能已是最新版本
+```
+
+**输出示例（有更新，使用 GitHub）：**
+```
+[INFO] 本地版本: 53ad1820
+[INFO] github: 远程 a1b2c3d4 → 有更新
+[INFO] gitcode: 远程 a1b2c3d4 → 有更新
+[INFO] 将从以下仓库更新: github, gitcode
+[INFO] 开始并行 clone 2 个仓库...
+[OK] github clone 完成 (3.2s)
+[INFO] 使用 github 的副本安装
+[OK] 已安装: SKILL.md, templates, scripts, docs, evals
+[RESULT] 技能更新成功！
+```
+
+### 手动更新方法（备用）
+
+如果自动脚本失败，可手动更新：
+
+```bash
+# 方法 1: 从 GitHub 更新
+cd <skill目录> && git pull origin math
+
+# 方法 2: 从 GitCode 更新
+cd <skill目录> && git pull gitcode math
+
+# 方法 3: 重新 clone（保留 installers 目录）
+cp -r scripts/installers /tmp/git_installer_backup
+git clone https://github.com/BluesilveEmperor/shijuan-paiban.git /tmp/shijuan-paiban-new
+cp -r /tmp/shijuan-paiban-new/* .
+cp -r /tmp/shijuan-paiban-new/.* . 2>/dev/null
+cp -r /tmp/git_installer_backup scripts/installers
+rm -rf /tmp/shijuan-paiban-new /tmp/git_installer_backup
+```
