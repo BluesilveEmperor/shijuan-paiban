@@ -1,0 +1,94 @@
+% !TEX program = xelatex
+% cuoti_student.tex - 错题卷学生版（显示错题 + 留订正空间，隐藏错因分析和正确解法）
+% 编译命令：xelatex cuoti_student.tex
+% 配套：cuoti_content.tex（错题内容，被 \input 调用）、cuoti_teacher.tex（教师版）
+\documentclass[12pt,UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{ulem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{tasks}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{environ}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{diagbox}
+\usepackage{makecell}
+\usepackage{adjustbox}
+\usepackage{wrapfig}
+\usepackage{setspace}
+\usepackage{ifthen}
+
+\geometry{a4paper, margin=1.5cm}
+
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+    \lhead{\cuotiGrade\ /\ \cuotiDate}
+    \chead{\cuotiTitle}
+    \rhead{\cuotiClass\quad\cuotiStudent}
+\fancyfoot[C]{第\thepage 页\quad 共\pageref{LastPage}页}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\raggedbottom
+\allowdisplaybreaks
+
+\let\oldlim\lim
+\renewcommand{\lim}{\oldlim\limits}
+
+\setlist{left=0pt, nosep, itemsep=0.3ex, topsep=0.5ex}
+
+\settasks{
+    label=\Alph*.,
+    label-width=1.8em,
+    item-indent=2.4em,
+    label-offset=0.5em,
+    column-sep=2em,
+    before-skip=0pt,
+    after-skip=0pt
+}
+
+\newlist{examenum}{enumerate}{3}
+\setlist[examenum,1]{label=\arabic*., leftmargin=2em, itemsep=0.3em, parsep=0em}
+\setlist[examenum,2]{label=(\arabic*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+\setlist[examenum,3]{label=(\roman*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+
+% 圈号数字
+\newcommand{\mycircled}[1]{%
+  \tikz[baseline=0pt,outer sep=0pt]{%
+    \node[draw,circle,inner sep=0.5pt,minimum size=1.4em,
+          line width=0.4pt,font=\zihao{-5}] {#1};%
+  }%
+}
+\newcommand{\Parallel}{\raisebox{0.1ex}{\rotatebox[origin=c]{-20}{$\parallel$}}}
+\newcommand{\bigstarraised}{\raisebox{0.2ex}{$\bigstar$}}
+\newcommand{\blank}{\underline{\hspace{2cm}}}
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\me}{\mathrm{e}}
+
+% ===== 学生版：隐藏错因分析和正确解法，留 5cm 订正空间 =====
+\NewEnviron{solution}{\vspace*{5cm}}
+
+% 例题解答：学生版也显示（例题作为示范，附答案）
+\NewEnviron{exsolution}{\par\noindent\textbf{解：}\BODY\par\vspace{0.5ex}}
+
+% ===== 学生版：用 \providecommand 设置填写线（优先于 content 中的定义） =====
+\providecommand{\cuotiGrade}{\underline{\hspace{2cm}}}
+\providecommand{\cuotiDate}{\underline{\hspace{2cm}}}
+\providecommand{\cuotiClass}{\underline{\hspace{2cm}}}
+\providecommand{\cuotiStudent}{\underline{\hspace{2cm}}}
+
+\begin{document}
+\pagenumbering{arabic}
+
+\input{cuoti_content}
+
+\end{document}
