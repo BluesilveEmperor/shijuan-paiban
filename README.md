@@ -9,10 +9,14 @@
 - **PDF 通道**：基于 MinerU SDK 提取 Markdown + 图片，公式已为 LaTeX 格式可直接引用
 - **自动模板选择**：根据文件名是否含"答案"自动选用试题模板或答案模板
 - **三段式试题匹配**：答案文档自动查找同目录对应的 `.tex` 试题文件
-- **教师版生成**：试题文档自动生成解答题分页的教师版
-- **图片智能处理**：WMF→PNG 批量转换（DOCX）、wrapfigure/minipage 环绕排版、`\graphicspath` 自动对齐
+- **教师版生成**：试题文档自动生成教师版，支持两种模式（一题一页 / 答题空间）
+- **错题卷支持**：自动解析错题文件（图片/PDF），按难度排序排版，含错因分析/正确解法/变式
+- **周练卷支持**：参数化生成周练卷，含学生版/教师版/每题一页版
+- **图片智能处理**：WMF→PNG 批量转换（DOCX）、minipage 环绕排版、单张插图靠右、`\graphicspath` 自动对齐
 - **编译验证**：自动 XeLaTeX 编译、Overfull 检测、页数验证
+- **环境检查**：执行前自动检查 XeLaTeX/pandas/Python/MinerU 等环境，缺少时引导配置
 - **日志采集与上传**：自动记录运行时日志并上传到 GitHub
+- **双仓库更新**：支持 GitHub + GitCode 双仓库并行检查更新
 
 ## 快速开始
 
@@ -106,12 +110,15 @@ echo "token: '你的API密钥'" > ~/.mineru/config.yaml
 | 条件 | 使用模板 |
 |------|---------|
 | 文件名含"答案" | `gaokao-answer-template.tex`（答案模板） |
+| 文件名含"专题"/"专项" | `zhuanti` 系列模板（四件套） |
+| 文件名含"周练"/"周测"/"周考" | `zhoukan` 系列模板（四件套） |
+| 文件名含"错题"/"纠错"/"订正" | `cuoti` 系列模板（三件套） |
 | 明显是高考数学试卷 | `gaokao-template.tex`（试题模板） |
 | 用户明确指定 | 按指定模板 |
 
 ### 内嵌模板
 
-两个模板已内嵌在 SKILL.md 中，无需额外文件：
+所有模板已内嵌在 SKILL.md 中，无需额外文件：
 
 - **gaokao-template.tex**：高考数学试卷模板，支持学生版/教师版
   - 12pt + 2.5cm 边距、tasks 选择题环境、examenum 大题编号
@@ -119,7 +126,11 @@ echo "token: '你的API密钥'" > ~/.mineru/config.yaml
 
 - **gaokao-answer-template.tex**：高考数学参考答案模板
   - `\daan{...}` 答案、`\jieti` 解析、`\xijie` 详解
-  - `\xiaoI`/`\xiaoII` 小问详解、`\eqimg` 公式图片
+  - `\xiaoI`/`\xiaoII`/`\xiaoIII` 小问详解、`\eqimg` 公式图片
+
+- **cuoti 系列**：错题订正模板
+  - 题型标签（蓝/橙/绿/紫）、难度星级可视化
+  - 学生版留订正空间，教师版显示错因/解法/总结/变式
 
 ## 图片处理
 
@@ -190,11 +201,14 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | 症状 | 修复 |
 |------|------|
 | Overfull \hbox | 选项改 2 列；`\dfrac` 改 `\frac`；缩短公式 |
-| 图片错位/消失 | 列表环境中改用 `minipage` 方案 |
+| 图片错位/消失 | 有子问用 `minipage`；单张无子问用 `[H]` + `\raggedleft` |
 | 页数超限 | 加 `\linespread{1.05}\selectfont` 压缩行距 |
 | MinerU 解析失败（PDF） | 检查 Token；文件 ≤ 200MB/600 页；扫描件加 `--ocr` |
 | UnicodeEncodeError（Windows） | 加 `PYTHONIOENCODING=utf-8` 前缀 |
 | 中文不显示 | 确认模板用 `ctexart` |
+| 解答题编号从 1 开始 | `start` 值 = 单选题数 + 多选题数 + 填空题数 + 1 |
+| 教师版分页没生效 | Python 字符串必须用 raw string `r"\begin"` |
+| 环境检查失败 | 按提示安装缺失依赖，必须项（XeLaTeX/pandas/Python）不可跳过 |
 
 ## MinerU API 限制（PDF 输入）
 
@@ -219,10 +233,24 @@ shijuan-paiban/
 │   └── 试卷排版技能工作流与排版细节.pdf    # 完整说明（编译成品）
 ├── evals/
 │   └── evals.json         # 评估用例
+├── templates/             # 模板文件
+│   ├── cuoti_content.tex
+│   ├── cuoti_student.tex / .pdf
+│   ├── cuoti_teacher.tex / .pdf
+│   └── gaokao_preamble.tex
 └── scripts/
     ├── math_pdf_extract.py  # MinerU SDK PDF→Markdown 提取脚本
     ├── logger.py            # 日志记录器
-    └── uploader.py          # 日志上传模块
+    ├── uploader.py          # 日志上传模块（git push 方式）
+    ├── gen_paper.py         # 参数化试卷生成脚本
+    ├── setup_git.py         # Git 环境检查与配置
+    ├── update_repo.py       # 双仓库并行更新检查
+    ├── fix_tex.py           # LaTeX 修复工具
+    ├── fix_geometry.py      # 页面几何修复
+    ├── fix_pages.py         # 页数调整
+    ├── fix_pages_aggressive.py  # 激进页数调整
+    ├── batch_test.py        # 批量测试
+    └── installers/          # 安装包（如 Git 安装器）
 ```
 
 ## 依赖 Skill
@@ -238,5 +266,5 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 
 - [MinerU 官网](https://mineru.net)
 - [工作流与排版细节全解](docs/试卷排版技能工作流与排版细节.pdf) — 完整技能说明（含 [Markdown](docs/试卷排版技能工作流与排版细节.md) / [LaTeX](docs/试卷排版技能工作流与排版细节.tex) 源文件）
-- [GitHub](https://github.com/BluesilveEmperor/shijuan-paiban)
-- [GitCode](https://gitcode.com/GLY-NXD/shijuan-paiban)
+- [GitHub](https://github.com/BluesilveEmperor/shijuan-paiban/tree/math)
+- [GitCode](https://gitcode.com/GLY-NXD/shijuan-paiban/tree/math)
