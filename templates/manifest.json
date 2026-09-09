@@ -1,0 +1,81 @@
+{
+  "templates": {
+    "gaokao-template": {
+      "file": "gaokao-template.tex",
+      "version": "2.1",
+      "exam_type": "gaokao_math",
+      "description": "高考数学新高考I卷学生版模板",
+      "environments": {
+        "choice_single": "enumerate + tasks(4)",
+        "choice_multi": "enumerate[start=9] + tasks(2)",
+        "fill_blank": "enumerate[start=12] + \\blank",
+        "long_answer": "examenum[start=N, itemsep=2.5cm]"
+      },
+      "commands": ["\\blank", "\\mycircled", "\\Parallel", "\\mi", "\\me"],
+      "required_packages": ["tasks", "enumitem", "tikz", "fancyhdr", "lastpage"],
+      "max_pages": 4,
+      "supports_teacher_version": true,
+      "page_format": {
+        "margin": "2.5cm",
+        "font_size": "12pt",
+        "line_spread": "optional 1.5"
+      }
+    },
+    "gaokao-answer-template": {
+      "file": "gaokao-answer-template.tex",
+      "version": "1.2",
+      "exam_type": "gaokao_math_answer",
+      "description": "高考数学参考答案模板",
+      "environments": {
+        "choice": "enumerate + \\eqimg",
+        "fill_blank": "enumerate[resume]",
+        "long_answer": "enumerate[resume]"
+      },
+      "commands": ["\\daan", "\\jieti", "\\xijie", "\\xiaoI", "\\xiaoII", "\\xiaoIII", "\\eqimg", "\\mi", "\\me"],
+      "required_packages": ["enumitem", "graphicx", "xcolor", "fancyhdr", "lastpage"],
+      "max_pages": null,
+      "supports_teacher_version": false,
+      "page_format": {
+        "margin": "2cm top/bottom, 2.5cm left/right",
+        "font_size": "12pt",
+        "line_spread": "1.5 (setspace)"
+      }
+    },
+    "zhuanti": {
+      "files": {
+        "student": "zhuanti_student.tex",
+        "teacher": "zhuanti_teacher.tex",
+        "onepage": "zhuanti_onepage.tex",
+        "content": "zhuanti_content.tex"
+      },
+      "exam_type": "zhuanti",
+      "description": "专题卷模板（四件套）",
+      "variable_prefix": "zhuanti",
+      "supports_tiered": true,
+      "max_tiers": 4
+    },
+    "zhoukan": {
+      "files": {
+        "student": "zhoukan_student.tex",
+        "teacher": "zhoukan_teacher.tex",
+        "onepage": "zhoukan_onepage.tex",
+        "content": "zhoukan_content.tex"
+      },
+      "exam_type": "zhoukan",
+      "description": "周练卷模板（四件套）",
+      "variable_prefix": "zhoukan",
+      "modes": ["limited", "homework"]
+    },
+    "cuoti": {
+      "files": {
+        "student": "cuoti_student.tex",
+        "teacher": "cuoti_teacher.tex",
+        "content": "cuoti_content.tex"
+      },
+      "exam_type": "cuoti",
+      "description": "错题卷模板（三件套）",
+      "variable_prefix": "cuoti",
+      "features": ["difficulty_stars", "error_analysis", "correct_solution", "variant_practice"]
+    }
+  }
+}

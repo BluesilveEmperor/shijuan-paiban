@@ -1,17 +1,392 @@
 {
   "skill_name": "shijuan-paiban",
+  "version": "3.0",
+  "description": "评估用例集。每条 eval 包含 prompt、expected_checks（可自动检查项）和 manual_checks（需人工/LLM 检查项）",
   "evals": [
     {
       "id": 1,
-      "prompt": "帮我把 2024年高考新课标Ⅰ卷数学真题.docx 用 gaokao-template.tex 模板重新排版成 LaTeX，图片放到对应位置。DOCX路径：D:\\Desktop\\高考数学22-26\\新课标一卷\\2024.6\\2024年高考新课标Ⅰ卷数学真题.docx，模板路径：D:\\Desktop\\高考数学22-26\\新课标一卷\\2024.6\\gaokao-template.tex",
-      "expected_output": "生成一个可编译的 .tex 文件，包含所有试题、正确数学公式、嵌入图片，编译通过生成 PDF",
-      "files": []
+      "category": "docx_basic",
+      "prompt": "帮我把 2024年高考新课标Ⅰ卷数学真题.docx 用 gaokao-template.tex 模板重新排版成 LaTeX",
+      "input_type": "docx",
+      "expected_output": "生成可编译的 .tex 文件，包含所有试题、正确数学公式、嵌入图片",
+      "expected_checks": {
+        "compiles": true,
+        "page_count": 4,
+        "has_tasks_env": true,
+        "has_examenum_env": true,
+        "has_teacher_version": true,
+        "no_overfull_errors": true
+      },
+      "manual_checks": [
+        "选择题使用 tasks 环境",
+        "大题使用 examenum 环境",
+        "图片位置正确"
+      ]
     },
     {
       "id": 2,
-      "prompt": "请把这个 Word 试卷转成 LaTeX 格式，用我指定的模板排版。docx 在：D:\\Desktop\\高考数学22-26\\新课标一卷\\2024.6\\2024年高考新课标Ⅰ卷数学真题.docx，模板：D:\\Desktop\\高考数学22-26\\新课标一卷\\2024.6\\gaokao-template.tex。只需要试题，不需要参考答案。",
-      "expected_output": "生成 .tex 文件并编译为 PDF，排版风格与模板一致，选择题使用 tasks 环境，大题使用 examenum 环境",
-      "files": []
+      "category": "docx_answer",
+      "prompt": "排版这个答案文档 新一卷数学-答案.docx",
+      "input_type": "docx",
+      "is_answer": true,
+      "expected_output": "生成答案版 .tex，含【答案】【解析】【详解】结构，不生成教师版",
+      "expected_checks": {
+        "compiles": true,
+        "has_daan_command": true,
+        "has_jieti_command": true,
+        "has_xijie_command": true,
+        "no_teacher_version": true,
+        "wmf_converted_to_png": true
+      },
+      "manual_checks": [
+        "答案结构完整（题目→答案→解析→详解）",
+        "选项图片正确显示",
+        "同目录试题 .tex 匹配成功（三段式）"
+      ]
+    },
+    {
+      "id": 3,
+      "category": "pdf_basic",
+      "prompt": "帮我把 2024高考真题.pdf 排版成 LaTeX",
+      "input_type": "pdf",
+      "expected_output": "生成可编译的 .tex 文件，公式已为 LaTeX 格式",
+      "expected_checks": {
+        "compiles": true,
+        "mineru_extraction_success": true,
+        "formulas_in_latex": true,
+        "images_extracted": true
+      },
+      "manual_checks": [
+        "公式识别正确（无乱码）",
+        "题型结构正确识别",
+        "图片路径与 graphicspath 一致"
+      ]
+    },
+    {
+      "id": 4,
+      "category": "pdf_answer",
+      "prompt": "排版这个 PDF 答案 新一卷数学-答案.pdf",
+      "input_type": "pdf",
+      "is_answer": true,
+      "expected_output": "生成答案版 .tex，公式已为 LaTeX 格式",
+      "expected_checks": {
+        "compiles": true,
+        "has_daan_command": true,
+        "no_teacher_version": true
+      },
+      "manual_checks": [
+        "MinerU 公式识别质量",
+        "答案结构完整"
+      ]
+    },
+    {
+      "id": 5,
+      "category": "zhuanti",
+      "prompt": "排版专题卷 导数综合专项训练.docx --tier-names '基础,提高,拔高'",
+      "input_type": "docx",
+      "expected_output": "使用 zhuanti 系列模板，生成四件套",
+      "expected_checks": {
+        "compiles": true,
+        "uses_zhuanti_template": true,
+        "has_tiered_structure": true,
+        "student_version_exists": true,
+        "teacher_version_exists": true
+      },
+      "manual_checks": [
+        "分层名称正确显示",
+        "页眉布局（年级/日期 | 专题名 | 班级/姓名）",
+        "间距变量正确注入"
+      ]
+    },
+    {
+      "id": 6,
+      "category": "zhoukan",
+      "prompt": "排版周练卷 --mode limited --mcq 4 --msq 1 --blank 2 --saq 1 --date '2026-03-15'",
+      "input_type": "generated",
+      "expected_output": "使用 zhoukan 系列模板，生成三种版本",
+      "expected_checks": {
+        "compiles": true,
+        "uses_zhoukan_template": true,
+        "student_version_exists": true,
+        "teacher_version_exists": true,
+        "onepage_version_exists": true,
+        "vars_injected": true
+      },
+      "manual_checks": [
+        "限时训练模式显示正确",
+        "题量与参数一致",
+        "学生版隐藏解答"
+      ]
+    },
+    {
+      "id": 7,
+      "category": "cuoti",
+      "prompt": "排版错题卷 第三章函数错题.docx --title '导数章节错题订正' --source '第三章周测'",
+      "input_type": "docx",
+      "expected_output": "使用 cuoti 系列模板，含错因/解法/变式结构",
+      "expected_checks": {
+        "compiles": true,
+        "uses_cuoti_template": true,
+        "has_solution_env": true,
+        "student_has_blank_space": true,
+        "teacher_has_full_content": true
+      },
+      "manual_checks": [
+        "难度星级正确显示",
+        "错因分析（红色）仅教师版可见",
+        "正确解法（绿色）仅教师版可见",
+        "学生版有 5cm 订正空间"
+      ]
+    },
+    {
+      "id": 8,
+      "category": "image_geometry",
+      "prompt": "排版含立体几何多图的试卷.docx（含 3 道解答题各有 1-2 张图）",
+      "input_type": "docx",
+      "expected_output": "图片正确嵌入，列表环境内用 minipage，列表外用 wrapfigure",
+      "expected_checks": {
+        "compiles": true,
+        "all_images_referenced_exist": true,
+        "no_wrapfigure_in_list": true
+      },
+      "manual_checks": [
+        "有子问的题目用 minipage 左右并排",
+        "无子问的单张图用 figure[H] + raggedleft",
+        "图片宽度不超过 0.35textwidth",
+        "图片显示在题目右侧"
+      ]
+    },
+    {
+      "id": 9,
+      "category": "formula_complex",
+      "prompt": "排版含复杂分段函数、行列式、矩阵的试卷.docx",
+      "input_type": "docx",
+      "expected_output": "所有公式正确转换为 LaTeX 格式",
+      "expected_checks": {
+        "compiles": true,
+        "dollar_balanced": true,
+        "no_missing_dollar": true
+      },
+      "manual_checks": [
+        "分段函数使用 cases 环境",
+        "行列式使用 vmatrix/Vmatrix",
+        "矩阵使用 pmatrix/bmatrix",
+        "分数使用 frac/dfrac 正确"
+      ]
+    },
+    {
+      "id": 10,
+      "category": "answer_fallback",
+      "prompt": "排版答案文档（同目录下无对应试题 .tex 文件）",
+      "input_type": "docx",
+      "is_answer": true,
+      "expected_output": "回退到从输入文件提取题目文本，不崩溃",
+      "expected_checks": {
+        "compiles": true,
+        "no_crash": true,
+        "has_daan_command": true
+      },
+      "manual_checks": [
+        "三段式匹配正确回退到第三阶段",
+        "题目文本从 DOCX/PDF 提取",
+        "不报错退出"
+      ]
+    },
+    {
+      "id": 11,
+      "category": "table_conversion",
+      "prompt": "排版含列联表、频率分布表的试卷.docx",
+      "input_type": "docx",
+      "expected_output": "表格正确转换为 tabular 环境",
+      "expected_checks": {
+        "compiles": true,
+        "has_tabular_env": true
+      },
+      "manual_checks": [
+        "使用 booktabs 三线表",
+        "斜线表头使用 diagbox",
+        "表格标题使用 captionof{table}"
+      ]
+    },
+    {
+      "id": 12,
+      "category": "page_control",
+      "prompt": "排版一份标注'本试卷共4页'但内容较多的试卷.docx",
+      "input_type": "docx",
+      "expected_output": "学生版严格控制在 4 页",
+      "expected_checks": {
+        "compiles": true,
+        "page_count": 4,
+        "has_linespread_if_needed": true
+      },
+      "manual_checks": [
+        "如超页，导言区有 linespread{1.05}",
+        "教师版不受页数限制",
+        "教师版无 itemsep=2.5cm"
+      ]
+    },
+    {
+      "id": 13,
+      "category": "teacher_onepage",
+      "prompt": "排版试题文档，生成教师版（onepage 模式）",
+      "input_type": "docx",
+      "expected_output": "教师版 Q18 起每题独占一页",
+      "expected_checks": {
+        "compiles": true,
+        "teacher_version_exists": true,
+        "teacher_page_count": "<=7",
+        "no_itemsep_in_teacher": true
+      },
+      "manual_checks": [
+        "Q17 跟在「四、解答题」标题后",
+        "Q18 起每题独占一页",
+        "Q22 可不分页紧接 Q21 后"
+      ]
+    },
+    {
+      "id": 14,
+      "category": "teacher_space",
+      "prompt": "排版试题文档，生成教师版（space 模式）",
+      "input_type": "docx",
+      "expected_output": "教师版每题下方有 4em 答题空间",
+      "expected_checks": {
+        "compiles": true,
+        "teacher_space_version_exists": true,
+        "has_vspace_4em": true
+      },
+      "manual_checks": [
+        "每道解答题末尾有 vspace{4em}",
+        "保留 itemsep=2.5cm",
+        "不强制分页"
+      ]
+    },
+    {
+      "id": 15,
+      "category": "multi_choice_long",
+      "prompt": "排版含长选项多选题的试卷（选项含公式）",
+      "input_type": "docx",
+      "expected_output": "多选题选项使用 2 列布局",
+      "expected_checks": {
+        "compiles": true,
+        "tasks_cols": 2
+      },
+      "manual_checks": [
+        "选项较长时使用 tasks(2)",
+        "选项为图片时使用 eqimg"
+      ]
+    },
+    {
+      "id": 16,
+      "category": "mineru_scan",
+      "prompt": "排版扫描版 PDF 试卷（需 OCR）",
+      "input_type": "pdf",
+      "expected_output": "使用 --ocr 参数，正确识别扫描内容",
+      "expected_checks": {
+        "compiles": true,
+        "mineru_ocr_enabled": true
+      },
+      "manual_checks": [
+        "OCR 识别准确率可接受",
+        "公式识别正确"
+      ]
+    },
+    {
+      "id": 17,
+      "category": "graphicspath_alignment",
+      "prompt": "排版答案文档，验证 \\graphicspath 与图片目录一致",
+      "input_type": "docx",
+      "is_answer": true,
+      "expected_output": "\\graphicspath 指向推导出的 {图片目录}",
+      "expected_checks": {
+        "compiles": true,
+        "graphicspath_matches_images_dir": true,
+        "all_images_found": true
+      },
+      "manual_checks": [
+        "graphicspath 目录名与实际图片目录一致",
+        "eqimg 引用的图片都能找到"
+      ]
+    },
+    {
+      "id": 18,
+      "category": "enumeration_start",
+      "prompt": "排版非标准题量试卷（如 10 道选择、4 道填空）",
+      "input_type": "docx",
+      "expected_output": "解答题 start 值正确计算",
+      "expected_checks": {
+        "compiles": true,
+        "examenum_start_correct": true
+      },
+      "manual_checks": [
+        "start = 选择题数 + 多选题数 + 填空题数 + 1",
+        "编号连续无跳跃"
+      ]
+    },
+    {
+      "id": 19,
+      "category": "wmf_batch",
+      "prompt": "排版含大量 WMF 公式图片的答案文档（500+ 个 WMF）",
+      "input_type": "docx",
+      "is_answer": true,
+      "expected_output": "所有 WMF 批量转换为 PNG（600 DPI）",
+      "expected_checks": {
+        "compiles": true,
+        "all_wmf_converted": true,
+        "no_wmf_remaining": true,
+        "png_dpi": 600
+      },
+      "manual_checks": [
+        "PNG 图片清晰度足够",
+        "图片目录命名正确"
+      ]
+    },
+    {
+      "id": 20,
+      "category": "wrapfigure_outside",
+      "prompt": "排版列表环境外有独立图形的试卷",
+      "input_type": "docx",
+      "expected_output": "列表环境外的图片使用 wrapfigure",
+      "expected_checks": {
+        "compiles": true,
+        "wrapfigure_used_outside_list": true
+      },
+      "manual_checks": [
+        "wrapfigure 在列表环境外正确使用",
+        "图片右侧环绕效果正常"
+      ]
+    },
+    {
+      "id": 21,
+      "category": "unicode_windows",
+      "prompt": "在 Windows 系统排版含中文的 DOCX 试卷",
+      "input_type": "docx",
+      "expected_output": "无 UnicodeEncodeError，中文正确显示",
+      "expected_checks": {
+        "compiles": true,
+        "chinese_renders": true,
+        "no_gbk_error": true
+      },
+      "manual_checks": [
+        "使用 PYTHONIOENCODING=utf-8 前缀",
+        "ctexart 模板正确加载"
+      ]
+    },
+    {
+      "id": 22,
+      "category": "three_stage_match",
+      "prompt": "排版答案文档，测试三段式试题匹配（精确剥离→前缀匹配→回退）",
+      "input_type": "docx",
+      "is_answer": true,
+      "expected_output": "正确匹配同目录试题 .tex 或回退",
+      "expected_checks": {
+        "compiles": true,
+        "three_stage_match_works": true
+      },
+      "manual_checks": [
+        "第一阶段：精确剥离 -答案/_答案/答案 后缀",
+        "第二阶段：公共前缀匹配（≥3字符）",
+        "第三阶段：回退到从输入文件提取"
+      ]
     }
   ]
 }

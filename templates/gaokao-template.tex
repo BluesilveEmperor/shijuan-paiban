@@ -1,0 +1,169 @@
+% ============================================================
+%  高考数学新高考I卷 LaTeX 模板（学生版）
+%  综合 2025 卷 (2506.tex) 与 2026 卷 (2606.tex) 排版风格
+%  用法：复制此文件 → 替换正文区内容 → XeLaTeX 编译
+% ============================================================
+
+\documentclass[12pt, a4paper, oneside]{ctexart}
+
+% ── 1. 数学与链接 ──
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage[bookmarks=true, colorlinks, citecolor=blue, linkcolor=black]{hyperref}
+
+% ── 2. 字体方案（newtxmath Times 风格） ──
+\usepackage{newtxmath}
+
+% ── 3. 页面布局（2.5cm 边距） ──
+\usepackage[a4paper, margin=2.5cm, footskip=1cm]{geometry}
+
+% ── 4. 页眉页脚 ──
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{数学试题第\thepage 页（共\pageref{LastPage}页）}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ── 5. 表格与插图 ──
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{diagbox}
+\usepackage{makecell}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{tikz}
+
+% ── 6. 选择题选项（tasks 环境） ──
+\usepackage{tasks}
+\settasks{
+    label       = \Alph*.,
+    label-width = 1.8em,
+    item-indent = 2.4em,
+    label-offset = 0.5em,
+    column-sep  = 2em,
+    before-skip = 0pt,
+    after-skip  = 0pt
+}
+
+% ── 7. 大题编号（enumitem 体系，支持三级嵌套） ──
+\usepackage[shortlabels]{enumitem}
+\newlist{examenum}{enumerate}{3}
+\setlist[examenum,1]{label=\arabic*., leftmargin=2em, itemsep=0.3em, parsep=0em}
+\setlist[examenum,2]{label=(\arabic*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+\setlist[examenum,3]{label=(\roman*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+
+% ── 8. 自定义命令 ──
+\newcommand{\mycircled}[1]{%
+  \tikz[baseline=(char.base),outer sep=0pt]{%
+    \node[draw,circle,inner sep=0.5pt,minimum size=1.4em,
+          line width=0.4pt,font=\zihao{-5}] (char) {#1};%
+  }%
+}
+\newcommand{\Parallel}{\raisebox{0.1ex}{\rotatebox[origin=c]{-20}{$\parallel$}}}
+\newcommand{\bigstarraised}{\raisebox{0.2ex}{$\bigstar$}}
+\newcommand{\blank}{\underline{\hspace{2cm}}}
+\newcommand{\subjecttitle}[1]{{\fontsize{24pt}{22pt}\selectfont\centering\textbf{#1}\par}}
+\newcommand{\subtitle}[1]{{\fontsize{16pt}{16pt}\selectfont\centering #1\par}}
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\me}{\mathrm{e}}
+
+% ── 9. 答题空间（纯留白，无线条无边框）──
+% compact：最小间距，适合自学
+\newcommand{\answerc}{%
+  \par\vspace{1.5em}%
+}
+% normal：适中间距，适合课后作业
+\newcommand{\answern}{%
+  \par\vspace{3em}%
+}
+% exam：较大间距，适合课堂测试
+\newcommand{\answere}{%
+  \par\vspace{5em}%
+}
+
+% ============================================================
+%  正文开始
+% ============================================================
+\begin{document}
+
+% ── 试卷标题区 ──
+\begin{center}
+    \LARGE{\textbf{202X年全国统一高考数学试卷\\新高考I卷}}
+\end{center}
+
+\vspace{0.5em}
+
+% ── 注意事项 ──
+\noindent\textbf{注意事项}：
+
+1．答卷前，考生务必将自己的姓名、准考证号填写在答题卡上。
+
+2．回答选择题时，选出每小题答案后，用铅笔把答题卡上对应题目的答案标号涂黑。
+如需改动，用橡皮擦干净后，再选涂其它答案标号。回答非选择题时，将答案写在答题卡上，
+写在本试卷上无效。
+
+3．考试结束后，将本试卷和答题卡一并交回。
+
+\vspace{1em}
+
+% ══════════════════════════════════════════
+%  一、选择题（8 小题，每小题 5 分，共 40 分）
+% ══════════════════════════════════════════
+
+\noindent\textbf{一、选择题：本题共8小题，每小题5分，共40分。在每小题给出的四个选项中，
+只有一项是符合题目要求的。}
+
+\begin{enumerate}[itemsep=0.3em]
+    \item 已知集合 $A=\{x \mid x^2-3x+2=0\}$，$B=\{0,1,2\}$，则 $A \cup B =$
+    \begin{tasks}(4)
+        \task $\{0\}$
+        \task $\{0,1,2\}$
+        \task $\{1,2\}$
+        \task $\{0,1\}$
+    \end{tasks}
+\end{enumerate}
+
+% ══════════════════════════════════════════
+%  二、选择题（多选）
+% ══════════════════════════════════════════
+
+\noindent\textbf{二、选择题：本题共3小题，每小题6分，共18分。在每小题给出的选项中，
+有多项符合题目要求。全部选对的得6分，部分选对的得部分分，有选错的得0分。}
+
+\begin{enumerate}[start=9, itemsep=0.5em]
+    \item 设 $z = 3 + 2\mathrm{i}$，则
+    \begin{tasks}(2)
+        \task $\bar{z} = 3 - 2\mathrm{i}$
+        \task $|z| = 5$
+        \task $z^2 = 5 + 12\mathrm{i}$
+        \task $\dfrac{z+3}{z-\mathrm{i}} \in \mathbb{R}$
+    \end{tasks}
+\end{enumerate}
+
+% ══════════════════════════════════════════
+%  三、填空题
+% ══════════════════════════════════════════
+
+\noindent\textbf{三、填空题：本题共3小题，每小题5分，共15分。}
+
+\begin{enumerate}[start=12, itemsep=0.8em]
+    \item 若直线 $y=2x+5$ 是曲线 $y=\mathrm{e}^x+x+a$ 的一条切线，则 $a=$ \blank.
+\end{enumerate}
+
+% ══════════════════════════════════════════
+%  四、解答题
+% ══════════════════════════════════════════
+
+\noindent\textbf{四、解答题：本题共5小题，共77分。解答应写出文字说明、证明过程或演算步骤。}
+
+% ⚠️ start 值 = 单选题数 + 多选题数 + 填空题数 + 1
+\begin{examenum}[start=15, itemsep=2.5cm]
+    \item （13分）已知数列 $\{a_n\}$ 中，$a_1=3$，$\dfrac{a_{n+1}}{n}=\dfrac{a_n}{n+1}+\dfrac{1}{n(n+1)}$.
+    \begin{examenum}
+        \item 证明：数列 $\{na_n\}$ 是等差数列；
+        \item 给定正整数 $m$，设函数 $f(x)=a_1x+a_2x^2+\cdots+a_mx^m$，求 $f'(-2)$.
+    \end{examenum}
+\end{examenum}
+
+\end{document}
