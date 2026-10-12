@@ -9,7 +9,7 @@ r"""Round-3 regression tests: the 5 fixes for the 6 low-error files.
 6. fix_dollar_signs mathrm option rule is now balanced (Lanzhou: `A.x \in A$`)
 """
 import sys, os
-sys.path.insert(0, r'D:\Desktop\shijuan-paiban\scripts')
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts'))
 os.environ['PYTHONIOENCODING'] = 'utf-8'
 from md2tex import (clean, clean_display, wrap_text_cmds, fix_dollar_signs,
                     _fix_textmode, _html_table_to_latex, _escape_cell, TEX_HEADER)

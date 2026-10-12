@@ -12,7 +12,7 @@ def to_native(p):
     return '/mnt/d/' + p[3:].replace('\\', '/')
 
 
-sys.path.insert(0, to_native(r'D:\Desktop\shijuan-paiban\scripts'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts'))
 import md2tex
 
 fails = 0

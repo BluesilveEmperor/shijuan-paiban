@@ -17,6 +17,9 @@
 - **环境检查**：执行前自动检查 XeLaTeX/pandas/Python/MinerU 等环境，缺少时引导配置
 - **日志采集与上传**：自动记录运行时日志并上传到 GitHub
 - **双仓库更新**：支持 GitHub + GitCode 双仓库并行检查更新
+- **MD→TEX 批量流水线**：`md2tex.py` / `md2ans.py` / `batch_convert.py` / `convert_new_papers.py` 等脚本批量把 MD 中间产物转换为试题/答案 tex
+- **题库维护**：维护 `D:\Music\试题加题库`（高考真题（模拟）卷 190 卷、考研数学真题卷、高三数学）；每个含 tex 文件夹部署一键编译 `build.py`（通用版编全部 tex ×2；书稿版只编 main.tex ×3）
+- **回归测试**：`tests/` 下 3 套测试（WSL 可移植），流水线改动后必须全部通过
 
 ## 快速开始
 
@@ -220,6 +223,17 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | 上传链接有效期 | 24 小时 |
 | 解析结果保存 | 30 天 |
 
+## 题库维护（D:\Music\试题加题库）
+
+| 目录 | 内容 |
+|------|------|
+| `高考真题（模拟）卷\` | 190 个成卷文件夹（tex+答案+Images+build.py）+ 5 个年份源目录（2022.6–2026.6，不动） |
+| `考研数学真题卷\` | 18 个年份文件夹（2008年–2025年，数学一/二/三）+ 71 个 `2024-<大学>` 文件夹 + `题库\` 书稿工程 |
+| `高三数学\` | 源材料 + `.math-output`（MD 中间产物） |
+
+- **一键编译**：每个含 tex 的文件夹都有 `build.py`（通用版：编全部 tex ×2；书稿版：只编 `main.tex` ×3），自动探测 xelatex（`shutil.which` → 各盘 `?:\texlive\*\bin\windows\` 探测，不写死路径）
+- **整理规范**：只动副本不动原件；图片先核实引用再删；`pdfinfo` 判定编译产物（Creator=LaTeX）才删；整理后全量并行编译验证 0 error
+
 ## 文件结构
 
 ```
@@ -233,6 +247,10 @@ shijuan-paiban/
 │   └── 试卷排版技能工作流与排版细节.pdf    # 完整说明（编译成品）
 ├── evals/
 │   └── evals.json         # 评估用例
+├── tests/                 # 回归测试（WSL 可移植）
+│   ├── test_fixed.py
+│   ├── test_round2.py
+│   └── test_round3.py
 ├── templates/             # 模板文件
 │   ├── cuoti_content.tex
 │   ├── cuoti_student.tex / .pdf
@@ -240,6 +258,10 @@ shijuan-paiban/
 │   └── gaokao_preamble.tex
 └── scripts/
     ├── math_pdf_extract.py  # MinerU SDK PDF→Markdown 提取脚本
+    ├── md2tex.py / md2ans.py          # MD → 试题/答案 tex 转换
+    ├── batch_convert.py / batch_convert_ans.py / convert_new_papers.py  # 批量转换
+    ├── split_combined.py / split_xj3.py  # 拆分合并卷/新课标卷
+    ├── fix_md_corruptions*.py / fix_errors.py / fix_error_answers.py / finish_papers.py  # 修复与收尾
     ├── logger.py            # 日志记录器
     ├── uploader.py          # 日志上传模块（git push 方式）
     ├── gen_paper.py         # 参数化试卷生成脚本

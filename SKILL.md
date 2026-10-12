@@ -776,6 +776,63 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 
 ---
 
+## 题库维护与批量整理（D:\Music\试题加题库）
+
+### 题库现有结构
+
+```
+D:\Music\试题加题库\
+├── 高考真题（模拟）卷\        # 190 个成卷文件夹 + 5 个年份源目录（2022.6–2026.6，源目录不动）
+│   └── <卷名>\               # 每卷：试题 tex + *答案.tex + Images-*\ + build.py
+├── 考研数学真题卷\
+│   ├── 2008年\ … 2025年\     # 18 个年份文件夹：数学（一/二/三）真题+解答共 6 tex + Images ×3 + build.py
+│   ├── 2024-<大学>\          # 71 个高校文件夹：高等代数/数学分析 tex 对 + build.py
+│   └── 题库\                 # 书稿工程：main.tex → chapters/2024/content → 各校 content → solutions/body
+│                              # build.py 为书稿版（只编 main.tex ×3，禁止单编章节 tex）
+└── 高三数学\                  # 源材料 + .math-output（MD 中间产物）
+```
+
+### 一键编译脚本 build.py（两种变体）
+
+| 变体 | 位置 | 行为 |
+|------|------|------|
+| 通用版 | 每个试卷/高校/年份文件夹 | 编译文件夹内全部 `*.tex` ×2，统计 log 中 `^!` 行数为错误数，清理 `.aux/.log/.out`，保留 PDF |
+| 书稿版 | `题库/` | 只编译 `main.tex` ×3（目录页码稳定），其余同上 |
+
+- `find_xelatex()` 按机器实际探测，顺序：`shutil.which('xelatex'/'xelatex.exe')` → 常见安装位置逐一试探（如 `<盘符>:\texlive\<年份>\bin\windows\xelatex.exe`、`/mnt/<盘符>/texlive/...`、`/usr/local/bin/xelatex`、`/usr/bin/xelatex`），命中即用；**不要假设固定盘符/年份**
+- 新整理的含 tex 文件夹都应部署一份 `build.py`（从任一已有文件夹复制母本即可）
+
+### MD→TEX 批量流水线（scripts/）
+
+| 脚本 | 用途 |
+|------|------|
+| `md2tex.py` / `md2ans.py` | MD 中间产物 → 试题 tex / 答案 tex（`\eqimg` 宏、graphicspath 自动对齐） |
+| `batch_convert.py` / `batch_convert_ans.py` | 批量处理整目录 |
+| `convert_new_papers.py` | 新卷一键转换入口 |
+| `split_combined.py` / `split_xj3.py` | 拆分合并卷 / 新课标卷 |
+| `fix_md_corruptions*.py` / `fix_errors.py` / `fix_error_answers.py` / `finish_papers.py` | 中间产物修复与收尾 |
+
+**回归测试**：`tests/test_fixed.py`、`tests/test_round2.py`、`tests/test_round3.py`（WSL 可移植，`to_native()` 把 `D:\x` 映射为 `/mnt/d/x`）。改流水线后必须全部通过。
+
+### 整理规范（历次会话沉淀）
+
+- **只动副本**：先复制到目标位置，再在副本里删除/改名；原件（桌面、源目录）永不修改
+- **图片先核实再删**：全库 grep `\includegraphics` / `\graphicspath` 建引用集，未被引用的才删；`_chk`、`_tmp_*` 类临时图片目录通常整目录删
+- **编译产物判定**：`pdfinfo` 看 Creator——`LaTeX with hyperref` 等即为编译产物可删；扫描原件/原始集合 PDF 保留
+- **命名**：高校文件夹加年份前缀 `2024-<大学>`；按年份归组用 `<YYYY>年` 文件夹
+- **全量验证**：整理完对全部文件夹并行编译，0 error 才算完成，验证产物随后清理：
+  ```bash
+  ls -d 20??年 | xargs -P 4 -I{} bash -c 'cd "{}" && python3 build.py'
+  ```
+
+### ⚠ WSL/PowerShell 执行纪律（Windows 主机）
+
+- PowerShell 会吃掉 `$`、`$(...)`、`2>/dev/null`、内联 for——**含 `$` 的命令一律写成脚本文件**（存 `C:\Users\HW\AppData\Local\Temp\deveco\shijuan-stage\`）再 `wsl bash <script>` / `wsl python3 <script>`，不要内联
+- Windows 版 `xelatex.exe` 不能写 WSL `/tmp`（`-output-directory=/tmp/...` 静默失败）：就地编译再清理
+- TeX Live 安装位置因机而异，先探测（`where xelatex` / `shutil.which` / 遍历各盘 `?:\texlive\*\bin\windows\`），用探测结果，不写死路径
+
+---
+
 ## 常见问题快速修复
 
 | 症状 | 原因 | 修复 |

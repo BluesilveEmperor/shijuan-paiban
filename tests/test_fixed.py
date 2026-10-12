@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Unit tests for the fixed clean() / fix_dollar_signs()."""
+import os
 import sys
-sys.path.insert(0, r'D:\Desktop\shijuan-paiban\scripts')
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts'))
 from md2tex import clean, fix_dollar_signs
 
 PASS = 0
