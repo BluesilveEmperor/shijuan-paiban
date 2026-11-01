@@ -11,8 +11,20 @@
         "fill_blank": "enumerate[start=12] + \\blank",
         "long_answer": "examenum[start=N, itemsep=2.5cm]"
       },
-      "commands": ["\\blank", "\\mycircled", "\\Parallel", "\\mi", "\\me"],
-      "required_packages": ["tasks", "enumitem", "tikz", "fancyhdr", "lastpage"],
+      "commands": [
+        "\\blank",
+        "\\mycircled",
+        "\\Parallel",
+        "\\mi",
+        "\\me"
+      ],
+      "required_packages": [
+        "tasks",
+        "enumitem",
+        "tikz",
+        "fancyhdr",
+        "lastpage"
+      ],
       "max_pages": 4,
       "supports_teacher_version": true,
       "page_format": {
@@ -31,8 +43,24 @@
         "fill_blank": "enumerate[resume]",
         "long_answer": "enumerate[resume]"
       },
-      "commands": ["\\daan", "\\jieti", "\\xijie", "\\xiaoI", "\\xiaoII", "\\xiaoIII", "\\eqimg", "\\mi", "\\me"],
-      "required_packages": ["enumitem", "graphicx", "xcolor", "fancyhdr", "lastpage"],
+      "commands": [
+        "\\daan",
+        "\\jieti",
+        "\\xijie",
+        "\\xiaoI",
+        "\\xiaoII",
+        "\\xiaoIII",
+        "\\eqimg",
+        "\\mi",
+        "\\me"
+      ],
+      "required_packages": [
+        "enumitem",
+        "graphicx",
+        "xcolor",
+        "fancyhdr",
+        "lastpage"
+      ],
       "max_pages": null,
       "supports_teacher_version": false,
       "page_format": {
@@ -64,7 +92,10 @@
       "exam_type": "zhoukan",
       "description": "周练卷模板（四件套）",
       "variable_prefix": "zhoukan",
-      "modes": ["limited", "homework"]
+      "modes": [
+        "limited",
+        "homework"
+      ]
     },
     "cuoti": {
       "files": {
@@ -75,7 +106,87 @@
       "exam_type": "cuoti",
       "description": "错题卷模板（三件套）",
       "variable_prefix": "cuoti",
-      "features": ["difficulty_stars", "error_analysis", "correct_solution", "variant_practice"]
+      "features": [
+        "difficulty_stars",
+        "error_analysis",
+        "correct_solution",
+        "variant_practice"
+      ]
+    },
+    "answer-sheet": {
+      "dir": "answer-sheet",
+      "files": {
+        "package": "answersheet.sty",
+        "skeleton": "answer_sheet.tex"
+      },
+      "exam_type": "answer_sheet",
+      "description": "答题卡（A4/A3 通用，由卷型数据自动分页分栏）",
+      "generator": "scripts/gen_answer_sheet.py",
+      "layouts": [
+        "a4",
+        "a3"
+      ],
+      "setup_keys": [
+        "layout",
+        "pages",
+        "block",
+        "choices",
+        "percol",
+        "blanks",
+        "rules",
+        "title",
+        "subject",
+        "color",
+        "bw"
+      ],
+      "rules_format": "题号/分值, 逗号分隔, 如 {15/13,16/15,17/15,18/17,19/17}",
+      "compile": "xelatex ×2（remember picture 定位）",
+      "presets": {
+        "新高考19题": {
+          "choices": 11,
+          "percol": 4,
+          "blanks": 3,
+          "rules": "15/13,16/15,17/15,18/17,19/17",
+          "pages": 4,
+          "block": 2
+        },
+        "模拟考22题": {
+          "choices": 8,
+          "percol": 4,
+          "blanks": 4,
+          "rules": "17/10,18/12,19/12,20/12,21/12,22/12",
+          "pages": 5,
+          "block": 2
+        },
+        "全国卷23题": {
+          "choices": 12,
+          "percol": 4,
+          "blanks": 4,
+          "rules": "17/10,18/12,19/12,20/12,21/12,22/10,23/10",
+          "pages": 5,
+          "block": 2
+        }
+      },
+      "features": [
+        "auto_pagination",
+        "score_proportional_space",
+        "id_grid",
+        "notice_box",
+        "bw_mode",
+        "a3_fold_layout",
+        "auto_figures",
+        "auto_tables",
+        "diagbox_support"
+      ],
+      "aux_commands": {
+        "\\gkFig{题号}{内容}": "作答区右上角小图，容器宽 6cm（单个 tikz / includegraphics）",
+        "\\gkBlock{题号}{内容}": "作答区顶部通栏，容器宽 15cm（并排多图 / 三线表）"
+      },
+      "auto_aux": {
+        "source": "解答题正文里的 tikzpicture / includegraphics / tabular",
+        "rule": "center 整块含图优先整块取；同题多块合并；超答题框 85% 自动降为每题一面",
+        "deps": "从原卷导言区搬 diagbox/booktabs/multirow/makecell 等图表宏包 + tikz 库 + graphicspath"
+      }
     }
   }
 }

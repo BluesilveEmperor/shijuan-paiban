@@ -1,0 +1,422 @@
+% ============================================================================
+%  answersheet.sty —— 高考 / 模拟考 / 联盟卷 通用答题卡宏包（v2.0）
+%  原名 答题卡.sty；为跨平台可移植（Linux/macOS 中文文件名易失配）改为 ASCII 名。
+%  调用方式：\usepackage{answersheet}
+% ----------------------------------------------------------------------------
+%  排版引擎：由「卷型数据」自动分页、自动分栏，不再逐页硬编码坐标。
+%    · layout=a4|a3   a4：每面一个版面；a3：每张纸横排两个版面（对折成册）
+%    · pages=N       版面总数（a4 即页数；a3 为张数，实际版面 = 2N）
+%    · block=B       每面最多排几道解答题（1～3，控制题目密度）
+%    · rules={15/13,16/15,17/15,18/17,19/17}
+%                    解答题「题号/分值」序列；按分值比例自动分配各面高度，
+%                    分值大的题自动占更多版面，装不下的题自动移到下一面
+%    · choices=11 percol=4 blanks=3   选择题数量、每列题数、填空题数量
+%    · title=… subject=… color=… bw=true|false
+%    · 考生信息（试室号/座位号/姓名/班级/考生号填涂表/注意事项）只出现在首面，
+%      其余版面为纯答题区，不再重复姓名、考生号。
+% ----------------------------------------------------------------------------
+%  注意：用 remember picture 定位，必须连续编译两次；改动版面后若位置异常，
+%        先删除同名 .aux 再编译两次。
+% ----------------------------------------------------------------------------
+%  用法：在导言区 \usepackage{answersheet}，然后
+%        \gkSetup{layout=a4,pages=4,block=2,...}
+%        \begin{document} … \gkMake
+%  示例见 A4答题卡.tex / A3答题卡.tex
+% ============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{answersheet}[2026/10/28 v2.0 Answer sheet for Gaokao / mock / league exams]
+
+\@ifpackageloaded{ctex}{}{\RequirePackage{ctex}}
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+\RequirePackage{eso-pic}
+\RequirePackage{lastpage}
+\RequirePackage{fontspec}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{}
+
+% --------------------------- 版式尺寸（cm） ---------------------------
+\def\gkCanvasW{19.8}      % 版心宽  = 210mm - 2×6mm
+\def\gkCanvasH{28.5}      % 版心高  = 297mm - 2×6mm
+\def\gkselw{0.5}          % 填涂框宽
+\def\gkselh{0.25}         % 填涂框高
+\newlength\gkMargin  \setlength\gkMargin{6mm}
+\newlength\gkPanelGap \setlength\gkPanelGap{21cm}   % a3 左右版面间距 = A4 纸宽
+
+% --------------------------- 参数接口 ---------------------------
+\definecolor{GKpink}{rgb}{1,0.2,0.65}
+\makeatletter
+\newif\if@gkBW      \@gkBWfalse
+\newif\if@gkAthree  \@gkAthreefalse
+\pgfkeys{/gk/.is family}
+\newcommand*\gkSetup[1]{\pgfkeys{/gk/.cd,#1}}
+\pgfkeys{
+  /gk/layout/.code     = {\def\gk@layout{#1}\def\gk@one{a4}%
+                          \ifx\gk@layout\gk@one\@gkAthreefalse\else\@gkAthreetrue\fi},
+  /gk/pages/.estore in = \gk@pages,
+  /gk/block/.estore in = \gk@block,
+  /gk/choices/.estore in=\gk@choices,
+  /gk/percol/.estore in = \gk@percol,
+  /gk/blanks/.estore in = \gk@blanks,
+  /gk/rules/.estore in  = \gk@rules,
+  /gk/title/.estore in  = \gk@title,
+  /gk/subject/.estore in= \gk@subject,
+  /gk/color/.code       = {\colorlet{GKmain}{#1}},
+  /gk/bw/.is if         = @gkBW,
+}
+\gkSetup{layout=a4, pages=4, block=2,
+         choices=11, percol=4, blanks=3,
+         rules={15/13,16/15,17/15,18/17,19/17},
+         title=2025年普通高等学校招生全国统一考试, subject=数学,
+         color=GKpink, bw=false}
+\if@gkBW \colorlet{GKmain}{black}\fi
+\makeatother
+% --------------------------- 基本图元 ---------------------------
+% 涂黑填涂框（#1#2 为中心）
+\newcommand*\gkMark[2]{%
+  \fill[black] ($(#1,#2)+(-\gkselw/2,\gkselh/2)$) rectangle ($(#1,#2)+(\gkselw/2,-\gkselh/2)$);}
+% 空心填涂框
+\newcommand*\gkBox[2]{%
+  \draw[GKmain] ($(#1,#2)+(-\gkselw/2,\gkselh/2)$) rectangle ($(#1,#2)+(\gkselw/2,-\gkselh/2)$);}
+% 中括号填涂框（考生作答区）
+\newcommand*\gkBracket[2]{%
+  \draw[GKmain] ($(#1,#2)+(-0.25*\gkselw,0.5*\gkselh)$) -- ($(#1,#2)+(-0.5*\gkselw,0.5*\gkselh)$)
+             -- ($(#1,#2)+(-0.5*\gkselw,-0.5*\gkselh)$) -- ($(#1,#2)+(-0.25*\gkselw,-0.5*\gkselh)$);
+  \draw[GKmain] ($(#1,#2)+(0.25*\gkselw,0.5*\gkselh)$) -- ($(#1,#2)+(0.5*\gkselw,0.5*\gkselh)$)
+             -- ($(#1,#2)+(0.5*\gkselw,-0.5*\gkselh)$) -- ($(#1,#2)+(0.25*\gkselw,-0.5*\gkselh)$);}
+% 上边缘定位标记带：#1 个数 #2 起点横坐标 #3 间距
+\newcommand*\gkTopMarks[3]{%
+  \foreach \i in {0,...,\numexpr#1-1\relax}{\gkMark{#2+\i*#3}{28.1}}}
+% 小节标题
+\newcommand*\gkSectionTitle[3]{%
+  \node[anchor=north west, align=left, font=\fontsize{10.5pt}{12pt}\selectfont]
+    at (#2,#3) {\bfseries #1};}
+
+% --------------------------- 选择题区 ---------------------------
+% #1 起始题号  #2 数量  #3 每列题数
+\newcommand*\gkChoice[3]{%
+\begin{scope}
+  \def\bx{1.4}\def\by{16.2}\def\bw{16.9}
+  \def\rowsep{0.55}\def\xstep{4.35}\def\labgap{0.8}\def\optgap{0.72}
+  \pgfmathtruncatemacro{\nrows}{min(#2,#3)}
+  \pgfmathsetmacro{\bh}{\nrows*\rowsep+0.5}
+  \pgfmathtruncatemacro{\ncols}{ceil(#2/#3)}
+  \draw[black] (\bx,\by) rectangle ++(\bw,-\bh);
+  \gkSectionTitle{一、选择题}{\bx+0.1}{\by+0.6}
+  \foreach \i in {0,...,\numexpr#2-1\relax}{
+    \pgfmathtruncatemacro{\q}{\i+#1}
+    \pgfmathtruncatemacro{\c}{floor(\i/#3)}
+    \pgfmathtruncatemacro{\r}{mod(\i,#3)}
+    \pgfmathsetmacro{\qx}{1.9+\c*\xstep}
+    \pgfmathsetmacro{\qy}{\by-0.53-\r*\rowsep}
+    \node at (\qx,\qy) {\q};
+    \foreach \k/\L in {0/A,1/B,2/C,3/D}{
+      \pgfmathsetmacro{\lx}{\qx+\labgap+\k*\optgap}
+      \node[font=\footnotesize, text=GKmain] at (\lx,\qy) {\L};
+      \gkBracket{\lx}{\qy}}}
+  \foreach \r in {0,...,\numexpr\nrows-1\relax}{
+    \pgfmathsetmacro{\qy}{\by-0.53-\r*\rowsep}
+    \gkMark{0.85}{\qy}\gkMark{18.85}{\qy}}
+\end{scope}}
+
+% --------------------------- 填空题区 ---------------------------
+% #1 起始题号  #2 数量  #3 框上边纵坐标
+\newcommand*\gkBlank[3]{%
+\begin{scope}
+  \def\bx{1.4}\def\bw{16.9}
+  \pgfmathtruncatemacro{\nrows}{ceil(#2/3)}
+  \pgfmathsetmacro{\bh}{\nrows*1.2+0.2}
+  \draw[black] (\bx,#3) rectangle ++(\bw,-\bh);
+  \gkSectionTitle{二、填空题}{\bx+0.1}{#3+0.6}
+  \foreach \i in {0,...,\numexpr#2-1\relax}{
+    \pgfmathtruncatemacro{\c}{mod(\i,3)}
+    \pgfmathtruncatemacro{\r}{floor(\i/3)}
+    \pgfmathsetmacro{\qx}{1.9+\c*4.35+0.1}
+    \pgfmathsetmacro{\qy}{#3-0.8-\r*1.2}
+    \node at (\qx,\qy) {\the\numexpr\i+#1\relax.};
+    \draw[GKmain] (\qx+0.3,\qy-0.2) -- ++(3.55,0);}
+\end{scope}}
+% --------------------------- 考生信息页眉 ---------------------------
+\makeatletter
+% 第 1 面：完整页眉（考试名 + 信息行 + 考生号填涂表 + 注意事项 + 三个小框）
+\newcommand*\gkHeaderFull{%
+\begin{scope}
+  \node[font=\fontsize{16pt}{18pt}\selectfont, text=GKmain] at (9.9,27.35) {\bfseries\gk@title};
+  \node[font=\fontsize{22pt}{24pt}\selectfont] at (9.9,26.35) {\bfseries\gk@subject 答题卡};
+  \node at (9.9,25.0) {%
+    试室号：\textcolor{GKmain}{\underline{\hspace{2cm}}}\hspace{0.6em}%
+    座位号：\textcolor{GKmain}{\underline{\hspace{2cm}}}\hspace{0.6em}%
+    姓名：\textcolor{GKmain}{\underline{\hspace{3.2cm}}}\hspace{0.6em}%
+    班级：\textcolor{GKmain}{\underline{\hspace{3.2cm}}}};
+\end{scope}
+\gkIDGrid{10}
+\gkNoticeBox
+\gkInfoBoxes
+\gkTopMarks{19}{1.7}{0.9}}
+
+% 考生号填涂表：#1 = 位数
+\newcommand*\gkIDGrid[1]{%
+\begin{scope}
+  \def\cols{#1}\def\rows{10}
+  \def\cellw{0.9}\def\cellh{0.5}
+  \def\gx{9.5}\def\gy{24.2}\def\headh{0.6}\def\pad{0.2}
+  \pgfmathsetmacro{\gbot}{\gy-\headh-\cellw-2*\pad-\rows*\cellh}
+  \foreach \c in {0,...,\cols}{\draw[GKmain] (\gx+\c*\cellw,\gy-\headh) -- (\gx+\c*\cellw,\gbot);}
+  \draw[GKmain] (\gx,\gy) -- (\gx+\cols*\cellw,\gy);
+  \draw[GKmain] (\gx,\gy-\headh) -- (\gx+\cols*\cellw,\gy-\headh);
+  \draw[GKmain] (\gx,\gy-\headh-\cellw) -- (\gx+\cols*\cellw,\gy-\headh-\cellw);
+  \draw[GKmain] (\gx,\gbot) -- (\gx+\cols*\cellw,\gbot);
+  \draw[GKmain] (\gx,\gy) -- (\gx,\gy-\headh);
+  \draw[GKmain] (\gx+\cols*\cellw,\gy) -- (\gx+\cols*\cellw,\gy-\headh);
+  \node[font=\small\bfseries] at (\gx+0.5*\cols*\cellw,\gy-0.5*\headh) {考\hspace{1em}生\hspace{1em}号};
+  \foreach \r in {1,...,\rows}{%
+    \pgfmathsetmacro{\cy}{\gy-\headh-\cellw-\pad-\r*\cellh+0.5*\cellh}
+    \begingroup
+      \def\gkselw{0.34}\def\gkselh{0.22}%
+      \foreach \c in {1,...,\cols}{%
+        \pgfmathsetmacro{\cx}{\gx+\c*\cellw-0.5*\cellw}%
+        \node[font=\footnotesize, text=GKmain] at (\cx-0.2,\cy) {\the\numexpr\r-1\relax};%
+        \gkBracket{\cx+0.17}{\cy}}%
+    \endgroup
+    \gkMark{18.9}{\cy}}
+\end{scope}}
+
+% 注意事项框
+\newcommand*\gkNoticeBox{%
+\begin{scope}
+  \def\sx{1.2}\def\sy{24.2}\def\sw{7.7}\def\sh{4.8}
+  \draw[GKmain] (\sx,\sy) rectangle ++(\sw,-\sh);
+  \node[text width=7.3cm, align=left, anchor=north west,
+        font=\fontsize{8pt}{9.5pt}\selectfont] at (\sx+0.1,\sy-0.1) {%
+      \textbf{注意事项：}\\
+      \hangindent=1.4em 1．答题前，考生务必用黑色字迹的钢笔或签字笔将试室号、座位号、姓名和考生号填写在答题卡上，并用\hspace{0.1em}2B\hspace{0.1em}铅笔将考生号对应的数字涂黑。\\
+      \hangindent=1.4em 2．回答选择题时，选出每小题答案以后，用\hspace{0.1em}2B\hspace{0.1em}铅笔把答题卡上对应题目的答案标号涂黑。如需改动，用橡皮擦擦干净后，再选其它答案标号涂黑。回答非选择题时，将答案写在答题卡上指定区域内，超出答题区域的答案无效。\\
+      \hangindent=1.4em 3．正确填涂试卷类型，否则答案无效。\\
+      \hangindent=1.4em 4．答题卡保持卡面整洁，不要折叠和弄破。};
+\end{scope}}
+% 试卷类型 / 填涂样例 / 缺考标记
+\newcommand*\gkInfoBoxes{%
+\begin{scope}
+  \def\bx{1.2}\def\by{19.1}
+  \draw[GKmain] (\bx,\by) rectangle ++(2.5,-1.8);
+  \node[anchor=north west, align=left, font=\fontsize{9pt}{10.5pt}\selectfont]
+    at (\bx+0.1,\by-0.1) {\textbf{试卷类型：}\\ 试卷A\\ 试卷B};
+  \gkBox{\bx+1.75}{\by-0.925}\gkBox{\bx+1.75}{\by-1.425}
+  \def\px{3.9}\def\py{19.1}
+  \draw[GKmain] (\px,\py) rectangle ++(3.1,-1.8);
+  \node[anchor=north west, align=left, font=\fontsize{9pt}{10.5pt}\selectfont]
+    at (\px+0.1,\py-0.1) {\textbf{填涂样例：}\\ 正确填涂：\\ 错误填涂：};
+  \gkMark{\px+1.95}{\py-0.925}
+  \gkBox{\px+1.95}{\py-1.425}
+  \draw[black, line width=0.8pt] (\px+1.7,\py-1.55) -- (\px+2.2,\py-1.3);
+  \fill[black] (\px+2.4,\py-1.42) rectangle ++(0.55,-0.09);
+  \def\lx{7.2}\def\ly{19.1}
+  \draw[GKmain] (\lx,\ly) rectangle ++(1.7,-1.8);
+  \node[anchor=north west, font=\fontsize{9pt}{10.5pt}\selectfont] at (\lx+0.1,\ly-0.1) {\textbf{缺考标记}};
+  \gkBox{\lx+0.85}{\ly-1.125}
+\end{scope}}
+
+% --------------------------- 解答题区 ---------------------------
+% 外层圆角框：#1 = 上边纵坐标（下边固定 0.6）
+\newcommand*\gkFrame[1]{%
+  \draw[GKmain, rounded corners=10pt] (1.2,#1) rectangle (18.5,0.6);}
+% 内层答题框：#1 上边，#2 下边
+\newcommand*\gkInnerFrame[2]{\draw[black] (1.4,#1) rectangle (18.3,#2);}
+% 题间分隔线
+\newcommand*\gkDivider[1]{\draw[black] (1.4,#1) -- (18.3,#1);}
+% 题号标签：#1 题号 #2 分值 #3 横坐标 #4 纵坐标
+\newcommand*\gkQLabel[4]{%
+  \node[fill=white, inner sep=1.5pt] at (#3,#4) {#1.（#2分）};}
+% 页内提示语
+\newcommand*\gkWarn[2]{%
+  \node[text=GKmain, font=\small] at (#1,#2)
+    {请在各题目的答题区域内作答，超出黑色矩形边框限定区域的答案无效};}
+
+% ---------- 题目附图 / 三线表 ----------
+% 用法（写在 \begin{document} 之后、\gkMake 之前）：
+%   \gkFig{16}{\begin{tikzpicture}...\end{tikzpicture}}   % 右上角小图
+%   \gkBlock{19}{\begin{tabular}{...}...\end{tabular}}   % 顶部通栏（宽表）
+% 参数是【题号】，不是第几道。必须用 \long 版本：图表内容里常有空行，
+% 短宏（\newcommand*）遇到 \par 会报 "Paragraph ended before ... was complete"。
+\def\gk@figw{6cm}       % 角图容器宽度
+\def\gk@blkw{15cm}      % 通栏块容器宽度
+% 用固定宽度的 minipage 承载内容：
+%   · minipage 内部是竖直模式，原卷里的 center / 多行 / 表格都能正常工作
+%     （\sbox 是 LR 模式，一遇到 \begin{center} 就报 "Not allowed in LR mode"）；
+%   · 内容里的 \textwidth / \linewidth 会随容器收窄，0.32\textwidth 的并排图自动缩小。
+% 内容用固定宽度的 minipage 承载：minipage 内部是竖直模式，原卷里的
+% center / 多行 / 表格都能正常工作（\sbox 是 LR 模式，遇到 \begin{center} 就报错）；
+% 内容里的 \textwidth / \linewidth 会随容器收窄，0.32\textwidth 的并排图自动缩小。
+% 高度不在这里做缩放——是否放得下由 gen_answer_sheet.py 在生成前算好，
+% 放不下就自动降密度（每题独占一面），比 TeX 现场量高度可靠得多。
+\newcommand*\gk@fit[2]{%
+  \begin{minipage}{#1}\centering #2\end{minipage}}
+\newcommand\gkFig[2]{\expandafter\gdef\csname gk@fig@#1\endcsname{#2}}
+\newcommand\gkBlock[2]{\expandafter\gdef\csname gk@blk@#1\endcsname{#2}}
+\makeatother
+% ============================================================================
+%  排版引擎
+% ============================================================================
+\makeatletter
+% ---------- 解析 rules：题号 / 分值 / 分值前缀和 ----------
+% 注意：附图高度【不】参与分页计算。图只占作答区顶部，挤掉的是书写空间，
+% 不改变「哪几题同页」——若把图高折成分数，19 题卷会从 1+2+1+1 变成 1+1+1+2，
+% 末页硬塞两道 17 分大题，反而更难写。空间不够请用 --pages / --block 调。
+\newcounter{gk@i}
+\newcommand*\gk@parse{%
+  \setcounter{gk@i}{0}\def\gk@acc{0}%
+  \expandafter\xdef\csname gk@pfx0\endcsname{0}%
+  \foreach \q/\sc in \gk@rules{%
+    \stepcounter{gk@i}%
+    \expandafter\xdef\csname gk@q\arabic{gk@i}\endcsname{\q}%
+    \expandafter\xdef\csname gk@s\arabic{gk@i}\endcsname{\sc}%
+    \xdef\gk@acc{\the\numexpr\gk@acc+\sc\relax}%
+    \expandafter\xdef\csname gk@pfx\arabic{gk@i}\endcsname{\gk@acc}}%
+  \xdef\gk@N{\arabic{gk@i}}%
+  \xdef\gk@total{\gk@acc}}
+
+% ---------- 版面规划 ----------
+% 第 #1 面可排版高度（cm）：只有首面被考生信息/选择题/填空题占用，其余整面用于解答题
+\newcommand*\gk@Hget[1]{%
+  \ifnum#1=0 \def\gk@Ht{\gk@Hzero}\else \def\gk@Ht{\gk@plainH}\fi}
+% 把解答题按分值比例装进各版面：每面目标分值与其可用高度成正比
+\newcommand*\gk@plan{%
+  \pgfmathsetmacro{\gk@Htot}{\gk@Hzero+(\gk@npanels-1)*\gk@plainH}%
+  \def\gk@qi{0}%
+  \foreach \i in {0,...,\numexpr\gk@npanels-1\relax}{%
+    \gk@Hget{\i}%
+    \edef\gk@psv{\csname gk@pfx\gk@qi\endcsname}%
+    \ifnum\i=\numexpr\gk@npanels-1\relax
+      \xdef\gk@e{\gk@N}%
+    \else
+      \pgfmathsetmacro{\gk@tgt}{\gk@Ht/\gk@Htot*\gk@total}%
+      \xdef\gk@e{\gk@qi}\xdef\gk@cnt{0}\xdef\gk@go{1}%
+      \foreach \k in {1,...,\gk@N}{%
+        \ifnum\gk@go=1
+          \ifnum\k>\gk@qi
+            \ifnum\gk@cnt<\gk@block
+              \ifnum\gk@cnt=0
+                \xdef\gk@e{\k}\xdef\gk@cnt{1}%
+              \else
+                \edef\gk@mbv{\csname gk@pfx\the\numexpr\k-1\relax\endcsname}%
+                \edef\gk@sv{\csname gk@s\k\endcsname}%
+                \pgfmathsetmacro{\gk@mb}{\gk@mbv-\gk@psv+\gk@sv/2}%
+                \pgfmathtruncatemacro{\gk@ok}{\gk@mb<\gk@tgt?1:0}%
+                \ifnum\gk@ok=1
+                  \xdef\gk@e{\k}\xdef\gk@cnt{\the\numexpr\gk@cnt+1\relax}%
+                \else \xdef\gk@go{0}\fi
+              \fi
+            \else \xdef\gk@go{0}\fi
+          \fi
+        \fi
+      }%
+    \fi
+    \expandafter\xdef\csname gk@ps\i\endcsname{\gk@qi}%
+    \expandafter\xdef\csname gk@pe\i\endcsname{\gk@e}%
+    \xdef\gk@qi{\gk@e}}%
+}
+
+% ---------- 判定当前版面的框线与答题区高度 ----------
+\newcommand*\gk@PageSetup{%
+  \ifnum\gk@pageNo=0
+    \def\gk@bigtop{\gk@zeroBig}\def\gk@top{\gk@answertop}%
+  \else
+    \def\gk@bigtop{\gk@plainBig}\def\gk@top{\gk@plainTop}%
+  \fi}
+
+% ---------- 画本版面的解答题：分隔线 + 题号标签 + 附图 ----------
+% 附图：#1 第几道解答题，#2 该题答题区上边纵坐标
+\newcommand*\gk@DrawAux[2]{%
+  \ifcsname gk@fig@#1\endcsname
+    \node[anchor=north east, inner sep=2pt] at (18.25,#2-0.12)
+      {\gk@fit{\gk@figw}{\csname gk@fig@#1\endcsname}};%
+  \fi
+  \ifcsname gk@blk@#1\endcsname
+    \node[anchor=north, inner sep=2pt] at (9.85,#2-0.80)
+      {\gk@fit{\gk@blkw}{\csname gk@blk@#1\endcsname}};%
+  \fi}
+\newcommand*\gk@DrawPage{%
+  \def\gk@qi{\csname gk@ps\gk@pageNo\endcsname}%
+  \def\gk@qe{\csname gk@pe\gk@pageNo\endcsname}%
+  \ifnum\gk@qe>\gk@qi
+    \edef\gk@psv{\csname gk@pfx\gk@qi\endcsname}%
+    \edef\gk@pev{\csname gk@pfx\gk@qe\endcsname}%
+    \pgfmathsetmacro{\gk@mk}{\gk@pev-\gk@psv}%
+    \pgfmathsetmacro{\gk@sca}{(\gk@top-1.2)/\gk@mk}%
+    \foreach \k in {1,...,\gk@N}{%
+      \ifnum\k>\gk@qi
+        \ifnum\k<\numexpr\gk@qe+1\relax
+          \edef\gk@prev{\csname gk@pfx\the\numexpr\k-1\relax\endcsname}%
+          \pgfmathsetmacro{\gk@yy}{\gk@top-(\gk@prev-\gk@psv)*\gk@sca}%
+          \gkQLabel{\csname gk@q\k\endcsname}{\csname gk@s\k\endcsname}{2.7}{\gk@yy-0.42}%
+          \gk@DrawAux{\csname gk@q\k\endcsname}{\gk@yy}%
+          \ifnum\k>\numexpr\gk@qi+1\relax\gkDivider{\gk@yy}\fi
+        \fi
+      \fi
+    }%
+  \fi}
+
+% ---------- 单个版面的全部内容 ----------
+\newcommand*\gk@PageContent{%
+  \gk@PageSetup
+  \ifnum\gk@pageNo=0
+    \gkHeaderFull
+    \gkChoice{1}{\gk@choices}{\gk@percol}%
+    \gkBlank{\numexpr\gk@choices+1\relax}{\gk@blanks}{\gk@blanktop}%
+    \gkSectionTitle{三、解答题}{1.5}{\gk@answertop+1.0}%
+  \fi
+  \gkFrame{\gk@bigtop}%
+  \gkInnerFrame{\gk@top}{1.2}%
+  \gk@DrawPage
+  \gkWarn{9.9}{0.9}%
+  \ifnum\gk@pageNo=0\else\gkWarn{9.9}{\gk@bigtop+0.5}\fi
+  \node[text=GKmain, font=\bfseries] at (0.5*\gkCanvasW,0.25) {\gk@footertext};}
+
+% ---------- 页脚 ----------
+\newcommand*\gk@footertext{\gk@subject 答题卡\quad 第 \thepage\ 
+  \if@gkAthree 张\else 页\fi（共 \pageref{LastPage}\ \if@gkAthree 张\else 页\fi）}
+\newcommand*\gk@hook{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[black] ([xshift=\gkMargin,  yshift=\gkMargin] current page.south west) rectangle ++(10mm,6mm);
+    \fill[black] ([xshift=-\gkMargin, yshift=\gkMargin] current page.south east) rectangle ++(-10mm,6mm);
+    \fill[black] ([xshift=-\gkMargin, yshift=-\gkMargin] current page.north east) rectangle ++(-10mm,-6mm);
+    \fill[black] ([xshift=\gkMargin,  yshift=-\gkMargin] current page.north west) rectangle ++(10mm,-6mm);
+  \end{tikzpicture}}
+
+% ---------- 主入口 ----------
+\newlength\gkPanelShift
+\newcommand*\gkMake{%
+  \gk@parse
+  \if@gkAthree
+    \def\gk@devices{2}\pgfmathtruncatemacro{\gk@npanels}{\gk@pages*2}%
+  \else
+    \def\gk@devices{1}\def\gk@npanels{\gk@pages}%
+  \fi
+  % 版面尺寸推算（单位 cm，原点在版心左下角）
+  \pgfmathtruncatemacro{\gk@cnrows}{min(\gk@choices,\gk@percol)}%
+  \pgfmathsetmacro{\gk@choiceH}{\gk@cnrows*0.55+0.5}%
+  \pgfmathsetmacro{\gk@blanktop}{16.2-\gk@choiceH-0.7}%
+  \pgfmathtruncatemacro{\gk@brows}{ceil(\gk@blanks/3)}%
+  \pgfmathsetmacro{\gk@blankH}{\gk@brows*1.2+0.2}%
+  \pgfmathsetmacro{\gk@answertop}{\gk@blanktop-\gk@blankH-1.2}%
+  \pgfmathsetmacro{\gk@zeroBig}{\gk@answertop+0.5}%
+  \def\gk@plainTop{26.9}\def\gk@plainBig{27.5}%
+  \pgfmathsetmacro{\gk@Hzero}{\gk@answertop-1.2}%
+  \def\gk@plainH{25.7}%
+  \gk@plan
+  \AddToShipoutPictureFG{\gk@hook}%
+  \foreach \sh in {0,...,\numexpr\gk@pages-1\relax}{%
+    \foreach \dv in {0,...,\numexpr\gk@devices-1\relax}{%
+      \xdef\gk@pageNo{\the\numexpr\sh*\gk@devices+\dv\relax}%
+      \setlength\gkPanelShift{\gkMargin}%
+      \ifnum\dv=1 \setlength\gkPanelShift{\dimexpr\gkMargin+\gkPanelGap\relax}\fi
+      \begin{tikzpicture}[remember picture, overlay, x=1cm, y=1cm,
+        shift={([xshift=\gkPanelShift,
+                  yshift=\gkMargin]current page.south west)}]
+        \gk@PageContent
+      \end{tikzpicture}%
+    }%
+    \clearpage
+  }%
+}
+\makeatother
+% === EOF-SENTINEL ===

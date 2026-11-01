@@ -1,0 +1,62 @@
+% !TEX program = xelatex
+% ============================================================================
+%  答题卡模板骨架（A4 · 每面一个版面）
+%  正常流程由 scripts/gen_answer_sheet.py 自动生成同款文件，无需手写。
+%  本文件用于：① 快速手工出卡；② 查看 \gkSetup 各参数的含义。
+% ----------------------------------------------------------------------------
+%  编译：xelatex 连编两次（模板用 remember picture 定位，一次页码/位置不准）
+%  打印：A4 双面，共 pages 个版面
+% ----------------------------------------------------------------------------
+%  \gkSetup 参数
+%    layout   a4 | a3           a4 每面一个版面；a3 每张纸并排两个版面（对折成册）
+%    pages    版面数            a4 = 页数；a3 = 张数（实际版面 = 2×pages）
+%    block    每面最多解答题数   1～3，控制题目密度
+%    choices  选择题总数         单选 + 多选
+%    percol   选择题每列题数     11 题 + percol=4 → 4/4/3 三列
+%    blanks   填空题总数
+%    rules    解答题「题号/分值」 按分值比例自动分配高度，装不下自动移面
+%    title    考试名称
+%    subject  科目
+%    color    主色（GKpink 默认；可填任意 xcolor 颜色名）
+%    bw       true → 全黑，用于黑白印刷
+% ----------------------------------------------------------------------------
+%  常用卷型预设
+%    新高考 19 题（8单选+3多选+3填空+5解答）
+%        choices=11, percol=4, blanks=3,
+%        rules={15/13,16/15,17/15,18/17,19/17}, pages=4, block=2
+%    模拟考 22 题（8选择+4填空+6解答）
+%        choices=8, percol=4, blanks=4,
+%        rules={17/10,18/12,19/12,20/12,21/12,22/12}, pages=5, block=2
+%    全国卷 23 题（12选择+4填空+7解答）
+%        choices=12, percol=4, blanks=4,
+%        rules={17/10,18/12,19/12,20/12,21/12,22/10,23/10}, pages=5, block=2
+% ============================================================================
+\documentclass[UTF8,11pt,a4paper]{ctexart}
+
+\usepackage{geometry}
+\geometry{paperwidth=210mm, paperheight=297mm, hmargin=6mm, vmargin=6mm}
+\pagestyle{empty}
+
+% 宏包与生成的 .tex 同目录；若放在别处，请把所在目录加入 TEXINPUTS
+\usepackage{answersheet}
+
+\gkSetup{
+  layout  = a4,
+  pages   = 4,
+  block   = 2,
+  choices = 11, percol = 4, blanks = 3,
+  rules   = {15/13,16/15,17/15,18/17,19/17},
+  title   = 2025年普通高等学校招生全国统一考试,
+  subject = 数学,
+  color   = GKpink,
+  bw      = false
+}
+
+\begin{document}
+% ── 解答题附图 / 三线表（可选）─────────────────────────────────────────
+% 参数是【题号】，不是第几道。内容里可以有空行。
+%   \gkFig{16}{\begin{tikzpicture}...\end{tikzpicture}}   右上角小图，容器宽 6cm
+%   \gkBlock{19}{\begin{tabular}{...}...\end{tabular}}    顶部通栏，容器宽 15cm
+% 原卷里的 \textwidth / \linewidth 会随容器收窄，并排图自动缩小。
+\gkMake
+\end{document}
