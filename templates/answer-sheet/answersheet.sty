@@ -171,11 +171,11 @@
   \foreach \r in {1,...,\rows}{%
     \pgfmathsetmacro{\cy}{\gy-\headh-\cellw-\pad-\r*\cellh+0.5*\cellh}
     \begingroup
-      \def\gkselw{0.34}\def\gkselh{0.22}%
+      \def\gkselw{0.55}\def\gkselh{0.26}%
       \foreach \c in {1,...,\cols}{%
         \pgfmathsetmacro{\cx}{\gx+\c*\cellw-0.5*\cellw}%
-        \node[font=\footnotesize, text=GKmain] at (\cx-0.2,\cy) {\the\numexpr\r-1\relax};%
-        \gkBracket{\cx+0.17}{\cy}}%
+        \node[font=\footnotesize, text=GKmain] at (\cx,\cy) {\the\numexpr\r-1\relax};%
+        \gkBracket{\cx}{\cy}}%
     \endgroup
     \gkMark{18.9}{\cy}}
 \end{scope}}

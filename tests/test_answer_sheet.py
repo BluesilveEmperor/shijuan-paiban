@@ -351,6 +351,49 @@ tex2 = G.render_tex(sp2, layout='a4', pages=4, block=2, percol=4,
                     title=sp2.title, subject='数学')
 check_true('render-no-aux', "\\gkBlock" not in tex2 and "\\gkFig" not in tex2)
 
+# ---------------------------------------------------------------- 11 填涂框几何
+# 考生号填涂表：数字必须居中在括号内，括号左右对称（不能有横向偏移）。
+# 历史回归：曾用 gkselw=0.34 + 数字偏移 -0.2 + 括号偏移 +0.17，
+# 导致数字压在左括号上、左右括号不对齐。
+import re as _re
+STY = (Path(__file__).resolve().parent.parent
+       / 'templates' / 'answer-sheet' / 'answersheet.sty').read_text(encoding='utf-8')
+id_grid = STY[STY.index(r'\newcommand*\gkIDGrid'):]
+id_grid = id_grid[:id_grid.index(r'\end{scope}}')]
+
+m = _re.search(r'\\def\\gkselw\{([\d.]+)\}\\def\\gkselh\{([\d.]+)\}', id_grid)
+check_true('idgrid-selw-declared', m is not None, '未找到 gkselw/gkselh 定义')
+if m:
+    selw, selh = float(m.group(1)), float(m.group(2))
+    # 单元格 0.9 × 0.5，填涂框必须留出间隙
+    check_true('idgrid-selw-fits-cell', selw < 0.9, f'gkselw={selw} 超出单元格宽 0.9')
+    check_true('idgrid-selh-fits-cell', selh < 0.5, f'gkselh={selh} 超出单元格高 0.5')
+    # 括号内净空 = 0.5*selw（两侧各 0.25*selw），需容纳一个 footnotesize 数字
+    check_true('idgrid-inner-gap', 0.5 * selw >= 0.25, f'括号内净空仅 {0.5*selw:.3f}cm，数字会压线')
+
+check_true('idgrid-digit-centered',
+           _re.search(r'at \(\\cx,\\cy\)\s*\{\\the\\numexpr\\r-1', id_grid) is not None,
+           '数字未居中在 \\cx（存在横向偏移）')
+check_true('idgrid-bracket-centered',
+           r'\gkBracket{\cx}{\cy}' in id_grid,
+           '括号未以 \\cx 为中心（存在横向偏移）')
+
+# ---------------------------------------------------------------- 12 附图高度标定
+# 表格高度估算曾用 1.8 + 0.72*rows，把 2601强基联盟 第 15 题的两张表估成 8.6cm
+# （pdftotext -bbox 实测仅 4.0cm），误触发降密度，把 4 版面撑成 5 版面。
+TAB3 = (r'\begin{tabular}{|c|c|}\hline 甲 & 1 \\ \hline 乙 & 2 \\ \hline'
+        r' 丙 & 3 \\ \hline\end{tabular}')          # 3 行
+TAB10 = (r'\begin{tabular}{|c|c|}' + r'\hline a & 1 \\ ' * 10 + r'\hline\end{tabular}')
+
+h3 = G._est_aux_height('block', TAB3)
+h10 = G._est_aux_height('block', TAB10)
+check_true('est-tab-3rows-sane', 1.5 <= h3 <= 3.0, f'3 行表估成 {h3:.2f}cm（实测约 1.3cm）')
+check_true('est-tab-10rows-sane', 4.0 <= h10 <= 7.0, f'10 行表估成 {h10:.2f}cm')
+check_true('est-tab-monotonic', h10 > h3, '行数增加高度应增大')
+check_true('est-fig-default', G._est_aux_height('fig', r'\includegraphics{a.png}') == 4.5)
+# 强基联盟 Q15 的两张表相加必须落在 7.8cm 答题区内
+check_true('est-two-tables-fit', h3 + h3 < 7.8, f'两张 3 行表合计 {h3*2:.2f}cm 超出 7.8cm')
+
 print()
 if fails:
     print(f'{len(fails)} FAILED: {fails}')

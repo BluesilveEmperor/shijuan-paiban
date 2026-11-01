@@ -367,11 +367,18 @@ def _strip_aux_noise(s: str) -> str:
 
 
 def _est_aux_height(mode: str, latex: str) -> float:
-    """估算附图占用高度（cm）。只用于分页预留，宁可略大。"""
+    """估算附图占用高度（cm）。只用于分页预留，宁可略大。
+
+    tabular 的标定来自实测（2601强基联盟 第 15 题两张表，pdftotext -bbox 量得）：
+      2 数据行的表实际占 1.3cm、3 数据行的表实际占 2.0cm，
+      而 `\\` 计数比数据行多 1（末行末尾也有 `\\`），故 rows = `\\` 数 + 1。
+    旧公式 1.8 + 0.72*rows 把两张表估成 8.6cm（实际 4.0cm），
+    误触发「降密度」，把 4 版面撑成 5 版面。
+    """
     if mode == "block":
         if "tabular" in latex:
             rows = len(re.findall(r"\\\\", latex)) + 1
-            return min(1.8 + 0.72 * rows, 9.0)
+            return min(0.45 + 0.55 * rows, 9.0)
         if latex.count("tikzpicture") >= 2 or "minipage" in latex:
             return 5.5
         return 4.8
