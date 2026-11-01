@@ -14,14 +14,15 @@
 - **自动模板选择**：根据文件名是否含"答案"自动选用试题模板或答案模板
 - **三段式试题匹配**：答案文档自动查找同目录对应的 `.tex` 试题文件（`match_paper.py`）
 - **教师版生成**：`gen_teacher.py` 支持 compact / normal / exam 三模式，环境扫描定位，不依赖 itemsep 取值
+- **答题卡生成**：从排好的试卷 `.tex` 自动识别题量与分值，生成 A4 / A3 答题卡（`scripts/gen_answer_sheet.py`）；按分值比例自动分页分栏，带考生号填涂表、注意事项、黑白模式
 - **错题卷支持**：自动解析错题文件（图片/PDF），按难度排序排版，含错因分析/正确解法/变式
 - **周练卷支持**：参数化生成周练卷，含学生版/教师版/每题一页版
 - **图片智能处理**：8 种场景自动选择（`IMG-SCENE-001`）、并排限高、`\graphicspath` 自动对齐
 - **编译验证**：XeLaTeX 编译、Overfull 检测、`validate_tex.py` 规则级结构验证、`visual_verify.py` 视觉验证
 - **环境检查**：执行前自动检查 XeLaTeX/pandoc/Python/MinerU 等环境，缺少时引导配置
 - **MD→TEX 批量流水线**：`md2tex.py` / `md2ans.py` / `batch_convert.py` / `convert_new_papers.py` 等脚本批量把 MD 中间产物转换为试题/答案 tex
-- **题库维护**：维护 `{题库根}`（环境变量 `SHIJUAN_LIBRARY`，默认 `D:\Music\试题加题库`）；每个含 tex 文件夹部署一键编译 `build.py`
-- **回归测试**：`tests/` 下 5 套测试（渲染器排版决策、教师版三模式、md2tex 清洗规则），`python tests/run_all.py` 一键跑完
+- **题库维护**：维护 `{题库根}`（环境变量 `SHIJUAN_LIBRARY`，默认 `D:\Music\试题加题库`）；每个含 tex 文件夹部署一键编译 `build.py`（通用版编全部 tex ×2；书稿版只编 main.tex ×3）
+- **回归测试**：`tests/` 下 5 套测试（渲染器排版决策、教师版三模式、md2tex 清洗规则、答题卡），`python tests/run_all.py` 一键跑完
 
 ## 快速开始
 

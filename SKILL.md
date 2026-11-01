@@ -1,7 +1,7 @@
 ---
 name: shijuan-paiban
 description: >-
-  将试卷文件（DOCX 或 PDF）自动转换为 LaTeX 排版并编译为 PDF。
+  将试卷文件（DOCX 或 PDF）自动转换为 LaTeX 排版并编译为 PDF，可同时生成配套答题卡。
   支持两种输入格式：
   - DOCX 输入：pandoc 提取文本 + 内置 extract_docx.py 解包取图片
   - PDF 输入：使用 MinerU SDK (mineru-open-sdk) 提取为 Markdown + 图片
@@ -11,6 +11,7 @@ description: >-
   当用户说"用模板排版这个docx""把这个word转成tex""重新排版试卷""排版这个答案""处理这个答案文档"
   或"排版这个pdf""把这个pdf转成tex"时，
   或者用户引用的文件名（含 @ 或路径）中包含"答案"字样时，立即使用本技能。
+  用户说"生成答题卡""做一份答题卡""配个答题卡""出A3答题卡"时也使用本技能。
   即使看起来只是"转一下格式""排个版"，也要调用此技能。不要问用户"是否要使用 skill"——直接执行。
 compatibility:
   require_tools:
@@ -41,8 +42,10 @@ flowchart TD
     I --> J{答案文档?}
     J -- 是 --> K[5. 跳过教师版生成]
     J -- 否 --> L[5. gen_teacher.py → compact/normal/exam]
+    J -- 否 --> LB[5-B. gen_answer_sheet.py → 答题卡 A4/A3]
     K --> M[6. 编译 ×2 → validate_tex → visual_verify]
     L --> M
+    LB --> M
     M --> M2{页数达标?}
     M2 -- 否 --> M3[auto_adjust.py 迭代]
     M3 --> M
@@ -53,6 +56,8 @@ flowchart TD
 ## 一句话原则
 
 用户提供 **试卷文件路径**（DOCX 或 PDF）和 **模板路径** → 你全自动完成提取、转换、编译。用户不需要知道任何脚本路径。
+
+需要答题卡时，追加一条命令即可（见「步骤 5-B」），题量与分值自动从排好的试卷 `.tex` 里读。
 
 ## 输入格式自动识别
 
@@ -528,6 +533,107 @@ python "{SKILL_DIR}/scripts/gen_teacher.py" "学生版.tex" --mode exam
 不依赖 `itemsep` 的具体取值——v3 内联脚本用 `content.find("[start=15, itemsep=2.5cm]")` 定位，
 itemsep 一改就返回 -1 并静默写出错误文件，该问题已修复。
 
+### 步骤 5-B：生成答题卡（可选）
+
+**触发条件**：用户要求"配答题卡""生成答题卡""做A3答题卡"，或试卷是考试/测试用途需要作答区。
+答案文档不生成答题卡。
+
+**一条命令搞定**（自动识别题量 + 自动推算版面 + 自动编译）：
+
+```bash
+python scripts/gen_answer_sheet.py "<试卷.tex>"
+```
+
+| 参数 | 默认 | 说明 |
+|------|------|------|
+| `--layout` | `a4` | `a4` / `a3` / `both`（a3 每张纸并排两个 A4 版面，对折成册） |
+| `--pages` | 自动 | 强制版面数（a4=页数，a3=张数） |
+| `--block` | `2` | 每面最多几道解答题 |
+| `--percol` | `4` | 选择题每列题数 |
+| `--title` / `--subject` | 自动 | 覆盖卷头文字 |
+| `--bw` | 关 | 黑白版（不印彩色框线） |
+| `--no-compile` | 关 | 只出 `.tex` 不编译 |
+| `--no-figs` | 关 | 不附带解答题的图/三线表，只出纯答题区 |
+| `--print-spec` | — | 只打印解析结果，用于核对题量与附图 |
+| `--suffix` | `答题卡` | 输出文件名后缀（同名手工版已存在时换个后缀即可） |
+| `--force` | 关 | 允许覆盖非本脚本生成的文件（默认拒绝） |
+| `--single/--multi/--blanks/--solves` | — | 解析失败时手工兜底 |
+
+**两道安全防护（默认开启）：**
+
+- **拒绝非学生版输入**：文件名含 `答案` / `教师版` / `答题卡` / `解析` / `详解` 时直接报错退出（退出码 4）——答题卡只能从学生版试题解析。
+- **不覆盖手工版**：目标 `.tex` 已存在且开头没有本脚本的生成标记时，跳过并提示（退出码 5），原文件分毫不动。确认要替换加 `--force`，或换个 `--suffix`。
+
+**自动识别的题量来源**（读试卷 `.tex` 正文，不依赖文件名）：
+
+| 项 | 识别方式 |
+|----|---------|
+| 单选 / 多选 | 扫 `\section*{一、…}`、`\noindent\textbf{二、…}` 等小节标题，按"单选/多选/多项选择/多项符合"分类，再数该小节内**顶层** `\item`（自动跳过嵌套 `examenum`） |
+| 填空 | 同上，"填空题"小节 |
+| 解答题 | 数顶层 `\item`，并从 `（本题满分 13 分）` / `（本小题满分 13 分）` / `（13分）` / `(13 分)` 中取分值 |
+| 卷头 | 收集 `\textbf{…}`（容许一层嵌套，如 `\textbf{\LARGE{…}}`）与 `\subtitle{}` / `\subjecttitle{}` / `\title{}`，剔除「绝密★启用前」「试卷类型」「本试卷共…」「一、选择题…」等干扰项，再按「含考试/高考/联考/期末…」加权取最高分；`\\` 换行转全角空格（普通空格会被 ctex 吞掉） |
+
+**版面数自动推算**（复刻 `answersheet.sty` 的分页算法，取最小可行值）：
+
+1. 先找"可行"的最小版面数：**不能有空版面**（多出来的版面会变成一整片空白答题框），且每面解答题数 ≤ `block`；
+2. 再看每分能摊到多少答题高度：`可用高度 / 总分 ≥ 1.05cm` 才认可，否则在 +1～+3 版面内找一个达标的；
+3. 实测：新高考 19 题 → 4 版面（与宏包预设一致）；22/23 题 → 4 版面（比宏包注释的 5 更紧凑，要更宽松就 `--pages 5`）。
+
+#### 解答题附图 / 三线表（默认开启）
+
+立体几何的题图、统计题的表格会自动搬到答题卡对应题目的作答区，学生直接在图上画辅助线、在表里填数——不用另外打印试题。
+
+| 内容 | 判定 | 放置方式 |
+|------|------|---------|
+| 单个 `tikzpicture` / `\includegraphics` | 角图 | 作答区右上角，容器宽 6cm |
+| `center` 块里并排多图、含 `minipage` | 通栏 | 作答区顶部居中，容器宽 15cm |
+| `tabular` / `tabularx` / `longtable`（含三线表） | 通栏 | 同上 |
+
+- **提取粒度**：优先整块取 `center` 环境（保留「图(1) 图(2) 并排」「图 + 图注」的原版式），再捡散落的 `tikzpicture` / `\includegraphics` / `tabular`；同题多个图表会合并成一次调用（宏包按题号存储，重复调用会互相覆盖）。
+- **依赖自动跟随**：原卷导言区里 `diagbox` / `booktabs` / `multirow` / `makecell` 等图表宏包、以及 `\usetikzlibrary{…}`、`\graphicspath{…}` 会一并带过来（`geometry` / `fancyhdr` / `hyperref` 这类版式宏包**绝不**搬）。所以 `\diagbox` 斜线表头也能正常排。
+- **放不下就降密度**：图是硬内容，压过分隔线会盖住下一题。脚本先估图高，超过答题框 85% 就自动改成「每题独占一面」（`block=1`），并打印 `[INFO]`；单面 24.5cm 仍放不下才 `[WARN]` 让用户手工删减。**不在 TeX 里现场缩放**——量高度易错，缩出来的字号也不可控。
+- **编译兜底**：带图版编译失败时（原卷图引用了答题卡里没有的宏/图片），自动退回无图版重编并打印错误摘要，保证答题卡本身一定能出。
+- **不要图**：`--no-figs`。
+
+**想调整时**（按优先级）：
+
+| 症状 | 做法 |
+|------|------|
+| 解答题写不开 | `--pages 5`（加版面） |
+| 页面太空 / 太多页 | `--pages 3`，或 `--block 3` |
+| 选择题挤成一坨 | `--percol 3`（每列 3 题） |
+| 黑白印刷 | `--bw` |
+| 某题图太大、自动变成每题一面 | 想要紧凑就 `--no-figs`，或先删原卷里多余的图 |
+| 解析出的题量不对 | 先 `--print-spec` 核对，再用 `--single/--multi/--blanks/--solves` 覆盖 |
+
+**输出物**（与试卷同目录）：
+
+```
+<卷名>-答题卡.tex / .pdf        A4，4 个版面
+<卷名>-答题卡-A3.tex / .pdf     A3 横向，2 张纸（--layout a3/both 时）
+answersheet.sty                 宏包副本，供日后单独重编
+```
+
+**⚠️ 答题卡必须 xelatex 连编两次**（模板用 `remember picture` 定位，一次页码与坐标不准）。
+脚本已自动连编两次并清理 `.aux/.log`。
+
+**⚠️ 版式参数改动后若位置错乱**：删掉同名 `.aux` 再连编两次。
+
+**模板本体**：`templates/answer-sheet/answersheet.sty`（宏包）+ `answer_sheet.tex`（骨架，含三档卷型预设注释）。
+需要换配色改 `--color`（任意 xcolor 颜色名，默认 `GKpink`）。
+
+**宏包侧的附图接口**（手工建卡时用）：
+
+```latex
+\begin{document}
+\gkFig{16}{\begin{tikzpicture}...\end{tikzpicture}}   % 右上角小图
+\gkBlock{19}{\begin{tabular}{...}...\end{tabular}}   % 顶部通栏（宽表）
+\gkMake
+\end{document}
+```
+
+参数是**题号**（不是第几道）；宏包用 `\long` 定义，内容里可以有空行。
+
 ### 步骤 6：编译 → 验证
 
 **试题文档（学生版 + 教师版，各编译两次）：**
@@ -587,6 +693,7 @@ rm -f *.aux *.log *.out *.toc *.synctex.gz   # 所有版本
 **保留：**
 - 试题文档：`.tex` 源文件（学生版 + 教师版 + 答题空间版）、`.pdf`、图片
 - 答案文档：`.tex` 源文件、`.pdf`、`{图片目录}/`
+- 答题卡：`<卷名>-答题卡.tex/.pdf`（及 `-A3` 版）、`answersheet.sty`
 
 ### 步骤 8：日志采集与上传
 
@@ -689,7 +796,7 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | `split_combined.py` / `split_xj3.py` | 拆分合并卷 / 新课标卷 |
 | `finish_papers.py` | 批量收尾（一次性修复脚本已清理，规则前移到 md2tex.py） |
 
-**回归测试**：`python tests/run_all.py` 跑全部（`test_render.py` 渲染器单测 + `test_fixed/round2/round3` md2tex 回归）。
+**回归测试**：`python tests/run_all.py` 跑全部（`test_render.py` 渲染器排版决策 + `test_teacher.py` 教师版三模式 + `test_answer_sheet.py` 答题卡 + `test_fixed/round2/round3` md2tex 回归）。
 端到端用例依赖题库样本，缺少时自动跳过（可用 `SHIJUAN_LIBRARY` 指定题库根目录）。改流水线后必须全部通过。
 
 ### 整理规范（历次会话沉淀）
@@ -729,6 +836,15 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | `UnicodeEncodeError` | Windows GBK 编码 | 加 `PYTHONIOENCODING=utf-8` 前缀 |
 | 题干「如图①②③」丢字 | 默认字体缺圈号字形 | 模板已用 `newunicodechar` 映射，勿删（`STRUCT-GLYPH-001`） |
 | 含表格的卷子编译崩 | 模板缺 `booktabs` | 模板已加载，勿删 |
+| 答题卡末页一片空白 | 版面数超过装填能力 | 脚本已规避；手改时减小 `pages` |
+| 答题卡位置错乱/页脚页数不对 | 只编了一次 | xelatex 连编两次；仍异常则删 `.aux` 重编 |
+| 答题卡题量识别错 | 小节标题非常规写法 | `--print-spec` 核对后用 `--single/--multi/--blanks/--solves` 覆盖 |
+| 答题卡提示 `[SKIP] … 疑似手工版` | 目标文件名已被手工版占用 | 换 `--suffix`，或确认要替换后加 `--force` |
+| 答题卡卷头文字不对 | 密级/说明文字被误判 | `--print-spec` 看「标题」，用 `--title` 直接指定 |
+| 答题卡附图压线/盖住下一题 | 图比答题框还高 | 脚本会自动改成每题一面；仍不行就 `--no-figs` 或删原卷多余的图 |
+| 附图里出现 `??` 或宏未定义 | 原卷用了答题卡没有的宏 | 已在白名单里的会自动带；其他用 `--no-figs`，或手工在生成 tex 里加 `\usepackage` |
+| `\diagbox` / `\toprule` 未定义 | 原卷宏包没被识别 | 同上：白名单见 `scripts/gen_answer_sheet.py` 的 `SAFE_PKGS` |
+| `File answersheet.sty not found` | 宏包不在 tex 同目录 | 脚本会自动复制；手工建卡时把 `.sty` 放到 tex 同目录 |
 
 ---
 
