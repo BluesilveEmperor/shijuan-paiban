@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "title": "2026 年测试卷（IR 图片场景）",
+    "template": "gaokao",
+    "total_pages": 1,
+    "images_dir": "images",
+    "answer_space": "compact"
+  },
+  "sections": [
+    {
+      "heading": "四、解答题：本题共3小题，共36分。",
+      "type": "long_answer",
+      "questions": [
+        {
+          "stem": "如图，在四棱锥 $Q-ABCD$ 中，底面 $ABCD$ 是正方形，$QA \\perp$ 平面 $ABCD$.",
+          "points": 12,
+          "images": [{"file": "fig1.png", "caption": "第1题图"}],
+          "subquestions": [
+            "证明：$BQ \\perp AD$；",
+            "若 $QB=\\sqrt{6}$，求平面 $QAD$ 与平面 $QBC$ 夹角的余弦值."
+          ]
+        },
+        {
+          "stem": "如图，某几何体的三视图已知，求该几何体的体积.",
+          "points": 12,
+          "images": [{"file": "fig2.png", "caption": "第2题图"}]
+        },
+        {
+          "stem": "三个几何体的三视图分别如图①②③所示，求它们的表面积之和.",
+          "points": 12,
+          "images": [
+            {"file": "fig3.png", "caption": "①"},
+            {"file": "fig4.png", "caption": "②"},
+            {"file": "fig5.png", "caption": "③"}
+          ]
+        }
+      ]
+    }
+  ]
+}

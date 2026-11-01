@@ -15,13 +15,29 @@ def to_native(p):
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts'))
 import md2tex
 
+# 题库根目录可通过环境变量覆盖；端到端用例在缺少样本时自动跳过，
+# 保证测试套件在任何机器上都能跑（纯函数用例始终执行）。
+LIBRARY = os.environ.get('SHIJUAN_LIBRARY', r'D:\Music\试题加题库')
+
 fails = 0
+skipped = []
+
 
 def check(name, cond):
     global fails
     print(f'  {"PASS" if cond else "FAIL"} {name}')
     if not cond:
         fails += 1
+
+
+def sample(rel_path):
+    """返回样本绝对路径；不存在则记录跳过并返回 None。"""
+    path = to_native(os.path.join(LIBRARY, rel_path))
+    if not os.path.exists(path):
+        skipped.append(rel_path)
+        print(f'  SKIP {rel_path}（样本不存在，设置 SHIJUAN_LIBRARY 可启用）')
+        return None
+    return path
 
 print('== merge guards (clean) ==')
 # Q6 华中师大: option-letter content must NOT merge
@@ -65,35 +81,42 @@ s = md2tex.clean_display(r'\left( a+b \right) \cup D')
 check('display-right-no-dollar', '$' not in s)
 
 print('== convert() end-to-end (华中师大 MD) ==')
-import tempfile, os
+import tempfile
 tmp = tempfile.mkdtemp()
-tex = os.path.join(tmp, 't.tex')
-md2tex.convert(to_native(r'D:\Music\试题加题库\高三数学\.math-output\湖北省武汉市华中师范大学第一附属中学2024-2025学年高三上学期十一月月度检测数学试卷.md'), tex, 'Images-x')
-out = open(tex, encoding='utf-8').read()
-check('no-html-table', '<table' not in out and '<td' not in out)
-check('display-block-emitted', '\\[\\frac {\\sqrt {6}}{3}\\]' in out or '\\[\\frac{\\sqrt {6}}{3}\\]' in out)
-# Q6 figure should attach to Q6's item (image 8f7b... after 函数 item, before 数列 item)
-i_f = out.find('函数 $f(x) = A \\sin')
-i_img = out.find('8f7b5644054f6efc31fedaf7a0aaf6938f529d971c79f4aa3f5c898b0bd1dc3b.jpg')
-i_next = out.find('已知数列')
-check('img-attribution', -1 < i_f < i_img < i_next)
-# caption dropped
-check('caption-dropped', '第6题图' not in out and '第11题图' not in out)
+src1 = sample(r'高三数学\.math-output\湖北省武汉市华中师范大学第一附属中学2024-2025学年高三上学期十一月月度检测数学试卷.md')
+if src1:
+    tex = os.path.join(tmp, 't.tex')
+    md2tex.convert(src1, tex, 'Images-x')
+    out = open(tex, encoding='utf-8').read()
+    check('no-html-table', '<table' not in out and '<td' not in out)
+    check('display-block-emitted', '\\[\\frac {\\sqrt {6}}{3}\\]' in out or '\\[\\frac{\\sqrt {6}}{3}\\]' in out)
+    # Q6 figure should attach to Q6's item (image 8f7b... after 函数 item, before 数列 item)
+    i_f = out.find('函数 $f(x) = A \\sin')
+    i_img = out.find('8f7b5644054f6efc31fedaf7a0aaf6938f529d971c79f4aa3f5c898b0bd1dc3b.jpg')
+    i_next = out.find('已知数列')
+    check('img-attribution', -1 < i_f < i_img < i_next)
+    check('caption-dropped', '第6题图' not in out and '第11题图' not in out)
 
 print('== convert() end-to-end (学军 MD, answer truncation) ==')
-tex2 = os.path.join(tmp, 't2.tex')
-md2tex.convert(to_native(r'D:\Music\试题加题库\高三数学\.math-output\浙江省杭州学军中学2024-2025学年高三上学期期末测试数学试卷.md'), tex2, 'Images-y')
-out2 = open(tex2, encoding='utf-8').read()
-check('answer-truncated', '参考答案' not in out2 and '⋯' not in out2 and '满分' not in out2)
-check('phi-kept', '$\\phi$' in out2)
+src2 = sample(r'高三数学\.math-output\浙江省杭州学军中学2024-2025学年高三上学期期末测试数学试卷.md')
+if src2:
+    tex2 = os.path.join(tmp, 't2.tex')
+    md2tex.convert(src2, tex2, 'Images-y')
+    out2 = open(tex2, encoding='utf-8').read()
+    check('answer-truncated', '参考答案' not in out2 and '⋯' not in out2 and '满分' not in out2)
+    check('phi-kept', '$\\phi$' in out2)
 
 print('== convert() end-to-end (江岸 MD, table->tabular) ==')
-tex3 = os.path.join(tmp, 't3.tex')
-md2tex.convert(to_native(r'D:\Music\试题加题库\高三数学\.math-output\湖北省武汉市江岸区元月调考2025届高三数学试题.md'), tex3, 'Images-z')
-out3 = open(tex3, encoding='utf-8').read()
-check('table-converted', 'begin{tabular}' in out3 and '<table' not in out3)
-check('table-content', '出现诊断问题人数' in out3)
+src3 = sample(r'高三数学\.math-output\湖北省武汉市江岸区元月调考2025届高三数学试题.md')
+if src3:
+    tex3 = os.path.join(tmp, 't3.tex')
+    md2tex.convert(src3, tex3, 'Images-z')
+    out3 = open(tex3, encoding='utf-8').read()
+    check('table-converted', 'begin{tabular}' in out3 and '<table' not in out3)
+    check('table-content', '出现诊断问题人数' in out3)
 
 print()
+if skipped:
+    print(f'SKIPPED {len(skipped)} 个端到端样本（设置 SHIJUAN_LIBRARY 指向题库根目录可启用）')
 print(f'TOTAL: {fails} fail')
 sys.exit(1 if fails else 0)

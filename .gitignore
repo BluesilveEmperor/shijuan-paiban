@@ -1,4 +1,22 @@
 *.aux
 *.log
 *.out
+*.toc
+*.synctex.gz
+
+# 编译产物：PDF 通常不提交，但模板预览 PDF 需要保留
 *.pdf
+!templates/*.pdf
+
+# 评估运行产物（baseline.json 要提交，用于回归门禁）
+reports/work/
+reports/scorecard.json
+reports/report.md
+reports/failures.json
+
+# Python
+__pycache__/
+*.pyc
+
+# 本地工作区数据（记忆、会话状态），不入库
+.workbuddy-ai/

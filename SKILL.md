@@ -3,8 +3,10 @@ name: shijuan-paiban
 description: >-
   将试卷文件（DOCX 或 PDF）自动转换为 LaTeX 排版并编译为 PDF。
   支持两种输入格式：
-  - DOCX 输入：使用 pandoc 提取文本 + 解包取图片
+  - DOCX 输入：pandoc 提取文本 + 内置 extract_docx.py 解包取图片
   - PDF 输入：使用 MinerU SDK (mineru-open-sdk) 提取为 Markdown + 图片
+  排版走「Question IR + 确定性渲染器」：你只产出结构化 paper.json，
+  编号/环境嵌套/图片场景/答题空间/itemsep 由 render_tex.py 按 rules/layout.yaml 生成。
   能自动识别文件名含"答案"的文档并使用参考答案模板排版。
   当用户说"用模板排版这个docx""把这个word转成tex""重新排版试卷""排版这个答案""处理这个答案文档"
   或"排版这个pdf""把这个pdf转成tex"时，
@@ -16,8 +18,6 @@ compatibility:
     - Read
     - Write
     - Edit
-  require_skills:
-    - docx
 ---
 
 # 试卷 → LaTeX 自动排版
@@ -37,13 +37,16 @@ flowchart TD
     C2 --> H
     E --> G[2-B. 确认图片位置 + 设置图片目录]
     G --> H
-    H --> I[4. 写 LaTeX → 逐题转换]
+    H --> I[4. 写 paper.json → render_tex.py 渲染]
     I --> J{答案文档?}
     J -- 是 --> K[5. 跳过教师版生成]
-    J -- 否 --> L[5. 生成教师版 → 解答题分页]
-    K --> M[6. 编译 → 验证]
+    J -- 否 --> L[5. gen_teacher.py → compact/normal/exam]
+    K --> M[6. 编译 ×2 → validate_tex → visual_verify]
     L --> M
-    M --> N[7. 清理]
+    M --> M2{页数达标?}
+    M2 -- 否 --> M3[auto_adjust.py 迭代]
+    M3 --> M
+    M2 -- 是 --> N[7. 清理]
     N --> O[8. 日志采集与上传]
 ```
 
@@ -72,11 +75,26 @@ flowchart TD
 
 **在后续所有步骤中，用 `{图片目录}` 代表推导出的目录名。**
 
-## 零配置检测
+## 路径约定
+
+**`{SKILL_DIR}` = 本 SKILL.md 所在目录。**
+
+下文所有脚本引用都写成 `{SKILL_DIR}/scripts/xxx.py`。**不要**用 `find ~/.claude/skills` 之类的全局搜索
+定位自己的脚本——那会把技能绑死在特定宿主的目录结构上，换宿主即失效。
+
+DOCX 解包不再依赖外部 `docx` skill，改用内置脚本（只依赖标准库 zipfile）：
 
 ```bash
-DOCX_SKILL_DIR=$(find ~/.claude/skills -maxdepth 2 -name "SKILL.md" -path "*/docx/SKILL.md" -exec dirname {} \; 2>/dev/null | head -1)
+python "{SKILL_DIR}/scripts/extract_docx.py" "<docx路径>" "<输出目录>"
 ```
+
+## 规则来源
+
+排版规则的唯一权威定义在 **`{SKILL_DIR}/rules/layout.yaml`**（每条规则有唯一 ID、禁止项和证据）。
+SKILL.md 与 `docs/conversion-rules.md` 里的规则表由 `scripts/gen_rules_doc.py` 从该文件生成，
+**禁止手改生成区块**。改规则 → 改 YAML → `python scripts/gen_rules_doc.py`。
+
+规则变更后必须跑 `python scripts/eval_run.py`，分数不得低于 `reports/baseline.json`。
 
 ## 使用前环境检查（必须首先执行）
 
@@ -156,7 +174,7 @@ print(f"提取 {len(os.listdir(out_dir))} 张页面图片")
 PYEOF
 
 # 2. 对每张页面图片执行 MinerU OCR
-MATH_EXTRACT=$(find ~/.claude/skills -path "*/shijuan-paiban*/scripts/math_pdf_extract.py" 2>/dev/null | head -1)
+MATH_EXTRACT="{SKILL_DIR}/scripts/math_pdf_extract.py"
 for img in "$TEST_DIR/media"/image*.png; do
     PYTHONIOENCODING=utf-8 python "$MATH_EXTRACT" "$img" --output-dir "$TEST_DIR/mineru-out" --language ch
 done
@@ -185,7 +203,7 @@ else:
 
 配置好后执行提取：
 ```bash
-MATH_EXTRACT=$(find ~/.claude/skills -path "*/shijuan-paiban*/scripts/math_pdf_extract.py" 2>/dev/null | head -1)
+MATH_EXTRACT="{SKILL_DIR}/scripts/math_pdf_extract.py"
 PYTHONIOENCODING=utf-8 python "$MATH_EXTRACT" "<pdf路径>" --output-dir ./math-output --language ch
 ```
 
@@ -206,50 +224,20 @@ PYTHONIOENCODING=utf-8 python "$MATH_EXTRACT" "<pdf路径>" --output-dir ./math-
 
 **试题文档（无"答案"字样）：**
 ```bash
-python "$DOCX_SKILL_DIR/scripts/office/unpack.py" "<docx路径>" "<临时目录>/"
-cp "<临时目录>/word/media/"*.png "<docx所在目录>/"
+python "{SKILL_DIR}/scripts/extract_docx.py" "<docx路径>" "<docx所在目录>" --images-dir media
 ```
 
 **答案文档（文件名含"答案"）：**
 ```bash
-python "$DOCX_SKILL_DIR/scripts/office/unpack.py" "<docx路径>" "<临时目录>/"
-
-# 推导图片目录名
+# 推导图片目录名：Images-<文件名去扩展名>
 img_dir="Images-$(basename "<docx路径>" .docx)"
 
-# 复制 PNG
-mkdir -p "<docx所在目录>/$img_dir"
-cp "<临时目录>/word/media/"*.png "<docx所在目录>/$img_dir/"
-
-# 批量转换 WMF → PNG（600 DPI）
-python3 << 'PYEOF'
-import os, zipfile, glob
-from PIL import Image
-
-docx = glob.glob("*.docx")[0]
-img_dir = "Images-" + os.path.basename(docx).replace(".docx", "")
-
-with zipfile.ZipFile(docx, 'r') as z:
-    for name in z.namelist():
-        if 'media' in name and name.lower().endswith('.wmf'):
-            z.extract(name, "tmp_media")
-            os.rename(f"tmp_media/{name}", f"{img_dir}/{os.path.basename(name)}")
-os.system("rm -rf tmp_media")
-
-for fname in sorted(os.listdir(img_dir)):
-    if not fname.lower().endswith('.wmf'):
-        continue
-    img = Image.open(f"{img_dir}/{fname}")
-    w, h = img.size
-    scale = 600 / 72.0
-    new_w = max(int(w * scale), 30)
-    new_h = max(int(h * scale), 30)
-    img.resize((new_w, new_h), Image.LANCZOS).save(
-        f"{img_dir}/{fname.replace('.wmf', '.png')}",
-        dpi=(600, 600), quality=90)
-    os.remove(f"{img_dir}/{fname}")
-PYEOF
+# 解包：PNG 直接复制，WMF 自动批量转 600 DPI PNG
+python "{SKILL_DIR}/scripts/extract_docx.py" "<docx路径>" "<docx所在目录>" --images-dir "$img_dir" --convert-wmf
 ```
+
+`extract_docx.py` 只用标准库 zipfile + Pillow，不依赖外部 `docx` skill。
+`--convert-wmf` 会把 `word/media/*.wmf` 用 Pillow 渲染为 600 DPI PNG 并删除原 WMF（见 `EXTRACT-003`）。
 
 #### 2-B. PDF 输入（MinerU SDK 自动提取图片）
 
@@ -281,17 +269,74 @@ ls ./math-output/  # 确认 .md 和图片文件存在
 
 **模板能力清单（manifest）：** 参见 `templates/manifest.json`
 
-### 步骤 4：写 LaTeX → 逐题转换
+### 步骤 4：生成 LaTeX
+
+有两种方式，**优先用方式 A**：
+
+#### 方式 A（推荐）：IR + 确定性渲染器
+
+你只负责「理解」——把题目切分成结构化 JSON；排版由脚本做，因此结果可复现、可验证。
+
+```bash
+# 1. 写 paper.json（格式见 docs/ir-schema.md，或 --schema 打印示例）
+python "{SKILL_DIR}/scripts/render_tex.py" --schema
+
+# 2. 渲染（脚本自动决定编号 / tasks 列数 / 图片场景 / 答题空间 / itemsep）
+python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "学生版.tex"
+
+# 3. 渲染后立即验证
+python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "学生版.tex" --validate
+```
+
+无法用 IR 表达的结构（复杂 TikZ、特殊表格）用 `raw_tex` 逃生舱，**不要**为了个别题目放弃整个 IR。
+
+#### 方式 B（兜底）：直接写 LaTeX
 
 保留模板的 **完整导言区**，只替换 `\begin{document}` 到 `\end{document}` 之间的正文。
 
 **⚠️ 详细的转换规则见 `docs/conversion-rules.md`，此处仅列核心约束：**
 
 #### 结构约束（不可违反）
-1. **选择题外层必须用 `enumerate`，内层选项才用 `tasks`**。禁止单独使用 `tasks` 作为题目列表容器
-2. **解答题必须用 `examenum` 环境**，start 值 = 单选题数 + 多选题数 + 填空题数 + 1
-3. **填空题空位用 `\blank`**（模板已定义）
-4. **图片宽度不得超过 `0.35\textwidth`**
+1. **选择题外层必须用 `enumerate`，内层选项才用 `tasks`**（`STRUCT-ENV-001`）
+2. **解答题必须用 `examenum` 环境**，`start` = 单选题数 + 多选题数 + 填空题数 + 1（`STRUCT-ENV-002` / `ENUM-START-001`）
+3. **填空题空位用 `\blank`**（`STRUCT-BLANK-001`）
+4. **单张图片硬上限 `0.35\textwidth`，默认 `0.30\textwidth`**（`IMG-W-001` / `IMG-W-002`）
+
+#### 完整规则表（自动生成，勿手改）
+
+<!-- RULES:BEGIN index -->
+<!-- 本区块由 scripts/gen_rules_doc.py 从 rules/layout.yaml 生成，请勿手改 -->
+
+| ID | 规则 | 取值 |
+|----|------|------|
+| `STRUCT-ENV-001` | 选择题外层容器 | 外层 enumerate + 内层 tasks |
+| `STRUCT-ENV-002` | 解答题环境 | examenum |
+| `STRUCT-BLANK-001` | 填空题空位 | \blank（模板已定义，下划线 2cm） |
+| `STRUCT-GLYPH-001` | 圈号字符 ①-⑩ 字形映射 | 导言区用 newunicodechar 把 ①-⑩ 映射到 \mycircled |
+| `IMG-W-001` | 单张图片宽度硬上限 | 0.35\textwidth |
+| `IMG-W-002` | 单张题目配图默认宽度 | 0.30\textwidth |
+| `IMG-W-003` | 并排图片宽度与高度 | 2 张并排：minipage 0.42\textwidth，图高 3cm<br>3 张并排：minipage 0.28\textwidth，图高 2.5cm |
+| `IMG-W-004` | 选项图片宽度 | 0.12\textwidth |
+| `IMG-ALIGN-001` | 图片对齐方式 | \centering |
+| `IMG-SCENE-001` | 图片场景选择 | 小装饰图（行内） → \includegraphics[height=0.6em]<br>列表内单图（无论有无子问） → minipage 左右并排（0.62 文字 + 0.30 图片）<br>图片作为选项 → tasks(4)，图宽 0.12\textwidth<br>图片与长选项并排 → minipage 左选项右图片<br>多张图片并排 → figure[H] + minipage，必须限高<br>TikZ 图 → \resizebox{0.35\textwidth}{!}{...}<br>图片位于 \\begin{examenum} 之前（列表外） → wrapfigure{r}{0.30\textwidth} 右侧环绕 |
+| `TASKS-COL-001` | tasks 列数判定 | 含图片且平均长度 < 80 字符 → 4 列<br>含图片且平均长度 ≥ 80 字符 → 2 列<br>平均可见长度 > 25 字符（含公式或纯文字） → 2 列<br>默认（简短选项，含短公式如 $\{0\}$） → 4 列 |
+| `TASKS-COL-002` | 禁止竖排图片选项 | 禁止 tasks(1) |
+| `ENUM-START-001` | 解答题起始编号 | start = 单选题数 + 多选题数 + 填空题数 + 1 |
+| `ENUM-RESUME-001` | 答案文档编号衔接 | 第一个 enumerate 不带 start，后续统一用 [resume] |
+| `PAGE-001` | 学生版页数 | 严格匹配试卷标注页数 |
+| `PAGE-002` | 超页压缩手段（按优先级） | 减小解答题 itemsep；导言区加 \linespread{1.05}\selectfont；最后手段：调整 margin |
+| `PAGE-003` | 解答题 itemsep 经验值 | 4 页 3 题：2.0 ~ 2.5cm<br>4 页 4 题：1.8 ~ 2.2cm<br>4 页 5 题：1.5 ~ 2.0cm<br>4 页 6 题：1.2 ~ 1.5cm<br>itemsep < 1.0cm 仍超页：降 linespread 至 0.95 |
+| `PAGE-004` | 教师版移除 itemsep | 教师版不保留 itemsep（分页已替代间隙作用） |
+| `ANS-001` | 答题空间命令与留白量 | \answerc：1.5em，compact 模式（自学）<br>\answern：3em，normal 模式（作业，默认）<br>\answere：5em，exam 模式（测试） |
+| `ANS-002` | 答题空间插入位置 | 每道解答题 \item 内容结束后；最后一道解答题不插入 |
+| `ANS-003` | 答题空间禁止线条 | 仅用 \vspace 留白 |
+| `ANS-004` | 教师版三种模式 | compact：itemsep 0.5em，题下 2em，文件名后缀 -教师版-紧凑<br>normal（默认）：itemsep 1.5em，题下 6em，文件名后缀 -教师版<br>exam：Q18 起每题独占一页，移除 itemsep，文件名后缀 -教师版-考试 |
+| `EXTRACT-001` | 图片目录命名 | DOCX 答案文档：Images-<文件名去扩展名><br>DOCX 试题文档：media<br>PDF 输入：Images-<PDF文件名去扩展名> |
+| `EXTRACT-002` | 扫描件判定 | pandoc 输出仅含 ![](media/imageN.png) 且无正文 → 走 MinerU OCR |
+| `EXTRACT-003` | WMF 转 PNG | Pillow 渲染，600 DPI |
+
+> 完整规则（含禁止项与证据）见 [docs/conversion-rules.md](docs/conversion-rules.md)，机器可读源见 [rules/layout.yaml](rules/layout.yaml)。
+<!-- RULES:END index -->
 
 #### 题型结构速查
 ```latex
@@ -328,49 +373,18 @@ ls ./math-output/  # 确认 .md 和图片文件存在
 
 #### 图片排版约束
 
-**通用规则**：
-- **始终用 `\centering`，禁止 `\raggedleft`**（图注始终在图片正下方）
-- 单张图片最大宽度 `0.35\textwidth`
-- 图片与选项并排时用 `minipage` 左右布局
-- 多图并排时添加 `height=Xcm,keepaspectratio` 限制高度
+**核心三条**：
+- **始终用 `\centering`，禁止 `\raggedleft`**（`IMG-ALIGN-001`，图注必须居中于图片正下方）
+- 单张硬上限 `0.35\textwidth`，默认 `0.30\textwidth`；选项图 `0.12\textwidth`（`IMG-W-001` / `IMG-W-002` / `IMG-W-004`）
+- 多图并排必须限高 `height=Xcm,keepaspectratio`（`IMG-W-003`：2 张 3cm / 3 张 2.5cm）
 
-**场景速查**：
-
-| 场景 | 方案 |
-|------|------|
-| 小装饰图 | 行内 `\includegraphics[height=0.6em]` |
-| 几何图在列表外 | `wrapfigure` 右侧环绕 |
-| 几何图在列表内（有子问） | `minipage` 左右并排 |
-| 单张插图无子问 | `wrapfigure{r}{0.30\textwidth}` 右侧环绕（图在 item 前） |
-| 图片作为选项 | `tasks(4)` 一行4张，`0.12\textwidth` |
-| 图片+选项并排 | `minipage` 左选项右图片 |
-| 多张图片并排 | 2张：`0.42\textwidth`+`height=3cm`；3张：`0.28\textwidth`+`height=2.5cm` |
-| TikZ 图 | `\resizebox{0.35\textwidth}{!}{...}` |
-
-**图片+选项布局决策**：
-
-| 条件 | 布局方式 |
-|------|---------|
-| 选项简短（< 10字） | 图片在上，选项在下 |
-| 选项较长（> 15字）或含公式 | `minipage` 左右并排 |
-| 选项与图片高度相当 | `minipage` 左右并排 |
-
-**禁止事项**：
-- ❌ `\raggedleft`（导致图注不对齐）
-- ❌ `tasks(1)` 竖排图片选项
-- ❌ 图片宽度超过 `0.30\textwidth`（单张，默认）
-- ❌ 多图并排时不限制高度
-- ❌ 图片+长选项时上下布局（导致选项重叠）
+**8 种场景选择**与**图片+选项布局决策**见规则 `IMG-SCENE-001`，
+完整 LaTeX 示例见 `docs/conversion-rules.md` 的「图片场景示例」章节。
 
 #### 答题空间插入规则（学生版）
 
-**模板已定义三个命令**（纯留白，无线条无边框）：
-
-| 命令 | 留白量 | 适用模式 |
-|------|--------|---------|
-| `\answerc` | 1.5em | compact（自学） |
-| `\answern` | 3em | normal（作业） |
-| `\answere` | 5em | exam（测试） |
+三个命令定义在 `templates/gaokao-template.tex` 导言区：`\answerc`(1.5em) / `\answern`(3em) / `\answere`(5em)，
+对应 compact / normal / exam 三种模式（`ANS-001`）。
 
 **插入位置**：每道解答题的 `\item` 内容结束后、下一 `\item` 之前：
 
@@ -387,63 +401,22 @@ ls ./math-output/  # 确认 .md 和图片文件存在
 \end{examenum}
 ```
 
-**规则**：
+**规则**（`ANS-002` / `ANS-003`）：
 - 最后一道解答题后**不插入**答题空间（避免尾部留白过多）
 - 答题空间命令前需有空行（`\par` 已包含在命令内）
-- **禁止**使用 `\rule`、`tcolorbox`、`\fbox` 等任何带线条的命令
-- 教师版由 `gen_teacher.py` 自动生成，无需手动插入
+- 纯留白，**禁止** `\rule`、`tcolorbox`、`\fbox` 等任何带线条的命令
+- 教师版由 `scripts/gen_teacher.py` 生成，无需手动插入
 
-#### itemsep 计算公式
+#### itemsep 经验值
 
-**目标**：让解答题均匀分布在目标页数内，避免前两题挤在一起、后两题间距过大。
+见 `PAGE-003`（4 页卷：3 题 2.0~2.5cm，4 题 1.8~2.2cm，5 题 1.5~2.0cm，6 题 1.2~1.5cm）。
 
-```
-可用空间(cm) = 页高(29.7) - 上边距 - 下边距 - 页眉页脚 - 选择题/填空题占用 - 解答题题目本身占用
-itemsep(cm) = 可用空间 / 解答题数
-```
+**调整顺序**（`PAGE-002`）：先调 itemsep → 仍超页加 `\linespread{1.05}\selectfont` → 最后才动 margin。
+编译后可交给 `scripts/auto_adjust.py` 自动迭代到目标页数。
 
-**经验值（4页试卷，margin=2cm）**：
+#### tasks 列数判定
 
-| 解答题数 | 建议 itemsep | 说明 |
-|---------|-------------|------|
-| 3 题 | 2.0 ~ 2.5cm | 空间充裕 |
-| 4 题 | 1.8 ~ 2.2cm | 适中 |
-| 5 题 | 1.5 ~ 2.0cm | 标准配置 |
-| 6 题 | 1.2 ~ 1.5cm | 偏紧凑 |
-
-**调整顺序**：
-1. 先用经验值编译一次
-2. 如果超页 → 减小 itemsep 或降低 linespread
-3. 如果页数有余 → 增大 itemsep 让分布更均匀
-4. 如果 itemsep < 1.0cm 仍超页 → 降低 linespread 到 0.95
-
-#### tasks 列数自动判断
-
-**规则**：根据选项内容自动选择列数。
-
-```python
-def auto_tasks_cols(options):
-    """自动判断 tasks 列数"""
-    has_image = any('includegraphics' in opt for opt in options)
-    has_formula = any('$' in opt for opt in options)
-    avg_len = sum(len(re.sub(r'\\[a-zA-Z]+\{[^}]*\}', '', opt)) for opt in options) / len(options)
-    
-    if has_image:
-        return 4 if avg_len < 80 else 2
-    elif avg_len > 25 or has_formula:
-        return 2
-    else:
-        return 4
-```
-
-**判断表**：
-
-| 条件 | 列数 | 示例 |
-|------|------|------|
-| 选项含图片，平均长度 < 80 字符 | 4 列 | 绳结图、电路图 |
-| 选项含图片，平均长度 ≥ 80 字符 | 2 列 | 带文字说明的图 |
-| 选项含公式或平均长度 > 25 字符 | 2 列 | 三角函数、不等式 |
-| 选项简短（< 15 字符） | 4 列 | 纯数字、简单字母 |
+规则见 `TASKS-COL-001`。`scripts/render_tex.py` 已实现该判定，走渲染器时无需手算。
 
 **示例**：
 ```latex
@@ -475,56 +448,31 @@ def auto_tasks_cols(options):
 - **不需要生成教师版，不需要 `itemsep` 间距**
 
 #### 页数控制与间距调整
-- 学生版页数必须匹配试卷标注
-- 超页时：导言区添加 `\linespread{1.05}\selectfont`
-- **解答题 `itemsep` 调整原则**：让5道解答题均匀分布在2-3页内
-  - 默认 `itemsep=2.5cm`，根据实际页数调整：
-    - 4页试卷且5道解答题 → `itemsep=1.5cm` ~ `2.0cm`
-    - 4页试卷且解答题内容少 → `itemsep=2.0cm` ~ `2.5cm`
-  - 目标是避免前两题挤在一起、后两题间距过大的不均匀现象
-- 教师版移除 `itemsep`（分页替代了间隙作用）
+- 学生版页数必须匹配试卷标注（`PAGE-001`）
+- 教师版不受标注约束，通常 ≤ 7 页，且移除 `itemsep`（`PAGE-004`）
+- 自动迭代到目标页数：
+  ```bash
+  python "{SKILL_DIR}/scripts/auto_adjust.py" "<tex文件>" --target-pages 4
+  ```
+
 
 #### 答案文档的同目录试题检测
-当处理答案文档时，**三段式匹配**检测同目录下对应的 `.tex` 试题文件：
 
-```python
-import os, re
+当处理答案文档时，用**三段式匹配**查找同目录下对应的 `.tex` 试题文件（逻辑实现在
+`scripts/match_paper.py`，不要在对话里重写）：
 
-def find_matching_tex(input_path):
-    input_dir = os.path.dirname(input_path)
-    input_stem = os.path.basename(input_path)
-    for ext in ('.docx', '.pdf'):
-        if input_stem.endswith(ext):
-            input_stem = input_stem[:-len(ext)]
-            break
-
-    # 第一阶段：精确剥离答案后缀
-    for pat in [r'-答案$', r'_答案$', r'答案$', r'答案-', r'答案_']:
-        cand = re.sub(pat, '', input_stem)
-        tex_path = os.path.join(input_dir, cand + '.tex')
-        if os.path.exists(tex_path):
-            return tex_path
-
-    # 第二阶段：公共前缀匹配（≥3字符）
-    clean_stem = re.sub(r'[-_ ]?答案[-_ ]?', '', input_stem)
-    tex_files = [f for f in os.listdir(input_dir)
-                 if f.endswith('.tex') and '教师版' not in f
-                 and not f.lower().startswith('gaokao')
-                 and 'template' not in f.lower()]
-    best, best_score = None, 0
-    for tf in tex_files:
-        stem = tf.replace('.tex', '')
-        i = 0
-        while i < min(len(clean_stem), len(stem)) and clean_stem[i] == stem[i]:
-            i += 1
-        if i > best_score:
-            best_score, best = i, tf
-    if best_score >= 3:
-        return os.path.join(input_dir, best)
-
-    # 第三阶段：回退
-    return None
+```bash
+python "{SKILL_DIR}/scripts/match_paper.py" "<答案文档路径>" --json
+# → {"matched": "...tex", "stage": "stage1|stage2|stage3", "note": "..."}
 ```
+
+| 阶段 | 策略 | 命中条件 |
+|------|------|---------|
+| stage1 | 精确剥离 `-答案` / `_答案` / `答案` / `-参考答案` 后缀 | 剥离后同名 `.tex` 存在 |
+| stage2 | 与同目录 `.tex` 求最长公共前缀 | 前缀 ≥ 3 字符 |
+| stage3 | 回退 | 从输入文件重新提取题目文本 |
+
+`matched` 为 `null` 时走 stage3，**不要报错退出**。
 
 ### 步骤 5：生成教师版 → 三种模式
 
@@ -555,127 +503,44 @@ def find_matching_tex(input_path):
 - 移除 `itemsep`（分页替代了间隙作用）
 - 适合课堂测试、考试模拟
 
-**⚠️ Python 字符串转义陷阱：搜索 LaTeX 命令必须用 raw string `r"\begin"`，否则 `\b` 会被当作退格符。**
+**教师版由脚本生成，不要在对话里重写这段逻辑：**
 
-```python
-# gen_teacher.py
-import sys
-
-mode = sys.argv[1] if len(sys.argv) > 1 else "normal"  # compact | normal | exam
-
-with open("学生版.tex", "r", encoding="utf-8") as f:
-    content = f.read()
-
-# ── 模式参数 ──
-MODE_CONFIG = {
-    "compact": {"itemsep": "0.5em",  "vspace": r"\vspace{2em}",  "student_space": r"\answerc"},
-    "normal":  {"itemsep": "1.5em",  "vspace": r"\vspace{6em}",  "student_space": r"\answern"},
-    "exam":    {"itemsep": None,     "vspace": r"\newpage",      "student_space": r"\answere"},
-}
-cfg = MODE_CONFIG[mode]
-
-start_num = 15  # ← 根据实际题量调整（单选题数 + 多选题数 + 填空题数 + 1）
-start_marker = rf"\begin{{examenum}}[start={start_num}, itemsep=2.5cm]"
-end_marker = r"\end{examenum}"
-
-start_idx = content.find(start_marker)
-end_idx = content.rfind(end_marker)
-exam_block = content[start_idx:end_idx + len(end_marker)]
-lines = exam_block.split('\n')
-depth = 0
-item_count = 0
-new_lines = []
-
-for line in lines:
-    if r"\begin{examenum}" in line and f"[start={start_num}" not in line:
-        depth += 1
-    elif r"\end{examenum}" in line:
-        if depth > 0:
-            depth -= 1
-        else:
-            new_lines.append(line)
-            if mode == "exam":
-                new_lines.append(r"\newpage")
-            else:
-                new_lines.append(cfg["vspace"])
-            continue
-
-    stripped = line.lstrip()
-    if mode == "exam" and stripped.startswith(r"\item ") and depth == 0:
-        item_count += 1
-        if item_count >= 2:
-            new_lines.append(r"\newpage")
-
-    new_lines.append(line)
-
-modified_block = '\n'.join(new_lines)
-
-# 替换 itemsep
-if cfg["itemsep"]:
-    modified_block = modified_block.replace(
-        f"[start={start_num}, itemsep=2.5cm]",
-        f"[start={start_num}, itemsep={cfg['itemsep']}]"
-    )
-else:
-    modified_block = modified_block.replace(
-        f"[start={start_num}, itemsep=2.5cm]",
-        f"[start={start_num}]"
-    )
-
-# 生成后缀
-SUFFIX = {
-    "compact": "-教师版-紧凑",
-    "normal":  "-教师版",
-    "exam":    "-教师版-考试",
-}
-suffix = SUFFIX[mode]
-new_content = content[:start_idx] + modified_block + content[end_idx + len(end_marker):]
-
-with open(f"{suffix}.tex", "w", encoding="utf-8") as f:
-    f.write(new_content)
-
-# 同时生成带答题空间的学生版
-student_content = content.replace(
-    f"[start={start_num}, itemsep=2.5cm]",
-    f"[start={start_num}, itemsep={cfg['itemsep'] or '1.5em'}]"
-)
-# 在每道 \item 后插入学生答题空间命令（简化：在 \end{examenum} 前插入）
-# 实际实现需在循环中逐 item 插入，此处为示意
-with open(f"学生版-答题空间.tex", "w", encoding="utf-8") as f:
-    f.write(student_content)
-```
-
-**使用方式：**
 ```bash
-# 模式 A：紧凑
-python gen_teacher.py compact
-
 # 模式 B：标准（默认）
-python gen_teacher.py
-# 或
-python gen_teacher.py normal
+python "{SKILL_DIR}/scripts/gen_teacher.py" "学生版.tex" --mode normal
+
+# 模式 A：紧凑
+python "{SKILL_DIR}/scripts/gen_teacher.py" "学生版.tex" --mode compact
 
 # 模式 C：考试
-python gen_teacher.py exam
+python "{SKILL_DIR}/scripts/gen_teacher.py" "学生版.tex" --mode exam
 ```
+
+产出（与输入同目录）：
+
+| 模式 | 教师版文件名 | 学生版答题空间 |
+|------|-------------|---------------|
+| compact | `<stem>-教师版-紧凑.tex` | `<stem>-答题空间.tex` |
+| normal | `<stem>-教师版.tex` | 同上 |
+| exam | `<stem>-教师版-考试.tex` | 同上 |
+
+脚本用**环境扫描**定位解答题块（`\begin{examenum}[start=N, ...]` 配对其 `\end{examenum}`），
+不依赖 `itemsep` 的具体取值——v3 内联脚本用 `content.find("[start=15, itemsep=2.5cm]")` 定位，
+itemsep 一改就返回 -1 并静默写出错误文件，该问题已修复。
 
 ### 步骤 6：编译 → 验证
 
-**试题文档（编译两个版本，各两次）：**
+**试题文档（学生版 + 教师版，各编译两次）：**
 ```bash
 cd "<输出目录>"
 xelatex -interaction=nonstopmode "文件名.tex"
 xelatex -interaction=nonstopmode "文件名.tex"
-grep -E "Overfull|Error" "文件名.log" | grep -v "infwarerr"
+grep -E "Overfull|^!" "文件名.log" | grep -v "infwarerr"
 pdfinfo "文件名.pdf" 2>/dev/null | grep Pages
 
-# 教师版（onepage）
+# 教师版：文件名随 --mode 变化（见步骤 5 产出表）
 xelatex -interaction=nonstopmode "文件名-教师版.tex"
 xelatex -interaction=nonstopmode "文件名-教师版.tex"
-
-# 教师版（space）
-xelatex -interaction=nonstopmode "文件名-教师版-答题空间.tex"
-xelatex -interaction=nonstopmode "文件名-教师版-答题空间.tex"
 ```
 
 **答案文档（只编译一个版本）：**
@@ -687,32 +552,40 @@ pdfinfo "文件名.pdf" 2>/dev/null | grep Pages
 ```
 
 **验证要点：**
-- 学生版/答案版页数应与试卷标注一致
-- 教师版（onepage）页数不超过 7 页
+- 学生版/答案版页数应与试卷标注一致（`PAGE-001`）
+- 教师版页数不超过 7 页
 - 解答题编号正确
 - 答案文档的【答案】【解析】【详解】结构显示正确
 
-**⚠️ 编译后执行结构验证：**
+**① 结构验证（必做）**
 ```bash
-python scripts/validate_tex.py "文件名.tex"
+python "{SKILL_DIR}/scripts/validate_tex.py" "文件名.tex" --expected-pages 4
+python "{SKILL_DIR}/scripts/validate_tex.py" "文件名-答案.tex" --is-answer
 ```
-如验证失败，根据报告修正后重新编译。
+输出 JSON 报告，每条问题都带 `rule_id`（如 `IMG-W-001`），可直接定位到
+`rules/layout.yaml` 里的规则。有 `error` 时退出码为 1，按 `suggestion` 修正后重新编译。
 
-**⚠️ 编译后执行视觉验证：**
+**② 视觉验证（必做）**
 ```bash
-pdftoppm -png -r 150 "文件名.pdf" preview
+python "{SKILL_DIR}/scripts/visual_verify.py" "文件名.pdf" --dpi 150
 ```
-用 Read 工具查看 preview-*.png，确认：图片位置正确、公式渲染正常、无文字溢出。如有问题，修正后重新编译。
+用 Read 工具查看生成的 `preview-*.png`，确认：图片位置正确、公式渲染正常、无文字溢出。
+有问题则修正后重新编译。
+
+**③ 页数不达标时自动迭代**
+```bash
+python "{SKILL_DIR}/scripts/auto_adjust.py" "文件名.tex" --target-pages 4
+```
+按 `PAGE-002` 的优先级依次调整 itemsep → linespread → margin。
 
 ### 步骤 7：清理
 ```bash
 rm -rf "<临时目录>"
-rm -f gen_teacher.py
-rm -f .aux .log .out  # 所有版本
+rm -f *.aux *.log *.out *.toc *.synctex.gz   # 所有版本
 ```
 
 **保留：**
-- 试题文档：`.tex` 源文件（学生版+教师版×2）、`.pdf`、图片
+- 试题文档：`.tex` 源文件（学生版 + 教师版 + 答题空间版）、`.pdf`、图片
 - 答案文档：`.tex` 源文件、`.pdf`、`{图片目录}/`
 
 ### 步骤 8：日志采集与上传
@@ -776,12 +649,16 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 
 ---
 
-## 题库维护与批量整理（D:\Music\试题加题库）
+## 题库维护与批量整理
+
+> **路径配置**：题库根目录不写死在代码里。优先读环境变量 `SHIJUAN_LIBRARY`，
+> 未设置时默认 `D:\Music\试题加题库`（本机历史位置）。换机器时只改环境变量，不改文档。
+> 下文用 `{题库根}` 代指该目录。
 
 ### 题库现有结构
 
 ```
-D:\Music\试题加题库\
+{题库根}\
 ├── 高考真题（模拟）卷\        # 190 个成卷文件夹 + 5 个年份源目录（2022.6–2026.6，源目录不动）
 │   └── <卷名>\               # 每卷：试题 tex + *答案.tex + Images-*\ + build.py
 ├── 考研数学真题卷\
@@ -810,9 +687,10 @@ D:\Music\试题加题库\
 | `batch_convert.py` / `batch_convert_ans.py` | 批量处理整目录 |
 | `convert_new_papers.py` | 新卷一键转换入口 |
 | `split_combined.py` / `split_xj3.py` | 拆分合并卷 / 新课标卷 |
-| `fix_md_corruptions*.py` / `fix_errors.py` / `fix_error_answers.py` / `finish_papers.py` | 中间产物修复与收尾 |
+| `finish_papers.py` | 批量收尾（一次性修复脚本已清理，规则前移到 md2tex.py） |
 
-**回归测试**：`tests/test_fixed.py`、`tests/test_round2.py`、`tests/test_round3.py`（WSL 可移植，`to_native()` 把 `D:\x` 映射为 `/mnt/d/x`）。改流水线后必须全部通过。
+**回归测试**：`python tests/run_all.py` 跑全部（`test_render.py` 渲染器单测 + `test_fixed/round2/round3` md2tex 回归）。
+端到端用例依赖题库样本，缺少时自动跳过（可用 `SHIJUAN_LIBRARY` 指定题库根目录）。改流水线后必须全部通过。
 
 ### 整理规范（历次会话沉淀）
 
@@ -848,7 +726,55 @@ D:\Music\试题加题库\
 | 解答题编号从1开始 | start 值不对 | `start=单选题数+多选题数+填空题数+1` |
 | 答案中 WMF 过多 | 未批量转换 | 用 Python+Pillow 批量渲染 600 DPI |
 | MinerU 解析失败 | Token/网络/文件过大 | 检查配置；文件 ≤ 200MB/600 页 |
-| `UnicodeEncodeError` | Windows GBK 编码 | 加 `PYTHONIOENCODING=utf-8` |
+| `UnicodeEncodeError` | Windows GBK 编码 | 加 `PYTHONIOENCODING=utf-8` 前缀 |
+| 题干「如图①②③」丢字 | 默认字体缺圈号字形 | 模板已用 `newunicodechar` 映射，勿删（`STRUCT-GLYPH-001`） |
+| 含表格的卷子编译崩 | 模板缺 `booktabs` | 模板已加载，勿删 |
+
+---
+
+## 规则演进与评估（改规则前必读）
+
+这个技能的规则是**数据**，不是散文。任何规则改动都要走下面这条链：
+
+```
+失败记录  →  归因  →  候选  →  人工确认  →  改 YAML  →  生成文档  →  A/B 门禁
+```
+
+```bash
+# 1. 跑评估，拿到当前分数（首次或需要重置基线时加 --baseline）
+python "{SKILL_DIR}/scripts/eval_run.py"
+
+# 2. 归因：把失败按 rule_id 聚合成规则候选
+python "{SKILL_DIR}/scripts/evolve.py"
+python "{SKILL_DIR}/scripts/evolve.py" --from log-runtime   # 读真实任务日志
+
+# 3. 人工确认候选后，编辑 rules/layout.yaml
+
+# 4. 重新生成文档区块（SKILL.md / conversion-rules.md / RULES.md）
+python "{SKILL_DIR}/scripts/gen_rules_doc.py"
+
+# 5. 门禁：分数不得低于基线，否则拒绝改动
+python "{SKILL_DIR}/scripts/eval_run.py" --compare
+
+# 6. 回归测试
+python "{SKILL_DIR}/tests/run_all.py"
+```
+
+**硬约束**：
+
+- 规则只能改 `rules/layout.yaml`，文档里的规则表是生成的，手改会被 `--check` 打回
+- 每条新规则必须填 `evidence`（真实案例或实测依据），无证据不予收录
+- 分数低于基线（`reports/baseline.json`）的改动一律回滚
+
+**任务中遇到失败时的记录方式**（供 `evolve.py` 归因）：
+
+```python
+import sys; sys.path.insert(0, "{SKILL_DIR}/scripts")
+from logger import TaskLogger
+logger = TaskLogger(log_dir="log-runtime", task_name="试卷排版")
+logger.record_failure("IMG-SCENE-001", "第2题配图未渲染",
+                      evidence="wrapfigure 在列表内静默失效", question_no=2, stage="compile")
+```
 
 ---
 

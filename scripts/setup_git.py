@@ -96,10 +96,15 @@ def configure_git(computer_name):
 
 
 def get_embedded_installer():
-    """获取嵌入的 Git 安装包路径"""
+    """获取嵌入的 Git 安装包路径。
+
+    安装包不再随仓库分发（65MB 的 .exe 不适合放进 skill 仓库）。
+    如果用户自己把 Git-*.exe 放进 scripts/installers/，这里仍会识别。
+    """
     script_dir = os.path.dirname(os.path.abspath(__file__))
     installer_dir = os.path.join(script_dir, "installers")
-    # 查找 Git 安装包
+    if not os.path.isdir(installer_dir):
+        return None
     for fname in os.listdir(installer_dir):
         if fname.lower().startswith("git-") and fname.lower().endswith(".exe"):
             return os.path.join(installer_dir, fname)

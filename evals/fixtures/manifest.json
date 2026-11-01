@@ -1,0 +1,183 @@
+{
+  "version": 2,
+  "description": "评估样本清单。每个 case 是一份真实结构的 .tex，由 _generate.py 从 templates/ 拼装。expected_pages 为 null 表示不限页数。",
+  "cases": [
+    {
+      "id": "standard",
+      "title": "标准学生版（单选/多选/填空/解答 + 答题空间）",
+      "tex": "standard/standard.tex",
+      "is_answer": false,
+      "expected_pages": 1,
+      "expect": {
+        "envs": [
+          "tasks",
+          "examenum"
+        ],
+        "tasks_cols": [
+          2,
+          4,
+          4
+        ],
+        "examenum_start": 5,
+        "answer_space": {
+          "cmd": "\\answern",
+          "count": 1
+        },
+        "commands": [
+          "\\blank"
+        ],
+        "forbidden": [
+          "\\raggedleft"
+        ]
+      }
+    },
+    {
+      "id": "answer",
+      "title": "答案版（\\daan/\\jieti/\\xijie 结构）",
+      "tex": "answer/answer.tex",
+      "is_answer": true,
+      "expected_pages": null,
+      "expect": {
+        "forbidden_envs": [
+          "tasks"
+        ],
+        "commands": [
+          "\\daan",
+          "\\jieti",
+          "\\xijie",
+          "\\xiaoI",
+          "\\xiaoII"
+        ],
+        "forbidden": [
+          "\\raggedleft",
+          "\\answern"
+        ]
+      }
+    },
+    {
+      "id": "geometry",
+      "title": "几何配图（wrapfigure 环绕 + 三图并排限高）",
+      "tex": "geometry/geometry.tex",
+      "is_answer": false,
+      "expected_pages": 1,
+      "expect": {
+        "envs": [
+          "tasks",
+          "examenum",
+          "wrapfigure",
+          "figure"
+        ],
+        "tasks_cols": [
+          4
+        ],
+        "examenum_start": 2,
+        "min_images": 4,
+        "answer_space": {
+          "cmd": "\\answern",
+          "count": 1
+        },
+        "forbidden": [
+          "\\raggedleft"
+        ]
+      }
+    },
+    {
+      "id": "table",
+      "title": "统计表格（booktabs 三线表）",
+      "tex": "table/table.tex",
+      "is_answer": false,
+      "expected_pages": 1,
+      "expect": {
+        "envs": [
+          "tabular",
+          "tasks",
+          "examenum"
+        ],
+        "tasks_cols": [
+          2
+        ],
+        "examenum_start": 2,
+        "commands": [
+          "\\toprule",
+          "\\midrule",
+          "\\bottomrule",
+          "\\captionof"
+        ]
+      }
+    },
+    {
+      "id": "longopt",
+      "title": "长选项多选（tasks 2 列）+ 图片选项（tasks 4 列）",
+      "tex": "longopt/longopt.tex",
+      "is_answer": false,
+      "expected_pages": 1,
+      "expect": {
+        "envs": [
+          "tasks"
+        ],
+        "tasks_cols": [
+          2,
+          4
+        ],
+        "min_images": 4,
+        "forbidden": [
+          "\\raggedleft",
+          "\\begin{tasks}(1)"
+        ]
+      }
+    },
+    {
+      "id": "ir_standard",
+      "title": "IR 渲染（paper.json → tex，验证确定性渲染器）",
+      "ir": "ir_standard/paper.json",
+      "tex_name": "ir_standard.tex",
+      "is_answer": false,
+      "expected_pages": 1,
+      "expect": {
+        "envs": [
+          "tasks",
+          "examenum"
+        ],
+        "tasks_cols": [
+          2,
+          4,
+          4
+        ],
+        "examenum_start": 5,
+        "answer_space": {
+          "cmd": "\\answern",
+          "count": 1
+        },
+        "commands": [
+          "\\blank"
+        ],
+        "forbidden": [
+          "\\raggedleft"
+        ]
+      }
+    },
+    {
+      "id": "ir_geometry",
+      "title": "IR 图片场景（side / wrap / multi 三种布局自动选择）",
+      "ir": "ir_geometry/paper.json",
+      "tex_name": "ir_geometry.tex",
+      "is_answer": false,
+      "expected_pages": 2,
+      "expect": {
+        "envs": [
+          "examenum",
+          "figure",
+          "minipage"
+        ],
+        "min_images": 5,
+        "answer_space": {
+          "cmd": "\\answerc",
+          "count": 2
+        },
+        "forbidden": [
+          "\\raggedleft"
+        ]
+      }
+    }
+  ]
+}

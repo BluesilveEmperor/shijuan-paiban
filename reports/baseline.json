@@ -1,0 +1,547 @@
+{
+  "timestamp": "2026-11-01 11:01:01",
+  "total_score": 100.0,
+  "case_count": 7,
+  "hard_fail_count": 0,
+  "cases": [
+    {
+      "id": "standard",
+      "title": "标准学生版（单选/多选/填空/解答 + 答题空间）",
+      "score": 1.0,
+      "hard_failed": false,
+      "compile_ok": true,
+      "pages": 1,
+      "expected_pages": 1,
+      "overfull": 0,
+      "errors": [],
+      "hard_failures": [],
+      "validator": {
+        "error_count": 0,
+        "warning_count": 0,
+        "rule_ids": [],
+        "warnings": []
+      },
+      "assertions": [
+        {
+          "name": "env:tasks",
+          "passed": true,
+          "detail": "需要环境 tasks",
+          "rule_id": ""
+        },
+        {
+          "name": "env:examenum",
+          "passed": true,
+          "detail": "需要环境 examenum",
+          "rule_id": ""
+        },
+        {
+          "name": "tasks_cols",
+          "passed": true,
+          "detail": "期望 [2, 4, 4]，实际 [2, 4, 4]",
+          "rule_id": "TASKS-COL-001"
+        },
+        {
+          "name": "examenum_start",
+          "passed": true,
+          "detail": "期望 start=5，实际 5",
+          "rule_id": "ENUM-START-001"
+        },
+        {
+          "name": "answer_space",
+          "passed": true,
+          "detail": "\\answern 期望 1 次，实际 1 次",
+          "rule_id": "ANS-001"
+        },
+        {
+          "name": "cmd:\\blank",
+          "passed": true,
+          "detail": "需要命令 \\blank",
+          "rule_id": ""
+        },
+        {
+          "name": "no:\\raggedleft",
+          "passed": true,
+          "detail": "不应出现 \\raggedleft",
+          "rule_id": ""
+        }
+      ],
+      "layout": [
+        {
+          "name": "page_count",
+          "passed": true,
+          "detail": "期望 1 页，实际 1 页"
+        },
+        {
+          "name": "overfull",
+          "passed": true,
+          "detail": "Overfull 0 处（阈值 2）"
+        }
+      ],
+      "struct_ratio": 1.0,
+      "layout_ratio": 1.0
+    },
+    {
+      "id": "answer",
+      "title": "答案版（\\daan/\\jieti/\\xijie 结构）",
+      "score": 1.0,
+      "hard_failed": false,
+      "compile_ok": true,
+      "pages": 2,
+      "expected_pages": null,
+      "overfull": 0,
+      "errors": [],
+      "hard_failures": [],
+      "validator": {
+        "error_count": 0,
+        "warning_count": 0,
+        "rule_ids": [],
+        "warnings": []
+      },
+      "assertions": [
+        {
+          "name": "no_env:tasks",
+          "passed": true,
+          "detail": "不应出现环境 tasks",
+          "rule_id": ""
+        },
+        {
+          "name": "cmd:\\daan",
+          "passed": true,
+          "detail": "需要命令 \\daan",
+          "rule_id": ""
+        },
+        {
+          "name": "cmd:\\jieti",
+          "passed": true,
+          "detail": "需要命令 \\jieti",
+          "rule_id": ""
+        },
+        {
+          "name": "cmd:\\xijie",
+          "passed": true,
+          "detail": "需要命令 \\xijie",
+          "rule_id": ""
+        },
+        {
+          "name": "cmd:\\xiaoI",
+          "passed": true,
+          "detail": "需要命令 \\xiaoI",
+          "rule_id": ""
+        },
+        {
+          "name": "cmd:\\xiaoII",
+          "passed": true,
+          "detail": "需要命令 \\xiaoII",
+          "rule_id": ""
+        },
+        {
+          "name": "no:\\raggedleft",
+          "passed": true,
+          "detail": "不应出现 \\raggedleft",
+          "rule_id": ""
+        },
+        {
+          "name": "no:\\answern",
+          "passed": true,
+          "detail": "不应出现 \\answern",
+          "rule_id": ""
+        }
+      ],
+      "layout": [
+        {
+          "name": "overfull",
+          "passed": true,
+          "detail": "Overfull 0 处（阈值 2）"
+        }
+      ],
+      "struct_ratio": 1.0,
+      "layout_ratio": 1.0
+    },
+    {
+      "id": "geometry",
+      "title": "几何配图（wrapfigure 环绕 + 三图并排限高）",
+      "score": 1.0,
+      "hard_failed": false,
+      "compile_ok": true,
+      "pages": 1,
+      "expected_pages": 1,
+      "overfull": 0,
+      "errors": [],
+      "hard_failures": [],
+      "validator": {
+        "error_count": 0,
+        "warning_count": 0,
+        "rule_ids": [],
+        "warnings": []
+      },
+      "assertions": [
+        {
+          "name": "env:tasks",
+          "passed": true,
+          "detail": "需要环境 tasks",
+          "rule_id": ""
+        },
+        {
+          "name": "env:examenum",
+          "passed": true,
+          "detail": "需要环境 examenum",
+          "rule_id": ""
+        },
+        {
+          "name": "env:wrapfigure",
+          "passed": true,
+          "detail": "需要环境 wrapfigure",
+          "rule_id": ""
+        },
+        {
+          "name": "env:figure",
+          "passed": true,
+          "detail": "需要环境 figure",
+          "rule_id": ""
+        },
+        {
+          "name": "tasks_cols",
+          "passed": true,
+          "detail": "期望 [4]，实际 [4]",
+          "rule_id": "TASKS-COL-001"
+        },
+        {
+          "name": "examenum_start",
+          "passed": true,
+          "detail": "期望 start=2，实际 2",
+          "rule_id": "ENUM-START-001"
+        },
+        {
+          "name": "answer_space",
+          "passed": true,
+          "detail": "\\answern 期望 1 次，实际 1 次",
+          "rule_id": "ANS-001"
+        },
+        {
+          "name": "no:\\raggedleft",
+          "passed": true,
+          "detail": "不应出现 \\raggedleft",
+          "rule_id": ""
+        },
+        {
+          "name": "min_images",
+          "passed": true,
+          "detail": "期望 ≥4 张图，实际 4 张",
+          "rule_id": "EXTRACT-001"
+        }
+      ],
+      "layout": [
+        {
+          "name": "page_count",
+          "passed": true,
+          "detail": "期望 1 页，实际 1 页"
+        },
+        {
+          "name": "overfull",
+          "passed": true,
+          "detail": "Overfull 0 处（阈值 2）"
+        }
+      ],
+      "struct_ratio": 1.0,
+      "layout_ratio": 1.0
+    },
+    {
+      "id": "table",
+      "title": "统计表格（booktabs 三线表）",
+      "score": 1.0,
+      "hard_failed": false,
+      "compile_ok": true,
+      "pages": 1,
+      "expected_pages": 1,
+      "overfull": 0,
+      "errors": [],
+      "hard_failures": [],
+      "validator": {
+        "error_count": 0,
+        "warning_count": 0,
+        "rule_ids": [],
+        "warnings": []
+      },
+      "assertions": [
+        {
+          "name": "env:tabular",
+          "passed": true,
+          "detail": "需要环境 tabular",
+          "rule_id": ""
+        },
+        {
+          "name": "env:tasks",
+          "passed": true,
+          "detail": "需要环境 tasks",
+          "rule_id": ""
+        },
+        {
+          "name": "env:examenum",
+          "passed": true,
+          "detail": "需要环境 examenum",
+          "rule_id": ""
+        },
+        {
+          "name": "tasks_cols",
+          "passed": true,
+          "detail": "期望 [2]，实际 [2]",
+          "rule_id": "TASKS-COL-001"
+        },
+        {
+          "name": "examenum_start",
+          "passed": true,
+          "detail": "期望 start=2，实际 2",
+          "rule_id": "ENUM-START-001"
+        },
+        {
+          "name": "cmd:\\toprule",
+          "passed": true,
+          "detail": "需要命令 \\toprule",
+          "rule_id": ""
+        },
+        {
+          "name": "cmd:\\midrule",
+          "passed": true,
+          "detail": "需要命令 \\midrule",
+          "rule_id": ""
+        },
+        {
+          "name": "cmd:\\bottomrule",
+          "passed": true,
+          "detail": "需要命令 \\bottomrule",
+          "rule_id": ""
+        },
+        {
+          "name": "cmd:\\captionof",
+          "passed": true,
+          "detail": "需要命令 \\captionof",
+          "rule_id": ""
+        }
+      ],
+      "layout": [
+        {
+          "name": "page_count",
+          "passed": true,
+          "detail": "期望 1 页，实际 1 页"
+        },
+        {
+          "name": "overfull",
+          "passed": true,
+          "detail": "Overfull 0 处（阈值 2）"
+        }
+      ],
+      "struct_ratio": 1.0,
+      "layout_ratio": 1.0
+    },
+    {
+      "id": "longopt",
+      "title": "长选项多选（tasks 2 列）+ 图片选项（tasks 4 列）",
+      "score": 1.0,
+      "hard_failed": false,
+      "compile_ok": true,
+      "pages": 1,
+      "expected_pages": 1,
+      "overfull": 0,
+      "errors": [],
+      "hard_failures": [],
+      "validator": {
+        "error_count": 0,
+        "warning_count": 0,
+        "rule_ids": [],
+        "warnings": []
+      },
+      "assertions": [
+        {
+          "name": "env:tasks",
+          "passed": true,
+          "detail": "需要环境 tasks",
+          "rule_id": ""
+        },
+        {
+          "name": "tasks_cols",
+          "passed": true,
+          "detail": "期望 [2, 4]，实际 [2, 4]",
+          "rule_id": "TASKS-COL-001"
+        },
+        {
+          "name": "no:\\raggedleft",
+          "passed": true,
+          "detail": "不应出现 \\raggedleft",
+          "rule_id": ""
+        },
+        {
+          "name": "no:\\begin{tasks}(1)",
+          "passed": true,
+          "detail": "不应出现 \\begin{tasks}(1)",
+          "rule_id": ""
+        },
+        {
+          "name": "min_images",
+          "passed": true,
+          "detail": "期望 ≥4 张图，实际 4 张",
+          "rule_id": "EXTRACT-001"
+        }
+      ],
+      "layout": [
+        {
+          "name": "page_count",
+          "passed": true,
+          "detail": "期望 1 页，实际 1 页"
+        },
+        {
+          "name": "overfull",
+          "passed": true,
+          "detail": "Overfull 0 处（阈值 2）"
+        }
+      ],
+      "struct_ratio": 1.0,
+      "layout_ratio": 1.0
+    },
+    {
+      "id": "ir_standard",
+      "title": "IR 渲染（paper.json → tex，验证确定性渲染器）",
+      "score": 1.0,
+      "hard_failed": false,
+      "compile_ok": true,
+      "pages": 1,
+      "expected_pages": 1,
+      "overfull": 2,
+      "errors": [],
+      "hard_failures": [],
+      "validator": {
+        "error_count": 0,
+        "warning_count": 0,
+        "rule_ids": [],
+        "warnings": []
+      },
+      "assertions": [
+        {
+          "name": "env:tasks",
+          "passed": true,
+          "detail": "需要环境 tasks",
+          "rule_id": ""
+        },
+        {
+          "name": "env:examenum",
+          "passed": true,
+          "detail": "需要环境 examenum",
+          "rule_id": ""
+        },
+        {
+          "name": "tasks_cols",
+          "passed": true,
+          "detail": "期望 [2, 4, 4]，实际 [2, 4, 4]",
+          "rule_id": "TASKS-COL-001"
+        },
+        {
+          "name": "examenum_start",
+          "passed": true,
+          "detail": "期望 start=5，实际 5",
+          "rule_id": "ENUM-START-001"
+        },
+        {
+          "name": "answer_space",
+          "passed": true,
+          "detail": "\\answern 期望 1 次，实际 1 次",
+          "rule_id": "ANS-001"
+        },
+        {
+          "name": "cmd:\\blank",
+          "passed": true,
+          "detail": "需要命令 \\blank",
+          "rule_id": ""
+        },
+        {
+          "name": "no:\\raggedleft",
+          "passed": true,
+          "detail": "不应出现 \\raggedleft",
+          "rule_id": ""
+        }
+      ],
+      "layout": [
+        {
+          "name": "page_count",
+          "passed": true,
+          "detail": "期望 1 页，实际 1 页"
+        },
+        {
+          "name": "overfull",
+          "passed": true,
+          "detail": "Overfull 2 处（阈值 2）"
+        }
+      ],
+      "struct_ratio": 1.0,
+      "layout_ratio": 1.0
+    },
+    {
+      "id": "ir_geometry",
+      "title": "IR 图片场景（side / wrap / multi 三种布局自动选择）",
+      "score": 1.0,
+      "hard_failed": false,
+      "compile_ok": true,
+      "pages": 2,
+      "expected_pages": 2,
+      "overfull": 0,
+      "errors": [],
+      "hard_failures": [],
+      "validator": {
+        "error_count": 0,
+        "warning_count": 0,
+        "rule_ids": [],
+        "warnings": []
+      },
+      "assertions": [
+        {
+          "name": "env:examenum",
+          "passed": true,
+          "detail": "需要环境 examenum",
+          "rule_id": ""
+        },
+        {
+          "name": "env:figure",
+          "passed": true,
+          "detail": "需要环境 figure",
+          "rule_id": ""
+        },
+        {
+          "name": "env:minipage",
+          "passed": true,
+          "detail": "需要环境 minipage",
+          "rule_id": ""
+        },
+        {
+          "name": "answer_space",
+          "passed": true,
+          "detail": "\\answerc 期望 2 次，实际 2 次",
+          "rule_id": "ANS-001"
+        },
+        {
+          "name": "no:\\raggedleft",
+          "passed": true,
+          "detail": "不应出现 \\raggedleft",
+          "rule_id": ""
+        },
+        {
+          "name": "min_images",
+          "passed": true,
+          "detail": "期望 ≥5 张图，实际 5 张",
+          "rule_id": "EXTRACT-001"
+        }
+      ],
+      "layout": [
+        {
+          "name": "page_count",
+          "passed": true,
+          "detail": "期望 2 页，实际 2 页"
+        },
+        {
+          "name": "overfull",
+          "passed": true,
+          "detail": "Overfull 0 处（阈值 2）"
+        }
+      ],
+      "struct_ratio": 1.0,
+      "layout_ratio": 1.0
+    }
+  ]
+}

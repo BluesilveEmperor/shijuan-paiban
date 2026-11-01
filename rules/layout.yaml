@@ -1,0 +1,308 @@
+# ============================================================================
+#  shijuan-paiban 排版规则单一事实源 (single source of truth)
+# ----------------------------------------------------------------------------
+#  本文件是规则的唯一权威定义。SKILL.md / README.md / docs/conversion-rules.md
+#  中的规则表格由 scripts/gen_rules_doc.py 从本文件生成，生成区块禁止手改。
+#
+#  约束：
+#  1. 每条规则必须有唯一 id，格式 <SCOPE>-<TOPIC>-<序号>
+#  2. 每条规则必须有 evidence（真实案例或实测依据）—— 无证据的规则不予收录
+#  3. check 字段非 null 时，必须能在 scripts/validate_tex.py 中找到同名检查
+#  4. 改规则只改本文件，然后运行：python scripts/gen_rules_doc.py
+# ============================================================================
+
+version: 2
+updated: "2026-11-01"
+
+scopes:
+  structure: 结构约束
+  image: 图片排版
+  options: 选项排版
+  numbering: 题目编号
+  spacing: 间距与页数
+  answer: 答题空间
+  extraction: 输入提取
+
+rules:
+
+  # ══════════════════════ 结构约束 ══════════════════════
+  - id: STRUCT-ENV-001
+    scope: structure
+    title: 选择题外层容器
+    value: "外层 enumerate + 内层 tasks"
+    forbidden:
+      - 单独使用 tasks 作为题目列表容器
+    severity: error
+    check: env_nesting
+    evidence: tasks 环境无编号能力，单独使用导致题目无序号
+
+  - id: STRUCT-ENV-002
+    scope: structure
+    title: 解答题环境
+    value: "examenum"
+    severity: error
+    check: env_nesting
+    evidence: 模板以 newlist 定义三级嵌套 examenum，普通 enumerate 无法复用模板缩进体系
+
+  - id: STRUCT-BLANK-001
+    scope: structure
+    title: 填空题空位
+    value: "\\blank（模板已定义，下划线 2cm）"
+    severity: error
+    check: fill_blank_marker
+    evidence: 自造下划线导致同一份试卷内空位宽度不一致
+
+  - id: STRUCT-GLYPH-001
+    scope: structure
+    title: 圈号字符 ①-⑩ 字形映射
+    value: "导言区用 newunicodechar 把 ①-⑩ 映射到 \\mycircled"
+    severity: warning
+    check: circled_glyph
+    evidence: ctexart 默认字体缺 ①-⑩ 字形，直接写会静默丢字——题干「如图①②③所示」渲染成「如图 所示」且编译不报错（ir_geometry 实测）
+
+  # ══════════════════════ 图片排版 ══════════════════════
+  - id: IMG-W-001
+    scope: image
+    title: 单张图片宽度硬上限
+    value: "0.35\\textwidth"
+    severity: error
+    check: image_max_width
+    evidence: 超过 0.35 时图注被挤出页边（2024 新课标Ⅱ卷第 19 题实测）
+
+  - id: IMG-W-002
+    scope: image
+    title: 单张题目配图默认宽度
+    value: "0.30\\textwidth"
+    severity: warning
+    check: null
+    evidence: 0.30 在 4 页卷中留出足够文本环绕空间，与 IMG-W-001 的硬上限不冲突
+
+  - id: IMG-W-003
+    scope: image
+    title: 并排图片宽度与高度
+    type: table
+    rows:
+      - k: "2 张并排"
+        v: "minipage 0.42\\textwidth，图高 3cm"
+      - k: "3 张并排"
+        v: "minipage 0.28\\textwidth，图高 2.5cm"
+    severity: error
+    check: multi_image_height
+    evidence: 并排不限高时三视图会把整道题顶到下一页
+
+  - id: IMG-W-004
+    scope: image
+    title: 选项图片宽度
+    value: "0.12\\textwidth"
+    severity: warning
+    check: null
+    evidence: 4 × 0.12 = 0.48，为 label 与 column-sep 留出余量
+
+  - id: IMG-ALIGN-001
+    scope: image
+    title: 图片对齐方式
+    value: "\\centering"
+    forbidden:
+      - "\\raggedleft"
+    severity: error
+    check: image_align
+    evidence: raggedleft 使图注与图片左边缘错位，图注必须居中于图片正下方
+
+  - id: IMG-SCENE-001
+    scope: image
+    title: 图片场景选择
+    type: decision
+    cases:
+      - when: 小装饰图（行内）
+        value: "\\includegraphics[height=0.6em]"
+      - when: 列表内单图（无论有无子问）
+        value: "minipage 左右并排（0.62 文字 + 0.30 图片）"
+      - when: 图片作为选项
+        value: "tasks(4)，图宽 0.12\\textwidth"
+      - when: 图片与长选项并排
+        value: "minipage 左选项右图片"
+      - when: 多张图片并排
+        value: "figure[H] + minipage，必须限高"
+      - when: TikZ 图
+        value: "\\resizebox{0.35\\textwidth}{!}{...}"
+      - when: 图片位于 \\begin{examenum} 之前（列表外）
+        value: "wrapfigure{r}{0.30\\textwidth} 右侧环绕"
+    severity: error
+    check: wrapfigure_in_list
+    evidence: 实测 wrapfigure 放在 examenum 列表内会静默丢图——图片完全不渲染且编译不报错（evals/fixtures/ir_geometry 第 2 题）。因此列表内单图一律走 minipage，wrapfigure 仅限列表外场景
+
+  # ══════════════════════ 选项排版 ══════════════════════
+  - id: TASKS-COL-001
+    scope: options
+    title: tasks 列数判定
+    type: decision
+    cases:
+      - when: 含图片且平均长度 < 80 字符
+        value: 4 列
+      - when: 含图片且平均长度 ≥ 80 字符
+        value: 2 列
+      - when: 平均可见长度 > 25 字符（含公式或纯文字）
+        value: 2 列
+      - when: 默认（简短选项，含短公式如 $\{0\}$）
+        value: 4 列
+    severity: warning
+    check: tasks_cols
+    evidence: 原规则「含公式即 2 列」会把 $\{0\}$ 这类短选项也判成 2 列，与真实试卷排版不符（evals/fixtures/standard 实测）；改为只看可见长度
+
+  - id: TASKS-COL-002
+    scope: options
+    title: 禁止竖排图片选项
+    value: "禁止 tasks(1)"
+    severity: error
+    check: tasks_single_col_image
+    evidence: 图片竖排浪费半页空间，且与相邻题目间距失衡
+
+  # ══════════════════════ 题目编号 ══════════════════════
+  - id: ENUM-START-001
+    scope: numbering
+    title: 解答题起始编号
+    value: "start = 单选题数 + 多选题数 + 填空题数 + 1"
+    severity: error
+    check: examenum_start
+    evidence: 8+3+3 配置 → start=15；手算错误是历史最高频问题
+
+  - id: ENUM-RESUME-001
+    scope: numbering
+    title: 答案文档编号衔接
+    value: "第一个 enumerate 不带 start，后续统一用 [resume]"
+    severity: error
+    check: answer_resume
+    evidence: 各题型独立计数会使答案文档编号从 1 反复重新开始
+
+  # ══════════════════════ 间距与页数 ══════════════════════
+  - id: PAGE-001
+    scope: spacing
+    title: 学生版页数
+    value: "严格匹配试卷标注页数"
+    severity: error
+    check: page_count
+    evidence: 试卷标注「共 4 页」而实际 5 页属硬伤
+
+  - id: PAGE-002
+    scope: spacing
+    title: 超页压缩手段（按优先级）
+    type: list
+    items:
+      - 减小解答题 itemsep
+      - "导言区加 \\linespread{1.05}\\selectfont"
+      - 最后手段：调整 margin
+    severity: warning
+    check: null
+    evidence: 先动行距会破坏整体观感，应优先调 itemsep
+
+  - id: PAGE-003
+    scope: spacing
+    title: 解答题 itemsep 经验值
+    type: table
+    rows:
+      - k: "4 页 3 题"
+        v: "2.0 ~ 2.5cm"
+      - k: "4 页 4 题"
+        v: "1.8 ~ 2.2cm"
+      - k: "4 页 5 题"
+        v: "1.5 ~ 2.0cm"
+      - k: "4 页 6 题"
+        v: "1.2 ~ 1.5cm"
+      - k: "itemsep < 1.0cm 仍超页"
+        v: "降 linespread 至 0.95"
+    severity: warning
+    check: null
+    evidence: 10 份高考试卷实测区间
+
+  - id: PAGE-004
+    scope: spacing
+    title: 教师版移除 itemsep
+    value: "教师版不保留 itemsep（分页已替代间隙作用）"
+    severity: warning
+    check: teacher_no_itemsep
+    evidence: 保留 itemsep 会让教师版页数失控
+
+  # ══════════════════════ 答题空间 ══════════════════════
+  - id: ANS-001
+    scope: answer
+    title: 答题空间命令与留白量
+    type: table
+    rows:
+      - k: "\\answerc"
+        v: "1.5em，compact 模式（自学）"
+      - k: "\\answern"
+        v: "3em，normal 模式（作业，默认）"
+      - k: "\\answere"
+        v: "5em，exam 模式（测试）"
+    severity: error
+    check: answer_space
+    evidence: 三个命令定义在 templates/gaokao-template.tex 导言区
+
+  - id: ANS-002
+    scope: answer
+    title: 答题空间插入位置
+    value: "每道解答题 \\item 内容结束后；最后一道解答题不插入"
+    severity: warning
+    check: answer_space_last
+    evidence: 末题插入会在页尾留大片空白
+
+  - id: ANS-003
+    scope: answer
+    title: 答题空间禁止线条
+    value: "仅用 \\vspace 留白"
+    forbidden:
+      - "\\rule"
+      - tcolorbox
+      - "\\fbox"
+      - 虚线
+      - 角标
+    severity: error
+    check: answer_space_lines
+    evidence: 用户明确要求纯留白，保持试卷整洁
+
+  - id: ANS-004
+    scope: answer
+    title: 教师版三种模式
+    type: table
+    rows:
+      - k: compact
+        v: "itemsep 0.5em，题下 2em，文件名后缀 -教师版-紧凑"
+      - k: "normal（默认）"
+        v: "itemsep 1.5em，题下 6em，文件名后缀 -教师版"
+      - k: exam
+        v: "Q18 起每题独占一页，移除 itemsep，文件名后缀 -教师版-考试"
+    severity: error
+    check: null
+    evidence: v3 由 onepage/space 两模式扩展而来；旧后缀 -教师版-答题空间 已废弃
+
+  # ══════════════════════ 输入提取 ══════════════════════
+  - id: EXTRACT-001
+    scope: extraction
+    title: 图片目录命名
+    type: table
+    rows:
+      - k: DOCX 答案文档
+        v: "Images-<文件名去扩展名>"
+      - k: DOCX 试题文档
+        v: media
+      - k: PDF 输入
+        v: "Images-<PDF文件名去扩展名>"
+    severity: error
+    check: graphicspath_match
+    evidence: graphicspath 与目录名不一致时图片全部丢失且不报错
+
+  - id: EXTRACT-002
+    scope: extraction
+    title: 扫描件判定
+    value: "pandoc 输出仅含 ![](media/imageN.png) 且无正文 → 走 MinerU OCR"
+    severity: warning
+    check: null
+    evidence: 扫描件 DOCX 用 pandoc 只能拿到整页图片，提取不到任何文字
+
+  - id: EXTRACT-003
+    scope: extraction
+    title: WMF 转 PNG
+    value: "Pillow 渲染，600 DPI"
+    severity: warning
+    check: no_wmf_remaining
+    evidence: xelatex 不直接支持 WMF，残留 WMF 会导致编译失败

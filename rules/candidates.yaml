@@ -1,0 +1,46 @@
+generated: '2026-11-01 11:03:50'
+source: runtime:C:/Users/HW/AppData/Local/Temp/logruntime_4c0615_g
+min_support: 1
+note: 候选仅为提案。人工确认后编辑 rules/layout.yaml，再运行 gen_rules_doc.py 与 eval_run.py --compare
+  做门禁。
+candidates:
+- rule_id: IMG-SCENE-001
+  count: 2
+  source_count: 1
+  sources:
+  - 试卷排版
+  title: 图片场景选择
+  severity: error
+  current_value: '小装饰图（行内） → \includegraphics[height=0.6em] / 列表内单图（无论有无子问） → minipage
+    左右并排（0.62 文字 + 0.30 图片） / 图片作为选项 → tasks(4)，图宽 0.12\textwidth / 图片与长选项并排 → minipage
+    左选项右图片 '
+  samples:
+  - 第2题配图未渲染（wrapfigure 在列表内静默失效）
+  - 第5题配图跑到页首与题目分离
+  suggested_action: 规则被违反：检查执行路径是否绕过了该规则（渲染器 / 模板 / SKILL.md 提示词），或规则取值本身已不适用
+  status: pending
+- rule_id: (未归因)
+  count: 1
+  source_count: 1
+  sources:
+  - 试卷排版
+  title: —
+  severity: info
+  current_value: ''
+  samples:
+  - 图片路径找不到：image12.png
+  suggested_action: 规则 ID 缺失：检查 validate_tex / render_tex 是否给该问题分配了 rule_id
+  status: pending
+- rule_id: ANS-001
+  count: 1
+  source_count: 1
+  sources:
+  - 试卷排版
+  title: 答题空间命令与留白量
+  severity: error
+  current_value: \answerc：1.5em，compact 模式（自学）；\answern：3em，normal 模式（作业，默认）；\answere：5em，exam
+    模式（测试）
+  samples:
+  - 学生版末题后多出 3em 空白
+  suggested_action: 规则被违反：检查执行路径是否绕过了该规则（渲染器 / 模板 / SKILL.md 提示词），或规则取值本身已不适用
+  status: pending

@@ -1,7 +1,7 @@
 {
   "skill_name": "shijuan-paiban",
-  "version": "3.0",
-  "description": "评估用例集。每条 eval 包含 prompt、expected_checks（可自动检查项）和 manual_checks（需人工/LLM 检查项）",
+  "version": "4.0",
+  "description": "人工评估用例集（场景描述）。可自动执行的部分见 evals/fixtures/manifest.json，由 scripts/eval_run.py 驱动。每条 eval 含 prompt、expected_checks 与 manual_checks。",
   "evals": [
     {
       "id": 1,
@@ -220,44 +220,46 @@
         "has_linespread_if_needed": true
       },
       "manual_checks": [
-        "如超页，导言区有 linespread{1.05}",
+        "超页时优先调 itemsep，其次 \\linespread{1.05}",
         "教师版不受页数限制",
-        "教师版无 itemsep=2.5cm"
+        "教师版无 itemsep（PAGE-004）"
       ]
     },
     {
       "id": 13,
-      "category": "teacher_onepage",
-      "prompt": "排版试题文档，生成教师版（onepage 模式）",
+      "category": "teacher_compact",
+      "prompt": "排版试题文档，生成教师版（compact 模式）",
       "input_type": "docx",
-      "expected_output": "教师版 Q18 起每题独占一页",
+      "expected_output": "教师版解答题紧凑排版，每题下方留 2em，文件名为 <stem>-教师版-紧凑.tex",
       "expected_checks": {
         "compiles": true,
         "teacher_version_exists": true,
-        "teacher_page_count": "<=7",
-        "no_itemsep_in_teacher": true
+        "filename_suffix": "-教师版-紧凑",
+        "itemsep": "0.5em",
+        "has_vspace_2em": true
       },
       "manual_checks": [
-        "Q17 跟在「四、解答题」标题后",
-        "Q18 起每题独占一页",
-        "Q22 可不分页紧接 Q21 后"
+        "每道解答题末尾有 \\vspace{2em}",
+        "适合自学参考，页数明显少于 normal"
       ]
     },
     {
       "id": 14,
-      "category": "teacher_space",
-      "prompt": "排版试题文档，生成教师版（space 模式）",
+      "category": "teacher_exam",
+      "prompt": "排版试题文档，生成教师版（exam 模式）",
       "input_type": "docx",
-      "expected_output": "教师版每题下方有 4em 答题空间",
+      "expected_output": "教师版第 2 道解答题起每题独占一页，移除 itemsep，文件名为 <stem>-教师版-考试.tex",
       "expected_checks": {
         "compiles": true,
-        "teacher_space_version_exists": true,
-        "has_vspace_4em": true
+        "teacher_version_exists": true,
+        "filename_suffix": "-教师版-考试",
+        "no_itemsep_in_teacher": true,
+        "has_newpage": true
       },
       "manual_checks": [
-        "每道解答题末尾有 vspace{4em}",
-        "保留 itemsep=2.5cm",
-        "不强制分页"
+        "第 1 道解答题跟在「四、解答题」标题后",
+        "第 2 道起每题独占一页",
+        "末题后无多余分页"
       ]
     },
     {

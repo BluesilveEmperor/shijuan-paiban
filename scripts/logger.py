@@ -1,5 +1,10 @@
-"""日志记录器 - 记录运行时日志"""
+"""日志记录器 - 记录运行时日志
 
+除人类可读的 .txt 步骤日志外，另提供结构化失败记录（failures.jsonl）：
+每条失败带 rule_id，供 scripts/evolve.py 做归因与规则候选生成。
+"""
+
+import json
 import os
 import sys
 import time
@@ -15,6 +20,30 @@ class TaskLogger:
         self.task_name = task_name
         self.step_counter = 0
         os.makedirs(log_dir, exist_ok=True)
+
+    # ── 结构化失败记录（供 evolve.py 消费）──
+    def record_failure(self, rule_id: str, symptom: str, evidence: str = "",
+                       question_no: int = None, stage: str = ""):
+        """追加一条结构化失败到 failures.jsonl。
+
+        rule_id  规则 ID（如 IMG-W-001）；未知时传空串，evolve 会归入「未归因」
+        symptom  症状描述
+        evidence 证据（日志片段、编译输出等）
+        """
+        record = {
+            "timestamp": self._get_timestamp_ms(),
+            "task": self.task_name,
+            "rule_id": rule_id,
+            "stage": stage,
+            "symptom": symptom,
+            "evidence": evidence[:2000],
+        }
+        if question_no is not None:
+            record["question_no"] = question_no
+        path = os.path.join(self.log_dir, "failures.jsonl")
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        return path
 
     def _get_timestamp(self) -> str:
         """获取当前时间戳"""

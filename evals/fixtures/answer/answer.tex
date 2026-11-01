@@ -1,0 +1,141 @@
+% ============================================
+% ============================================
+\documentclass[12pt,a4paper]{ctexart}
+
+% ========== 页面布局 ==========
+\usepackage[top=2cm,bottom=2cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing  % 1.5倍行距
+
+% ========== 列表 ==========
+\usepackage{enumitem}
+
+% ========== 数学公式 ==========
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+
+% ========== 插图 ==========
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{float}
+\graphicspath{{images/}}
+
+% ========== 颜色 ==========
+\usepackage{xcolor}
+
+% ========== 表格 ==========
+\usepackage{array,booktabs,caption}
+
+% ========== 页眉页脚 ==========
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\setlength{\headheight}{13.6pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\small 202X年普通高等学校招生全国统一考试\,$\cdot$\,数学\quad 参考答案}
+\fancyfoot[C]{数学试题第\thepage 页（共\pageref{LastPage}页）}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ========== 超链接 ==========
+\usepackage[hidelinks]{hyperref}
+
+% ========== 自定义命令 ==========
+
+\newcommand{\daan}[1]{{\color{red}\textbf{【答案】#1}}}
+
+\newcommand{\jieti}{\par{\color{gray!60!black}\textbf{【解析】}}}
+
+\newcommand{\xijie}{\par{\color{blue!60!black}\textbf{【详解】}}}
+
+\newcommand{\xiaoI}{\par{\color{blue!60!black}\textbf{【小问 1 详解】}}}
+\newcommand{\xiaoII}{\par{\color{blue!60!black}\textbf{【小问 2 详解】}}}
+\newcommand{\xiaoIII}{\par{\color{blue!60!black}\textbf{【小问 3 详解】}}}
+
+\newcommand{\eqimg}[2][0.5]{%
+  \includegraphics[width=#1\textwidth,keepaspectratio]{#2}%
+}
+
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\me}{\mathrm{e}}
+
+\newcommand{\blank}{\underline{\hspace{2cm}}}
+
+\usepackage{tikz}
+\usepackage{newunicodechar}
+\newcommand{\mycircled}[1]{%
+  \tikz[baseline=(char.base),outer sep=0pt]{%
+    \node[draw,circle,inner sep=0.5pt,minimum size=1.4em,line width=0.4pt] (char) {#1};%
+  }%
+}
+\newunicodechar{①}{\mycircled{1}}
+\newunicodechar{②}{\mycircled{2}}
+\newunicodechar{③}{\mycircled{3}}
+\newunicodechar{④}{\mycircled{4}}
+\newunicodechar{⑤}{\mycircled{5}}
+\newunicodechar{⑥}{\mycircled{6}}
+\newunicodechar{⑦}{\mycircled{7}}
+\newunicodechar{⑧}{\mycircled{8}}
+\newunicodechar{⑨}{\mycircled{9}}
+\newunicodechar{⑩}{\mycircled{10}}
+
+% ========== 正文 ==========
+
+\begin{document}
+
+\begin{center}
+    {\Large\textbf{2026 年测试卷}}
+    \vspace{0.5em}
+
+    {\large\textbf{参考答案}}
+    \vspace{0.5em}
+    \hrule
+\end{center}
+
+\section*{一、选择题}
+本题共 2 小题，每小题 5 分，共 10 分。
+
+\begin{enumerate}
+    \item 已知集合 $A=\{x \mid x^2-3x+2=0\}$，$B=\{0,1,2\}$，则 $A \cup B =$
+    \begin{flushleft}
+        A.\ $\{0\}$\quad B.\ $\{0,1,2\}$\quad C.\ $\{1,2\}$\quad D.\ $\{0,1\}$
+    \end{flushleft}
+    \daan{B}
+    \jieti 由 $x^{2}-3x+2=0$ 得 $x=1$ 或 $x=2$，故 $A=\{1,2\}$，从而 $A\cup B=\{0,1,2\}$.
+    \xijie 逐个代入验证即可，注意集合元素的互异性.
+
+    \item 设 $z = 3 + 2\mi$，则 $|z| =$
+    \begin{flushleft}
+        A.\ $\sqrt{5}$\quad B.\ $\sqrt{13}$\quad C.\ $5$\quad D.\ $13$
+    \end{flushleft}
+    \daan{B}
+    \jieti $|z|=\sqrt{3^{2}+2^{2}}=\sqrt{13}$.
+    \xijie 复数的模等于实部与虚部平方和的算术平方根.
+\end{enumerate}
+
+\section*{三、填空题}
+本题共 1 小题，每小题 5 分，共 5 分。
+
+\begin{enumerate}[resume]
+    \item 若直线 $y=2x+5$ 是曲线 $y=\me^{x}+x+a$ 的一条切线，则 $a=$ \blank.
+    \daan{4}
+    \jieti 设切点横坐标为 $x_0$，由 $y'=\me^{x}+1=2$ 得 $x_0=0$.
+    \xijie 切点为 $(0,1+a)$，代入直线方程得 $1+a=5$，故 $a=4$.
+\end{enumerate}
+
+\section*{四、解答题}
+本题共 1 小题，共 12 分。
+
+\begin{enumerate}[resume]
+    \item （12分）已知数列 $\{a_n\}$ 中，$a_1=3$，$a_{n+1}=2a_n+1$.
+    \begin{enumerate}
+        \item 证明：数列 $\{a_n+1\}$ 是等比数列；
+        \item 求 $\{a_n\}$ 的前 $n$ 项和 $S_n$.
+    \end{enumerate}
+    \daan{(1) 见解析\quad (2) $S_n=2^{n+2}-n-4$}
+    \jieti 由 $a_{n+1}+1=2(a_n+1)$ 知 $\{a_n+1\}$ 是公比为 $2$ 的等比数列.
+    \xiaoI 首项 $a_1+1=4$，故 $a_n+1=2^{n+1}$，即 $a_n=2^{n+1}-1$.
+    \xiaoII $S_n=\sum_{k=1}^{n}(2^{k+1}-1)=2^{n+2}-n-4$.
+\end{enumerate}
+
+\end{document}
