@@ -24,6 +24,9 @@ import json
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import tex_width  # noqa: E402  宽度估算（TASKS-COL-001 可行性判定）
+
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES = ROOT / "templates"
 
@@ -83,7 +86,17 @@ def _visible_len(text):
 
 
 def auto_tasks_cols(options):
-    """TASKS-COL-001：按可见长度决定列数（不是「有 $ 就 2 列」）。"""
+    """TASKS-COL-001：按可见长度决定列数（不是「有 $ 就 2 列」）。
+
+    两层判定：
+      1. 意图层 —— 可见长度定 4 列还是 2 列（layout.yaml 的原始口径）；
+      2. 可行性层 —— 用 tex_width 的实测宽度模型确认该列宽放得下，
+         放不下就退列（4→2→1）。
+
+    实测依据：``\\dfrac{\\tanh x+\\tanh y}{1+\\tanh x\\tanh y}`` 实际渲染宽
+    86.53pt；放进 tasks(2)（每列 200.4pt）时整个选项 286.3pt → 溢出 51.46pt。
+    只按字符数判定会漏掉这种长分式。
+    """
     if not options:
         return 4
     texts = [o.get("text", "") for o in options]
@@ -91,10 +104,12 @@ def auto_tasks_cols(options):
     avg_len = sum(_visible_len(t) for t in texts) / len(texts)
 
     if has_image:
-        return 4 if avg_len < 80 else 2
-    if avg_len > 25:
-        return 2
-    return 4
+        want = 4 if avg_len < 80 else 2
+    elif avg_len > 25:
+        want = 2
+    else:
+        want = 4
+    return tex_width.choose_tasks_cols(texts, want_cols=want, has_image=has_image)
 
 
 def auto_itemsep(saq_count, total_pages=4):

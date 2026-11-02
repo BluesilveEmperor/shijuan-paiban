@@ -139,7 +139,7 @@
           "examenum"
         ],
         "tasks_cols": [
-          2,
+          1,
           4,
           4
         ],
@@ -153,7 +153,8 @@
         ],
         "forbidden": [
           "\\raggedleft"
-        ]
+        ],
+        "tasks_cols_note": "第三个多选题含 $\\dfrac{\\tanh x+\\tanh y}{1+\\tanh x\\tanh y}$，实测宽 320.7pt > tasks(2) 每列 200.4pt → 按 TASKS-COL-003 退到 1 列。旧期望 2 实测溢出 15.88pt 与 46.20pt（已复现）。"
       }
     },
     {

@@ -52,15 +52,35 @@ long_opts = [
     {'text': '对任意实数 $x$，恒有 $\\cosh^{2} x - \\sinh^{2} x = 1$'},
     {'text': '对任意实数 $x$，恒有 $\\sinh 2x = 2\\sinh x \\cosh x$'},
 ]
-check('cols-long-2', auto_tasks_cols(long_opts), 2)
+# TASKS-COL-003：最宽选项实测 320.7pt > tasks(2) 每列 200.4pt → 必须退到 1 列。
+# ⚠️ 旧期望值 2 固化了「按字符数摊算公式宽度」的 bug：该期望下编译必然溢出
+# 51.46pt（route_cmp 双路线对比测试实测）。
+check('cols-long-2', auto_tasks_cols(long_opts), 1)
 
 img_opts = [{'image': 'a.png'}, {'image': 'b.png'}, {'image': 'c.png'}, {'image': 'd.png'}]
 check('cols-image-4', auto_tasks_cols(img_opts), 4)
 
 img_long = [{'image': 'a.png', 'text': '很长的说明文字' * 12}] * 4
+# 图片选项退列下限是 2（TASKS-COL-002 禁止图片用 tasks(1) 竖排），
+# 即使说明文字长到任何列都放不下，也保持 2 列
 check('cols-image-long-2', auto_tasks_cols(img_long), 2)
 
 check('cols-empty-default-4', auto_tasks_cols([]), 4)
+
+# ── 1b. TASKS-COL-003 宽度兜底 ──
+# 中等长度选项：实测最宽 217.6pt > tasks(2) 每列 200.4pt → 退到 1 列
+medium_opts = [
+    {'text': '对任意实数 $x$，恒有 $\\cosh^{2} x - \\sinh^{2} x = 1$'},
+    {'text': '对任意实数 $x$，恒有 $\\sinh 2x = 2\\sinh x \\cosh x$'},
+]
+check('cols-medium-fallback-1', auto_tasks_cols(medium_opts), 1)
+
+# 短选项：4 列（各列 88.2pt，$\{0\}$ 这类够短）
+check('cols-short-4', auto_tasks_cols(short), 4)
+
+# 超长单个选项：连 1 列都放不下 → 仍返回 1（下限），交由后续处理
+huge_opts = [{'text': '长' * 200}, {'text': '短'}]
+check('cols-huge-floor-1', auto_tasks_cols(huge_opts), 1)
 
 # ── 2. itemsep ──
 check('itemsep-5q', auto_itemsep(5, 4), '1.75cm')

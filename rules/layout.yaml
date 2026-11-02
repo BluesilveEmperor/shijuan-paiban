@@ -152,10 +152,23 @@ rules:
   - id: TASKS-COL-002
     scope: options
     title: 禁止竖排图片选项
-    value: "禁止 tasks(1)"
+    value: "禁止图片选项使用 tasks(1)"
     severity: error
     check: tasks_single_col_image
-    evidence: 图片竖排浪费半页空间，且与相邻题目间距失衡
+    evidence: 图片竖排浪费半页空间，且与相邻题目间距失衡。注：纯文字选项因单个选项过长而用 tasks(1) 不受此限（见 TASKS-COL-003）
+
+  - id: TASKS-COL-003
+    scope: options
+    title: 宽度兜底——放不下就退列
+    type: decision
+    cases:
+      - when: 意图列数的单列宽度放不下最长选项
+        value: 退到 2 列
+      - when: 2 列仍放不下
+        value: 退到 1 列（纯文字选项允许）
+    severity: error
+    check: tasks_cols
+    evidence: 只按字符数判列会低估不可断行公式的真实宽度。实测 $\dfrac{\tanh x+\tanh y}{1+\tanh x\tanh y}$ 渲染宽 86.53pt（newtxmath 12pt），整体选项 286.3pt，而 tasks(2) 每列仅 200.4pt → 溢出 51.46pt（route_cmp 双路线对比测试）。改为按实测宽度模型（scripts/tex_width.py）判定，放不下就退列
 
   # ══════════════════════ 题目编号 ══════════════════════
   - id: ENUM-START-001

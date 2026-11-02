@@ -23,6 +23,9 @@ import struct
 import sys
 from collections import Counter
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import tex_width  # noqa: E402  宽度估算（TASKS-COL-001 可行性判定）
+
 # --------------------------------------------------------------------------- #
 #  一、全局配置
 # --------------------------------------------------------------------------- #
@@ -643,35 +646,21 @@ def split_options(text):
 
 
 def auto_tasks_cols(options):
-    """自动判断 tasks 列数（见 SKILL 规则，公式按源长度折算宽度）。"""
+    """自动判断 tasks 列数（TASKS-COL-001）。
+
+    判定分两层：
+      1. **意图层**：按 layout.yaml 的「可见长度」口径定 4 列还是 2 列；
+      2. **可行性层**：用 tex_width 的实测宽度模型检查该列宽是否真的放得下，
+         放不下就退列（4→2→1），避免长分式公式溢出版心。
+
+    实测（route_cmp 双路线对比测试）：旧实现把公式按字符数摊算，
+    ``\\dfrac{\\tanh x+\\tanh y}{1+\\tanh x\\tanh y}`` 被算成约 15 个单位，
+    而它实际渲染宽 86.53pt —— 放进 tasks(2)（每列仅 200.4pt）时该选项
+    整体 286.3pt，溢出 51.46pt。必须按真实宽度判定。
+    """
     if not options:
         return 4
-    has_image = any(r"\includegraphics" in o for o in options)
-    if has_image:
-        avg = sum(len(o) for o in options) / float(len(options))
-        return 4 if avg < 80 else 2
-
-    def _vis_width(o):
-        def _rep(m):
-            inner = m.group(0)[1:-1].strip()
-            return "\u2588" * max(1, min(int(len(inner) / 2) + 1, 30))
-        s = re.sub(r"\$[^$]*\$", _rep, o)
-        s = re.sub(r"\\[A-Za-z]+\*?", "", s)
-        s = s.replace("&", "").replace("\\", "")
-        w = 0.0
-        for ch in s:
-            if "\u4e00" <= ch <= "\u9fff":
-                w += 1.6
-            elif ch == "\u2588":
-                w += 1.0
-            elif ch.isspace():
-                continue
-            else:
-                w += 1.0
-        return w
-
-    w = max(_vis_width(o) for o in options)
-    return 4 if w <= 15 else 2
+    return tex_width.choose_tasks_cols(options)
 
 
 # --------------------------------------------------------------------------- #
@@ -697,6 +686,30 @@ RE_OPTION_LINE = re.compile(r"^\s*[A-D]\s*[.．、]")
 RE_IMAGE = re.compile(r"^\s*!\[[^\]]*\]\(\s*([^)\s]+)\s*\)\s*$")
 RE_SUB_ARABIC = re.compile(r"^\s*[（(]\s*(\d+)\s*[）)]\s*(.*)$")
 RE_SUB_ROMAN = re.compile(r"^\s*[（(]\s*(i{1,3}|iv|vi{0,3})\s*[）)]\s*(.*)$", re.I)
+# 答案区起始行：模拟卷 MD 常把试题与答案拼在同一份文件里
+RE_ANSWER_HEAD = re.compile(
+    r"^#{1,4}\s*(?:参考答案|答案与解析|试题答案|答案解析|答案及解析|试卷答案)")
+RE_ANSWER_PLAIN = re.compile(
+    r"^[（(【\[]?\s*(?:参考答案|答案与解析|试题答案|答案解析|答案及解析)\s*[）)】\]]?[:：]?$")
+
+
+def truncate_at_answer(lines):
+    """截掉「参考答案」及其后全部内容。
+
+    不截断会把答案段当成额外的解答题混进试卷——实测一份 2 道解答题的卷子
+    被解析成 4 道，答案文本还被塞进了子问环境。旧路线 md2tex.py 有等价逻辑，
+    新路线遗漏了。
+    """
+    for i, ln in enumerate(lines):
+        s = ln.strip()
+        if not s:
+            continue
+        if RE_ANSWER_HEAD.match(s) or RE_ANSWER_PLAIN.match(s):
+            dropped = len(lines) - i - 1
+            if dropped > 0:
+                warn(f"检测到答案区「{s[:16]}」，已截断其后 {dropped} 行")
+            return lines[:i]
+    return lines
 
 
 # 说明性标题（无题型信息，仅作卷/部分划分）：不得注册为题型区块。
@@ -1314,6 +1327,8 @@ def convert(md_path, out_tex, img_base, img_srcs=None):
     raw = raw.replace("\r\n", "\n").replace("\r", "\n")
     raw = collapse_dollar_blocks(raw)
     lines = filter_lines(raw.split("\n"))
+    # 0) 截掉内嵌的「参考答案」区，避免答案被当作题目
+    lines = truncate_at_answer(lines)
     # 0) 拆分「题干末尾拼接了题型标题」的行（如 2604「…△ 。四、解答题：…」）
     lines = _split_embedded_headings(lines)
 
@@ -1335,6 +1350,10 @@ def convert(md_path, out_tex, img_base, img_srcs=None):
         if RE_HEADING.match(ln):
             continue
         if s.startswith("注意事项"):
+            break
+        # 大题标题不是副标题：曾把「一、选择题…」当副标题抓走，
+        # 导致同一个标题在卷头和正文各出现一次。
+        if section_type(_heading_of(ln) or s):
             break
         subtitle_lines.append(s)
         break
