@@ -205,10 +205,10 @@ with tempfile.TemporaryDirectory() as td:
     rc, out = run_gen(str(ans), '--print-spec')
     check('reject-答案文件', rc, 4)
 
-    # 已有手工答题卡 → 不覆盖
+    # 已有手工答题卡 → 不覆盖（A4 输出带显式 -A4 后缀，ARTIFACT-002）
     exam = Path(td) / '某卷.tex'
     exam.write_text(PAPER, encoding='utf-8')
-    hand = Path(td) / '某卷-答题卡.tex'
+    hand = Path(td) / '某卷-答题卡-A4.tex'
     hand.write_text('% 手工版答题卡\n\\documentclass{ctexart}\n', encoding='utf-8')
     rc, out = run_gen(str(exam), '--no-compile')
     check('skip-手工版', rc, 5)

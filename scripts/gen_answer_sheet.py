@@ -20,7 +20,7 @@ gen_answer_sheet.py — 从试卷 .tex 自动生成答题卡（A4 / A3）
 
 输出（与试卷同目录）
 --------------------
-    <卷名>-答题卡.tex / .pdf        （layout=a4）
+    <卷名>-答题卡-A4.tex / .pdf    （layout=a4，ARTIFACT-002 显式 -A4 后缀）
     <卷名>-答题卡-A3.tex / .pdf     （layout=a3）
     answersheet.sty                 （宏包副本，供日后单独重编）
 
@@ -997,7 +997,7 @@ def main(argv: list[str] | None = None) -> int:
         else:
             pages = args.pages if args.pages is not None else a4_panels
 
-        name = f"{src.stem}-{args.suffix}" + ("" if layout == "a4" else "-A3")
+        name = f"{src.stem}-{args.suffix}" + ("-A4" if layout == "a4" else "-A3")
         tex = out_dir / f"{name}.tex"
 
         # 不覆盖别人的手工文件：只认本脚本写的（带生成标记）
