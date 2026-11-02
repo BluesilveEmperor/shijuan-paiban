@@ -6,8 +6,8 @@ extract_docx.py - 内置 DOCX 解包与图片提取（替代外部 docx skill）
 只依赖标准库 zipfile（WMF 转换额外需要 Pillow），不依赖任何外部 skill。
 
 用法:
-  # 解包图片到 <out_dir>/<images_dir>/
-  python scripts/extract_docx.py 试卷.docx ./输出目录 --images-dir media
+  # 解包图片到 <out_dir>/<images_dir>/（默认 Images-<docx文件名>，ARTIFACT-003）
+  python scripts/extract_docx.py 试卷.docx ./输出目录
 
   # 答案文档：WMF 批量转 600 DPI PNG
   python scripts/extract_docx.py 试卷-答案.docx ./ --images-dir Images-试卷-答案 --convert-wmf
@@ -110,8 +110,8 @@ def main():
     ap = argparse.ArgumentParser(description="DOCX 解包与图片提取")
     ap.add_argument("docx", help="DOCX 文件路径")
     ap.add_argument("out_dir", nargs="?", default=".", help="输出目录（默认当前目录）")
-    ap.add_argument("--images-dir", default="media",
-                    help="图片子目录名（试题用 media，答案用 Images-<文件名>）")
+    ap.add_argument("--images-dir", default=None,
+                    help="图片子目录名（默认 Images-<docx文件名>，ARTIFACT-003）")
     ap.add_argument("--convert-wmf", action="store_true", help="WMF/EMF 转 PNG")
     ap.add_argument("--dpi", type=int, default=600, help="WMF 转换 DPI（默认 600）")
     ap.add_argument("--markdown", action="store_true", help="同时导出 pandoc Markdown")
@@ -135,6 +135,9 @@ def main():
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    if not args.images_dir:
+        args.images_dir = f"Images-{docx_path.stem}"
 
     extracted, converted, failed = extract_images(
         docx_path, out_dir, args.images_dir, args.convert_wmf, args.dpi

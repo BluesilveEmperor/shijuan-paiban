@@ -410,7 +410,7 @@ SCHEMA_EXAMPLE = {
         "title": "2026 年普通高等学校招生全国统一考试（模拟）",
         "template": "gaokao",
         "total_pages": 4,
-        "images_dir": "media",
+        "images_dir": "Images-<卷名>",
         "answer_space": "normal",
     },
     "sections": [
@@ -450,7 +450,7 @@ IR 字段说明
 meta.title          试卷标题
 meta.template       gaokao（学生版，默认）| answer（答案版）
 meta.total_pages    试卷标注页数，用于推导 itemsep（PAGE-003）
-meta.images_dir     图片目录名（EXTRACT-001：试题 media / 答案 Images-<文件名>）
+meta.images_dir     图片目录名（EXTRACT-001 / ARTIFACT-003：统一 Images-<卷名>）
 meta.answer_space   compact | normal（默认）| exam（ANS-001）
 meta.front_matter   可选，自定义标题区原始 LaTeX
 
