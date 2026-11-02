@@ -18,7 +18,8 @@ gen_teacher.py - 从学生版 .tex 生成教师版 / 带答题空间的学生版
   <stem>-教师版-紧凑.tex   compact
   <stem>-教师版.tex        normal
   <stem>-教师版-考试.tex   exam
-  <stem>-答题空间.tex      学生版 + 答题空间命令
+  <stem>-学生版.tex        学生版 + 答题空间命令（ARTIFACT-002；
+                            旧名 <stem>-答题空间.tex 自动迁移）
 
 退出码:
   0 成功
@@ -179,8 +180,15 @@ def main():
         if student is None:
             print(f"[WARN] 学生版答题空间生成失败: {note}", file=sys.stderr)
         else:
-            sp = path.with_name(stem + "-答题空间.tex")
+            sp = path.with_name(stem + "-学生版.tex")
+            legacy = path.with_name(stem + "-答题空间.tex")
+            if legacy.exists() and not sp.exists():
+                legacy.rename(sp)
+                print(f"[MIGRATE] {legacy.name} -> {sp.name}")
             sp.write_text(student, encoding="utf-8")
+            if legacy.exists():
+                print(f"[WARN] 旧名文件 {legacy.name} 已被 {sp.name} 取代，可手动删除",
+                      file=sys.stderr)
             print(f"[OK] {sp.name}  ({note or '答题空间 = ' + MODES[args.mode]['space']})")
 
     return 0

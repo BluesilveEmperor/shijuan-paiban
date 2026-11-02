@@ -111,6 +111,39 @@ check_true('space-not-after-last',
            out2.rindex(r'\answern') < out2.rindex(r'\item 第三题'),
            '答题空间出现在末题之后')
 
+# ── 6. 旧名 -答题空间.tex 自动迁移为 -学生版.tex（ARTIFACT-002）──
+import subprocess
+import tempfile
+from pathlib import Path
+
+GEN = Path(__file__).resolve().parent.parent / 'scripts' / 'gen_teacher.py'
+
+with tempfile.TemporaryDirectory() as td:
+    d = Path(td)
+    src = d / '某卷.tex'
+    src.write_text(make_tex('2.0cm'), encoding='utf-8')
+
+    # 6a. 只有旧名 → 重命名迁移，内容替换为本次生成结果
+    legacy = d / '某卷-答题空间.tex'
+    legacy.write_text('旧版内容', encoding='utf-8')
+    r = subprocess.run([sys.executable, str(GEN), str(src), '--mode', 'normal'],
+                       capture_output=True, text=True, encoding='utf-8', errors='replace')
+    check('migrate-rc', r.returncode, 0)
+    migrated = d / '某卷-学生版.tex'
+    check_true('migrate-renamed', not legacy.exists() and migrated.exists())
+    check_true('migrate-content-refreshed',
+               '旧版内容' not in migrated.read_text(encoding='utf-8') and
+               count_calls(migrated.read_text(encoding='utf-8')) == 2)
+    check_true('migrate-log', '[MIGRATE]' in (r.stdout or ''))
+
+    # 6b. 新旧并存 → 保留新名，WARN 提示旧名可删
+    legacy.write_text('旧版内容', encoding='utf-8')
+    r = subprocess.run([sys.executable, str(GEN), str(src), '--mode', 'normal'],
+                       capture_output=True, text=True, encoding='utf-8', errors='replace')
+    check('migrate-coexist-rc', r.returncode, 0)
+    check_true('migrate-coexist-keep', legacy.exists() and migrated.exists())
+    check_true('migrate-coexist-warn', '已被' in ((r.stderr or '') + (r.stdout or '')))
+
 print()
 if fails:
     print(f'{len(fails)} FAILED: {fails}')
