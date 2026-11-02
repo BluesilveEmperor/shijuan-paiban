@@ -11,8 +11,8 @@
 #  4. 改规则只改本文件，然后运行：python scripts/gen_rules_doc.py
 # ============================================================================
 
-version: 2
-updated: "2026-11-01"
+version: 3
+updated: "2026-11-02"
 
 scopes:
   structure: 结构约束
@@ -22,6 +22,7 @@ scopes:
   spacing: 间距与页数
   answer: 答题空间
   extraction: 输入提取
+  artifacts: 产物规范
 
 rules:
 
@@ -294,15 +295,11 @@ rules:
     title: 图片目录命名
     type: table
     rows:
-      - k: DOCX 答案文档
-        v: "Images-<文件名去扩展名>"
-      - k: DOCX 试题文档
-        v: media
-      - k: PDF 输入
-        v: "Images-<PDF文件名去扩展名>"
+      - k: 任意输入（DOCX / PDF，试题或答案）
+        v: "Images-<文件名去扩展名>（与 ARTIFACT-003 一致，试题不再用 media）"
     severity: error
     check: graphicspath_match
-    evidence: graphicspath 与目录名不一致时图片全部丢失且不报错
+    evidence: graphicspath 与目录名不一致时图片全部丢失且不报错；统一 Images-<卷名> 与题库既有约定对齐
 
   - id: EXTRACT-002
     scope: extraction
@@ -319,3 +316,62 @@ rules:
     severity: warning
     check: no_wmf_remaining
     evidence: xelatex 不直接支持 WMF，残留 WMF 会导致编译失败
+
+  # ══════════════════════ 产物规范 ══════════════════════
+  - id: ARTIFACT-001
+    scope: artifacts
+    title: 试题卷标准产物集
+    type: table
+    rows:
+      - k: 源文件
+        v: "<卷名>.tex / .pdf（无答题空间紧凑版，生成基准）"
+      - k: 学生版
+        v: "<卷名>-学生版.tex / .pdf（有答题空间）"
+      - k: 教师版
+        v: "<卷名>-教师版.tex / .pdf + <卷名>-教师版-考试.tex / .pdf"
+      - k: 答题卡
+        v: "<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf"
+      - k: 图片文件夹
+        v: "Images-<卷名>/"
+      - k: 编译脚本
+        v: build.py
+    severity: error
+    check: null
+    evidence: 用户确认的五件套需求；与题库每卷 Images-* + build.py 的既有整理约定一致；答案文档（文件名含答案）只出 tex/.pdf + Images + build.py 三件
+
+  - id: ARTIFACT-002
+    scope: artifacts
+    title: 产物命名后缀表
+    type: table
+    rows:
+      - k: 学生版（有答题空间）
+        v: "-学生版"
+      - k: 教师版（normal，题下 6em）
+        v: "-教师版"
+      - k: 教师版-考试（每题独占一页）
+        v: "-教师版-考试"
+      - k: 答题卡 A4
+        v: "-答题卡-A4"
+      - k: 答题卡 A3
+        v: "-答题卡-A3"
+    forbidden:
+      - "-答题空间（旧名，由 -学生版 取代，gen_teacher 自动迁移）"
+    severity: error
+    check: null
+    evidence: 用户要求学生版/教师版/答题卡命名对称可辨；旧名 -答题空间 与 -教师版 系列不对称
+
+  - id: ARTIFACT-003
+    scope: artifacts
+    title: 图片文件夹统一命名
+    value: "Images-<卷名>（试题与答案一致，替代旧约定 media）"
+    severity: error
+    check: null
+    evidence: 题库每卷 Images-* 目录的既有约定；试题用 media 与答案用 Images-* 双标准增加记忆负担
+
+  - id: ARTIFACT-004
+    scope: artifacts
+    title: 收尾与部署
+    value: "每个含 tex 的试卷目录部署通用版 build.py；排版完成后用 scripts/finalize_paper.py 一键补齐产物集、编译并清理 preview-*.png"
+    severity: warning
+    check: null
+    evidence: finalize_paper.py 端到端实测（生成六件 tex、部署 build.py、6/6 编译成功、清单全 OK）

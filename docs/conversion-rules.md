@@ -77,11 +77,20 @@
 
 | ID | 规则 | 取值 | 说明 |
 |----|------|------|------|
-| `EXTRACT-001` | 图片目录命名 | DOCX 答案文档：Images-<文件名去扩展名><br>DOCX 试题文档：media<br>PDF 输入：Images-<PDF文件名去扩展名> | graphicspath 与目录名不一致时图片全部丢失且不报错 |
+| `EXTRACT-001` | 图片目录命名 | 任意输入（DOCX / PDF，试题或答案）：Images-<文件名去扩展名>（与 ARTIFACT-003 一致，试题不再用 media） | graphicspath 与目录名不一致时图片全部丢失且不报错；统一 Images-<卷名> 与题库既有约定对齐 |
 | `EXTRACT-002` | 扫描件判定 | pandoc 输出仅含 ![](media/imageN.png) 且无正文 → 走 MinerU OCR | 扫描件 DOCX 用 pandoc 只能拿到整页图片，提取不到任何文字 |
 | `EXTRACT-003` | WMF 转 PNG | Pillow 渲染，600 DPI | xelatex 不直接支持 WMF，残留 WMF 会导致编译失败 |
 
-> 规则版本 v2，更新于 2026-11-01。修改规则请编辑 `rules/layout.yaml` 后运行 `python scripts/gen_rules_doc.py`。
+### 产物规范
+
+| ID | 规则 | 取值 | 说明 |
+|----|------|------|------|
+| `ARTIFACT-001` | 试题卷标准产物集 | 源文件：<卷名>.tex / .pdf（无答题空间紧凑版，生成基准）<br>学生版：<卷名>-学生版.tex / .pdf（有答题空间）<br>教师版：<卷名>-教师版.tex / .pdf + <卷名>-教师版-考试.tex / .pdf<br>答题卡：<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py | 用户确认的五件套需求；与题库每卷 Images-* + build.py 的既有整理约定一致；答案文档（文件名含答案）只出 tex/.pdf + Images + build.py 三件 |
+| `ARTIFACT-002` | 产物命名后缀表 | 学生版（有答题空间）：-学生版<br>教师版（normal，题下 6em）：-教师版<br>教师版-考试（每题独占一页）：-教师版-考试<br>答题卡 A4：-答题卡-A4<br>答题卡 A3：-答题卡-A3 | 禁止：-答题空间（旧名，由 -学生版 取代，gen_teacher 自动迁移）<br>用户要求学生版/教师版/答题卡命名对称可辨；旧名 -答题空间 与 -教师版 系列不对称 |
+| `ARTIFACT-003` | 图片文件夹统一命名 | Images-<卷名>（试题与答案一致，替代旧约定 media） | 题库每卷 Images-* 目录的既有约定；试题用 media 与答案用 Images-* 双标准增加记忆负担 |
+| `ARTIFACT-004` | 收尾与部署 | 每个含 tex 的试卷目录部署通用版 build.py；排版完成后用 scripts/finalize_paper.py 一键补齐产物集、编译并清理 preview-*.png | finalize_paper.py 端到端实测（生成六件 tex、部署 build.py、6/6 编译成功、清单全 OK） |
+
+> 规则版本 v3，更新于 2026-11-02。修改规则请编辑 `rules/layout.yaml` 后运行 `python scripts/gen_rules_doc.py`。
 <!-- RULES:END full -->
 
 ---
