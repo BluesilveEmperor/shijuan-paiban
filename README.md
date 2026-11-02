@@ -15,6 +15,7 @@
 - **三段式试题匹配**：答案文档自动查找同目录对应的 `.tex` 试题文件（`match_paper.py`）
 - **教师版生成**：`gen_teacher.py` 支持 compact / normal / exam 三模式，环境扫描定位，不依赖 itemsep 取值
 - **答题卡生成**：从排好的试卷 `.tex` 自动识别题量与分值，生成 A4 / A3 答题卡（`scripts/gen_answer_sheet.py`）；按分值比例自动分页分栏，带考生号填涂表、注意事项、黑白模式
+- **标准产物集**：每份试题卷输出统一五件套——源文件 / `-学生版`（有答题空间）/ `-教师版` + `-教师版-考试` / `-答题卡-A4` + `-答题卡-A3` / `Images-<卷名>` + `build.py`（`ARTIFACT-001~004`）；`finalize_paper.py` 一键收尾：补齐产物 → 部署 `build.py` → 编译清理 → 产物清单校验，幂等可重跑
 - **错题卷支持**：自动解析错题文件（图片/PDF），按难度排序排版，含错因分析/正确解法/变式
 - **周练卷支持**：参数化生成周练卷，含学生版/教师版/每题一页版
 - **图片智能处理**：8 种场景自动选择（`IMG-SCENE-001`）、并排限高、`\graphicspath` 自动对齐
@@ -22,7 +23,7 @@
 - **环境检查**：执行前自动检查 XeLaTeX/pandoc/Python/MinerU 等环境，缺少时引导配置
 - **MD→TEX 批量流水线**：`md2tex.py` / `md2ans.py` / `batch_convert.py` / `convert_new_papers.py` 等脚本批量把 MD 中间产物转换为试题/答案 tex
 - **题库维护**：维护 `{题库根}`（环境变量 `SHIJUAN_LIBRARY`，默认 `D:\Music\试题加题库`）；每个含 tex 文件夹部署一键编译 `build.py`（通用版编全部 tex ×2；书稿版只编 main.tex ×3）
-- **回归测试**：`tests/` 下 5 套测试（渲染器排版决策、教师版三模式、md2tex 清洗规则、答题卡），`python tests/run_all.py` 一键跑完
+- **回归测试**：`tests/` 下 6 套测试（渲染器排版决策、教师版三模式、md2tex 清洗规则、答题卡、一键收尾），`python tests/run_all.py` 一键跑完
 
 ## 快速开始
 
@@ -144,8 +145,7 @@ echo "token: '你的API密钥'" > ~/.mineru/config.yaml
 
 | 场景 | 处理方式 |
 |------|---------|
-| 试题文档图片 | 解包到 `media/` 目录 |
-| 答案文档 PNG | 复制到 `Images-{文件名}/` 目录 |
+| 任意文档图片（试题或答案） | 解包到 `Images-{文件名}/` 目录（`ARTIFACT-003`，试题不再用 `media`） |
 | 答案文档 WMF | 批量转 PNG（600 DPI），保存到 `Images-{文件名}/` |
 | 列表环境外图片 | `wrapfigure` 右侧环绕 |
 | 列表环境内图片 | `minipage` 左右并排 |
@@ -289,6 +289,8 @@ shijuan-paiban/
 │   ├── run_all.py              # 一键跑全部
 │   ├── test_render.py          # 渲染器排版决策单测
 │   ├── test_teacher.py         # 教师版三模式 + 答题空间不重复插入
+│   ├── test_answer_sheet.py    # 答题卡生成单测
+│   ├── test_finalize.py        # finalize_paper 一键收尾单测
 │   ├── test_fixed.py / test_round2.py / test_round3.py   # md2tex 回归
 ├── templates/                  # 15 个 .tex 模板 + manifest.json
 └── scripts/
@@ -297,6 +299,7 @@ shijuan-paiban/
     ├── eval_run.py             # ★ 评估执行器（编译+验证+打分）
     ├── evolve.py               # ★ 失败归因 + 规则候选 + A/B 门禁
     ├── gen_rules_doc.py        # ★ 从 layout.yaml 生成文档规则表
+    ├── finalize_paper.py       # ★ 一键收尾（补齐标准产物集 + 部署 build.py + 编译清理 + 清单校验）
     ├── gen_teacher.py          # 教师版生成（compact/normal/exam）
     ├── extract_docx.py         # 内置 DOCX 解包（替代外部 docx skill）
     ├── match_paper.py          # 答案文档三段式匹配试题 tex

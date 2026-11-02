@@ -69,16 +69,37 @@ flowchart TD
 
 ## 关键约定：图片目录命名
 
-**图片目录名自动推导规则**（用户可覆盖）：
+**图片目录名自动推导规则**（用户可覆盖，`EXTRACT-001` / `ARTIFACT-003`）：
 
-**DOCX 输入时：**
-- **答案文档**（文件名含"答案"）：取 DOCX 文件名去掉 `.docx`，加前缀 `Images-`
-- **试题文档**（不含"答案"）：固定为 `media`
-
-**PDF 输入时：**
-- 图片目录名取 PDF 文件名去掉 `.pdf`，加前缀 `Images-`
+- **任意输入（DOCX / PDF，试题或答案）**：取文件名去掉扩展名，加前缀 `Images-`
+  - 例：`2026新高考模拟.docx` → `Images-2026新高考模拟/`（试题不再用 `media`）
 
 **在后续所有步骤中，用 `{图片目录}` 代表推导出的目录名。**
+
+## 标准产物集（规范化输出）
+
+每份试卷排版完成后，输出目录应形成统一的标准产物集（`ARTIFACT-001` / `ARTIFACT-002`）：
+
+| 产物 | 文件名 | 说明 |
+|------|--------|------|
+| 源文件 | `<卷名>.tex` / `.pdf` | 无答题空间紧凑版，教师版/答题卡的生成基准 |
+| 学生版 | `<卷名>-学生版.tex` / `.pdf` | **有答题空间**（`\answern`） |
+| 教师版 | `<卷名>-教师版.tex` / `.pdf` | normal 模式，题下 6em 答题空间 |
+| 教师版-考试 | `<卷名>-教师版-考试.tex` / `.pdf` | exam 模式，每题独占一页 |
+| 答题卡 | `<卷名>-答题卡-A4.tex` / `.pdf` + `-A3` | A4 / A3 两种版式 |
+| 图片文件夹 | `Images-<卷名>/` | 见上文命名约定 |
+| 编译脚本 | `build.py` | 一键编译（通用版母本 `{SKILL_DIR}/scripts/build.py`） |
+
+答案文档（文件名含"答案"）只出三件：`<卷名>.tex/.pdf` + `Images-<卷名>/` + `build.py`。
+
+**一键收尾**（生成/补齐上述产物集 → 部署 build.py → 编译清理 → 打印产物清单）：
+
+```bash
+python "{SKILL_DIR}/scripts/finalize_paper.py "<排好的试卷.tex>"
+# 可选：--force 重新生成 / --skip-answersheet / --skip-exam；传目录则处理目录内全部源 .tex
+```
+
+旧名 `<卷名>-答题空间.tex` 由 `-学生版` 取代，`gen_teacher.py` / `finalize_paper.py` 会自动迁移。
 
 ## 路径约定
 
@@ -227,14 +248,9 @@ PYTHONIOENCODING=utf-8 python "$MATH_EXTRACT" "<pdf路径>" --output-dir ./math-
 
 #### 2-A. DOCX 输入（解包取图片）
 
-**试题文档（无"答案"字样）：**
+**任意文档（试题或答案，目录名默认 `Images-<文件名去扩展名>`，`ARTIFACT-003`）：**
 ```bash
-python "{SKILL_DIR}/scripts/extract_docx.py" "<docx路径>" "<docx所在目录>" --images-dir media
-```
-
-**答案文档（文件名含"答案"）：**
-```bash
-# 推导图片目录名：Images-<文件名去扩展名>
+# 推导图片目录名：Images-<文件名去扩展名>（省略 --images-dir 即用该默认值）
 img_dir="Images-$(basename "<docx路径>" .docx)"
 
 # 解包：PNG 直接复制，WMF 自动批量转 600 DPI PNG
@@ -337,9 +353,13 @@ python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "学生版.tex" --valid
 | `ANS-002` | 答题空间插入位置 | 每道解答题 \item 内容结束后；最后一道解答题不插入 |
 | `ANS-003` | 答题空间禁止线条 | 仅用 \vspace 留白 |
 | `ANS-004` | 教师版三种模式 | compact：itemsep 0.5em，题下 2em，文件名后缀 -教师版-紧凑<br>normal（默认）：itemsep 1.5em，题下 6em，文件名后缀 -教师版<br>exam：Q18 起每题独占一页，移除 itemsep，文件名后缀 -教师版-考试 |
-| `EXTRACT-001` | 图片目录命名 | DOCX 答案文档：Images-<文件名去扩展名><br>DOCX 试题文档：media<br>PDF 输入：Images-<PDF文件名去扩展名> |
+| `EXTRACT-001` | 图片目录命名 | 任意输入（DOCX / PDF，试题或答案）：Images-<文件名去扩展名>（与 ARTIFACT-003 一致，试题不再用 media） |
 | `EXTRACT-002` | 扫描件判定 | pandoc 输出仅含 ![](media/imageN.png) 且无正文 → 走 MinerU OCR |
 | `EXTRACT-003` | WMF 转 PNG | Pillow 渲染，600 DPI |
+| `ARTIFACT-001` | 试题卷标准产物集 | 源文件：<卷名>.tex / .pdf（无答题空间紧凑版，生成基准）<br>学生版：<卷名>-学生版.tex / .pdf（有答题空间）<br>教师版：<卷名>-教师版.tex / .pdf + <卷名>-教师版-考试.tex / .pdf<br>答题卡：<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py |
+| `ARTIFACT-002` | 产物命名后缀表 | 学生版（有答题空间）：-学生版<br>教师版（normal，题下 6em）：-教师版<br>教师版-考试（每题独占一页）：-教师版-考试<br>答题卡 A4：-答题卡-A4<br>答题卡 A3：-答题卡-A3 |
+| `ARTIFACT-003` | 图片文件夹统一命名 | Images-<卷名>（试题与答案一致，替代旧约定 media） |
+| `ARTIFACT-004` | 收尾与部署 | 每个含 tex 的试卷目录部署通用版 build.py；排版完成后用 scripts/finalize_paper.py 一键补齐产物集、编译并清理 preview-*.png |
 
 > 完整规则（含禁止项与证据）见 [docs/conversion-rules.md](docs/conversion-rules.md)，机器可读源见 [rules/layout.yaml](rules/layout.yaml)。
 <!-- RULES:END index -->
@@ -524,11 +544,13 @@ python "{SKILL_DIR}/scripts/gen_teacher.py" "学生版.tex" --mode exam
 
 产出（与输入同目录）：
 
-| 模式 | 教师版文件名 | 学生版答题空间 |
-|------|-------------|---------------|
-| compact | `<stem>-教师版-紧凑.tex` | `<stem>-答题空间.tex` |
+| 模式 | 教师版文件名 | 学生版（有答题空间） |
+|------|-------------|---------------------|
+| compact | `<stem>-教师版-紧凑.tex` | `<stem>-学生版.tex` |
 | normal | `<stem>-教师版.tex` | 同上 |
 | exam | `<stem>-教师版-考试.tex` | 同上 |
+
+旧名 `<stem>-答题空间.tex` 已废弃：`gen_teacher.py` 检测到旧名文件且新名不存在时自动迁移（`ARTIFACT-002`）。
 
 脚本用**环境扫描**定位解答题块（`\begin{examenum}[start=N, ...]` 配对其 `\end{examenum}`），
 不依赖 `itemsep` 的具体取值——v3 内联脚本用 `content.find("[start=15, itemsep=2.5cm]")` 定位，
@@ -610,9 +632,9 @@ python scripts/gen_answer_sheet.py "<试卷.tex>"
 **输出物**（与试卷同目录）：
 
 ```
-<卷名>-答题卡.tex / .pdf        A4，4 个版面
-<卷名>-答题卡-A3.tex / .pdf     A3 横向，2 张纸（--layout a3/both 时）
-answersheet.sty                 宏包副本，供日后单独重编
+<卷名>-答题卡-A4.tex / .pdf    A4，4 个版面（显式 -A4 后缀，ARTIFACT-002）
+<卷名>-答题卡-A3.tex / .pdf    A3 横向，2 张纸（--layout a3/both 时）
+answersheet.sty                宏包副本，供日后单独重编
 ```
 
 **⚠️ 答题卡必须 xelatex 连编两次**（模板用 `remember picture` 定位，一次页码与坐标不准）。
@@ -685,16 +707,25 @@ python "{SKILL_DIR}/scripts/auto_adjust.py" "文件名.tex" --target-pages 4
 ```
 按 `PAGE-002` 的优先级依次调整 itemsep → linespread → margin。
 
-### 步骤 7：清理
+### 步骤 7：清理与收尾
+
+**推荐：一键收尾**（自动补齐标准产物集 → 部署 build.py → 编译全部 tex ×2 → 清理中间文件与 `preview-*.png` → 打印产物清单校验，见「标准产物集」章节）：
+
+```bash
+python "{SKILL_DIR}/scripts/finalize_paper.py "<文件名.tex>"
+```
+
+**兜底（手动清理）：**
 ```bash
 rm -rf "<临时目录>"
 rm -f *.aux *.log *.out *.toc *.synctex.gz   # 所有版本
 ```
 
-**保留：**
-- 试题文档：`.tex` 源文件（学生版 + 教师版 + 答题空间版）、`.pdf`、图片
+**保留（即标准产物集，`ARTIFACT-001`）：**
+- 试题文档：源文件 `<卷名>.tex/.pdf`、`<卷名>-学生版`、`<卷名>-教师版`、`<卷名>-教师版-考试`（tex + pdf）、图片
 - 答案文档：`.tex` 源文件、`.pdf`、`{图片目录}/`
-- 答题卡：`<卷名>-答题卡.tex/.pdf`（及 `-A3` 版）、`answersheet.sty`
+- 答题卡：`<卷名>-答题卡-A4.tex/.pdf` 与 `-A3` 版、`answersheet.sty`
+- 每卷目录：`build.py`
 
 ### 步骤 8：日志采集与上传
 
@@ -797,7 +828,7 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | `split_combined.py` / `split_xj3.py` | 拆分合并卷 / 新课标卷 |
 | `finish_papers.py` | 批量收尾（一次性修复脚本已清理，规则前移到 md2tex.py） |
 
-**回归测试**：`python tests/run_all.py` 跑全部（`test_render.py` 渲染器排版决策 + `test_teacher.py` 教师版三模式 + `test_answer_sheet.py` 答题卡 + `test_fixed/round2/round3` md2tex 回归）。
+**回归测试**：`python tests/run_all.py` 跑全部（`test_render.py` 渲染器排版决策 + `test_teacher.py` 教师版三模式 + `test_answer_sheet.py` 答题卡 + `test_finalize.py` 一键收尾 + `test_fixed/round2/round3` md2tex 回归）。
 端到端用例依赖题库样本，缺少时自动跳过（可用 `SHIJUAN_LIBRARY` 指定题库根目录）。改流水线后必须全部通过。
 
 ### 整理规范（历次会话沉淀）
