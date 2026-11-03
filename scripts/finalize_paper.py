@@ -4,10 +4,8 @@
 
 标准产物集（试题卷，ARTIFACT-001 / ARTIFACT-002）::
 
-    <卷名>.tex / .pdf                源文件（无答题空间紧凑版）
-    <卷名>-学生版.tex / .pdf         有答题空间（\\answern）
-    <卷名>-教师版.tex / .pdf         normal 模式，题下 6em 答题空间
-    <卷名>-教师版-考试.tex / .pdf    exam 模式，每题独占一页
+    <卷名>.tex / .pdf                试卷（唯一版本，含 \\answern 答题空间；
+                                      学生版/教师版已合并，后缀废止）
     <卷名>-答题卡-A4.tex / .pdf
     <卷名>-答题卡-A3.tex / .pdf
     Images-<卷名>/                    图片文件夹（无图时允许缺席）
@@ -15,24 +13,22 @@
     answersheet.sty                  答题卡宏包副本（随答题卡生成）
 
 答案文档（文件名含「答案」）只出三件：<卷名>.tex/.pdf + Images-<卷名>/
-+ build.py，不生成教师版/答题卡。
++ build.py，不生成答题卡。
 
 用法::
 
     python scripts/finalize_paper.py 试卷.tex
-    python scripts/finalize_paper.py 试卷.tex --skip-answersheet --skip-exam
+    python scripts/finalize_paper.py 试卷.tex --skip-answersheet
     python scripts/finalize_paper.py 试卷目录            # 处理目录内全部源 .tex
-    python scripts/finalize_paper.py 试卷.tex --force    # 产物已存在也重新生成
+    python scripts/finalize_paper.py 试卷.tex --force    # 答题卡已存在也重新生成
 
 流程（幂等，缺什么补什么）::
 
     1. 识别答案文档 → 仅部署 + 编译 + 校验
-    2. gen_teacher.py --mode normal  → -教师版.tex + -学生版.tex
-    3. gen_teacher.py --mode exam    → -教师版-考试.tex
-    4. gen_answer_sheet.py --layout both --no-compile → 答题卡 A4 + A3
-    5. 部署 build.py（母本 scripts/build.py，已存在则不动）
-    6. 运行 build.py：编译全部 tex ×2，回拷 PDF，清理中间文件
-    7. 清理 preview-*.png；逐项校验产物集，打印清单
+    2. gen_answer_sheet.py --layout both --no-compile → 答题卡 A4 + A3
+    3. 部署 build.py（母本 scripts/build.py，已存在则不动）
+    4. 运行 build.py：编译全部 tex ×2，回拷 PDF，清理中间文件
+    5. 清理 preview-*.png；逐项校验产物集，打印清单
 
 退出码：0 全部产物齐全；1 有产物缺失或生成失败。
 """
@@ -45,7 +41,6 @@ import sys
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
-GEN_TEACHER = SCRIPTS / "gen_teacher.py"
 GEN_SHEET = SCRIPTS / "gen_answer_sheet.py"
 BUILD_MASTER = SCRIPTS / "build.py"
 
@@ -83,37 +78,16 @@ def clean_previews(target_dir):
     for png in target_dir.glob("preview-*.png"):
         png.unlink()
 
-def process_source(src, force=False, skip_answersheet=False, skip_exam=False):
-    """对单个源 .tex 执行收尾，返回缺失产物数。"""
+def process_source(src, force=False, skip_answersheet=False):
+    """对单个试卷 .tex 执行收尾，返回缺失产物数。"""
     d = src.parent
     stem = src.stem
     is_answer = is_answer_doc(stem)
     missing = 0
 
-    teacher_ok = exam_ok = sheet_ok = True
+    sheet_ok = True
 
     if not is_answer:
-        # 教师版（normal）+ 学生版（有答题空间）
-        t_norm = d / f"{stem}-教师版.tex"
-        s_ver = d / f"{stem}-学生版.tex"
-        if force or not (t_norm.exists() and s_ver.exists()):
-            rc = run_py([str(GEN_TEACHER), str(src), "--mode", "normal"], d)
-            if rc != 0:
-                print(f"[WARN] 教师版/学生版生成失败（rc={rc}），相关产物不纳入校验",
-                      file=sys.stderr)
-                teacher_ok = False
-
-        # 教师版-考试（exam）
-        if not skip_exam:
-            t_exam = d / f"{stem}-教师版-考试.tex"
-            if force or not t_exam.exists():
-                rc = run_py([str(GEN_TEACHER), str(src),
-                             "--mode", "exam", "--no-student"], d)
-                if rc != 0:
-                    print(f"[WARN] 教师版-考试生成失败（rc={rc}），相关产物不纳入校验",
-                          file=sys.stderr)
-                    exam_ok = False
-
         # 答题卡 A4 + A3
         if not skip_answersheet:
             a4 = d / f"{stem}-答题卡-A4.tex"
@@ -127,7 +101,7 @@ def process_source(src, force=False, skip_answersheet=False, skip_exam=False):
                     print("[WARN] 答题卡目标文件疑似手工版，已保留不覆盖"
                           "（可加 --force 强制替换）", file=sys.stderr)
                 elif rc == 4:
-                    print("[WARN] 答题卡生成被拒绝（非学生版试题输入），"
+                    print("[WARN] 答题卡生成被拒绝（非试卷输入），"
                           "相关产物不纳入校验", file=sys.stderr)
                     sheet_ok = False
                 elif rc != 0:
@@ -148,15 +122,9 @@ def process_source(src, force=False, skip_answersheet=False, skip_exam=False):
 
     # 产物校验清单
     required = [src.name, f"{stem}.pdf", "build.py"]
-    if not is_answer:
-        if teacher_ok:
-            required += [f"{stem}-学生版.tex", f"{stem}-学生版.pdf",
-                         f"{stem}-教师版.tex", f"{stem}-教师版.pdf"]
-        if teacher_ok and not skip_exam and exam_ok:
-            required += [f"{stem}-教师版-考试.tex", f"{stem}-教师版-考试.pdf"]
-        if not skip_answersheet and sheet_ok:
-            required += [f"{stem}-答题卡-A4.tex", f"{stem}-答题卡-A4.pdf",
-                         f"{stem}-答题卡-A3.tex", f"{stem}-答题卡-A3.pdf"]
+    if not is_answer and not skip_answersheet and sheet_ok:
+        required += [f"{stem}-答题卡-A4.tex", f"{stem}-答题卡-A4.pdf",
+                     f"{stem}-答题卡-A3.tex", f"{stem}-答题卡-A3.pdf"]
 
     tag = "（答案文档）" if is_answer else ""
     print(f"\n== 产物清单 [{src.name}] {tag}==")
@@ -178,11 +146,10 @@ def process_source(src, force=False, skip_answersheet=False, skip_exam=False):
 def main():
     ap = argparse.ArgumentParser(
         description="排版收尾：按 ARTIFACT 规范一键补齐标准产物集并校验")
-    ap.add_argument("target", help="源 .tex 文件或试卷目录")
+    ap.add_argument("target", help="试卷 .tex 文件或试卷目录")
     ap.add_argument("--force", action="store_true",
-                    help="产物已存在也重新生成（答题卡会覆盖手工版）")
+                    help="答题卡已存在也重新生成（会覆盖手工版）")
     ap.add_argument("--skip-answersheet", action="store_true", help="跳过答题卡")
-    ap.add_argument("--skip-exam", action="store_true", help="跳过教师版-考试")
     args = ap.parse_args()
 
     target = Path(args.target)
@@ -190,7 +157,7 @@ def main():
         sources = [p for p in sorted(target.glob("*.tex"))
                    if not is_derived(p.stem)]
         if not sources:
-            print(f"[WARN] 目录内没有可处理的源 .tex: {target}", file=sys.stderr)
+            print(f"[WARN] 目录内没有可处理的试卷 .tex: {target}", file=sys.stderr)
             return 0
     else:
         if not target.exists():
@@ -202,14 +169,13 @@ def main():
     failed_sources = []
     for src in sources:
         missing = process_source(src, force=args.force,
-                                 skip_answersheet=args.skip_answersheet,
-                                 skip_exam=args.skip_exam)
+                                 skip_answersheet=args.skip_answersheet)
         if missing:
             total_missing += missing
             failed_sources.append(src.name)
 
     if failed_sources:
-        print(f"\n[ERROR] {len(failed_sources)} 个源文件产物缺失："
+        print(f"\n[ERROR] {len(failed_sources)} 个试卷产物缺失："
               f"{', '.join(failed_sources)}", file=sys.stderr)
         return 1
 

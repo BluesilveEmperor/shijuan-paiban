@@ -37,7 +37,7 @@ def check(name):
 
 
 LIST_ENVS = {"enumerate", "examenum", "itemize", "description"}
-ANSWER_SPACE_CMDS = ("\\answerc", "\\answern", "\\answere")
+ANSWER_SPACE_CMDS = ("\\answern",)
 IMAGE_RE = re.compile(r"\\includegraphics(?:\[([^\]]*)\])?\{([^}]*)\}")
 WIDTH_RE = re.compile(r"width\s*=\s*([\d.]+)\s*\\(?:textwidth|linewidth)")
 HEIGHT_RE = re.compile(r"height\s*=\s*[\d.]+\s*(?:cm|mm|in|em|pt)")
@@ -388,19 +388,6 @@ class TexValidator:
                 "message": f"页数 {pages} 符合期望",
             })
 
-    @check("teacher_no_itemsep")
-    def _check_teacher_no_itemsep(self):
-        if "教师版" not in self.tex_path.name:
-            return
-        for i, line in enumerate(self.lines, 1):
-            if re.search(r"\\begin\{examenum\}\[[^\]]*itemsep", line):
-                self.warn(
-                    "PAGE-004", "teacher_no_itemsep",
-                    "教师版仍保留 itemsep（页数会失控）",
-                    line_no=i,
-                    suggestion="教师版移除 itemsep，用分页/\\vspace 替代",
-                )
-
     @check("answer_space")
     def _check_answer_space(self):
         if self.is_answer:
@@ -410,8 +397,8 @@ class TexValidator:
         if long_answer and total == 0:
             self.warn(
                 "ANS-001", "answer_space",
-                "学生版解答题未插入任何答题空间命令",
-                suggestion="按模式插入 \\answerc / \\answern / \\answere",
+                "解答题未插入任何答题空间命令",
+                suggestion="插入 \\answern",
             )
         self.info.append({
             "check": "answer_space",
@@ -443,7 +430,7 @@ class TexValidator:
         if self.is_answer:
             return
         for i, line in enumerate(self.lines, 1):
-            if any(c in line for c in ("\\answerc", "\\answern", "\\answere")):
+            if "\\answern" in line:
                 continue
             if re.search(r"\\(rule|fbox)\b", line) and "newcommand" not in line:
                 self.warn(

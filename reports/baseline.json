@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-01 11:01:01",
+  "timestamp": "2026-11-03 22:55:55",
   "total_score": 100.0,
   "case_count": 7,
   "hard_fail_count": 0,
@@ -405,7 +405,7 @@
       "compile_ok": true,
       "pages": 1,
       "expected_pages": 1,
-      "overfull": 2,
+      "overfull": 0,
       "errors": [],
       "hard_failures": [],
       "validator": {
@@ -430,7 +430,7 @@
         {
           "name": "tasks_cols",
           "passed": true,
-          "detail": "期望 [2, 4, 4]，实际 [2, 4, 4]",
+          "detail": "期望 [1, 4, 4]，实际 [1, 4, 4]",
           "rule_id": "TASKS-COL-001"
         },
         {
@@ -467,7 +467,7 @@
         {
           "name": "overfull",
           "passed": true,
-          "detail": "Overfull 2 处（阈值 2）"
+          "detail": "Overfull 0 处（阈值 2）"
         }
       ],
       "struct_ratio": 1.0,

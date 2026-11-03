@@ -40,11 +40,9 @@ flowchart TD
     G --> H
     H --> I[4. 写 paper.json → render_tex.py 渲染]
     I --> J{答案文档?}
-    J -- 是 --> K[5. 跳过教师版生成]
-    J -- 否 --> L[5. gen_teacher.py → compact/normal/exam]
+    J -- 是 --> K[5. 跳过答题卡生成]
     J -- 否 --> LB[5-B. gen_answer_sheet.py → 答题卡 A4/A3]
     K --> M[6. 编译 ×2 → validate_tex → visual_verify]
-    L --> M
     LB --> M
     M --> M2{页数达标?}
     M2 -- 否 --> M3[auto_adjust.py 迭代]
@@ -82,10 +80,7 @@ flowchart TD
 
 | 产物 | 文件名 | 说明 |
 |------|--------|------|
-| 源文件 | `<卷名>.tex` / `.pdf` | 无答题空间紧凑版，教师版/答题卡的生成基准 |
-| 学生版 | `<卷名>-学生版.tex` / `.pdf` | **有答题空间**（`\answern`） |
-| 教师版 | `<卷名>-教师版.tex` / `.pdf` | normal 模式，题下 6em 答题空间 |
-| 教师版-考试 | `<卷名>-教师版-考试.tex` / `.pdf` | exam 模式，每题独占一页 |
+| 试卷 | `<卷名>.tex` / `.pdf` | **唯一版本**（学生版/教师版已合并），含 `\answern` 答题空间 |
 | 答题卡 | `<卷名>-答题卡-A4.tex` / `.pdf` + `-A3` | A4 / A3 两种版式 |
 | 图片文件夹 | `Images-<卷名>/` | 见上文命名约定 |
 | 编译脚本 | `build.py` | 一键编译（通用版母本 `{SKILL_DIR}/scripts/build.py`） |
@@ -96,10 +91,8 @@ flowchart TD
 
 ```bash
 python "{SKILL_DIR}/scripts/finalize_paper.py "<排好的试卷.tex>"
-# 可选：--force 重新生成 / --skip-answersheet / --skip-exam；传目录则处理目录内全部源 .tex
+# 可选：--force 重新生成 / --skip-answersheet；传目录则处理目录内全部试卷 .tex
 ```
-
-旧名 `<卷名>-答题空间.tex` 由 `-学生版` 取代，`gen_teacher.py` / `finalize_paper.py` 会自动迁移。
 
 ## 路径约定
 
@@ -303,10 +296,10 @@ ls ./math-output/  # 确认 .md 和图片文件存在
 python "{SKILL_DIR}/scripts/render_tex.py" --schema
 
 # 2. 渲染（脚本自动决定编号 / tasks 列数 / 图片场景 / 答题空间 / itemsep）
-python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "学生版.tex"
+python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "试卷.tex"
 
 # 3. 渲染后立即验证
-python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "学生版.tex" --validate
+python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "试卷.tex" --validate
 ```
 
 无法用 IR 表达的结构（复杂 TikZ、特殊表格）用 `raw_tex` 逃生舱，**不要**为了个别题目放弃整个 IR。
@@ -345,19 +338,17 @@ python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "学生版.tex" --valid
 | `TASKS-COL-003` | 宽度兜底——放不下就退列 | 意图列数的单列宽度放不下最长选项 → 退到 2 列<br>2 列仍放不下 → 退到 1 列（纯文字选项允许） |
 | `ENUM-START-001` | 解答题起始编号 | start = 单选题数 + 多选题数 + 填空题数 + 1 |
 | `ENUM-RESUME-001` | 答案文档编号衔接 | 第一个 enumerate 不带 start，后续统一用 [resume] |
-| `PAGE-001` | 学生版页数 | 严格匹配试卷标注页数 |
+| `PAGE-001` | 试卷页数 | 严格匹配试卷标注页数 |
 | `PAGE-002` | 超页压缩手段（按优先级） | 减小解答题 itemsep；导言区加 \linespread{1.05}\selectfont；最后手段：调整 margin |
 | `PAGE-003` | 解答题 itemsep 经验值 | 4 页 3 题：2.0 ~ 2.5cm<br>4 页 4 题：1.8 ~ 2.2cm<br>4 页 5 题：1.5 ~ 2.0cm<br>4 页 6 题：1.2 ~ 1.5cm<br>itemsep < 1.0cm 仍超页：降 linespread 至 0.95 |
-| `PAGE-004` | 教师版移除 itemsep | 教师版不保留 itemsep（分页已替代间隙作用） |
-| `ANS-001` | 答题空间命令与留白量 | \answerc：1.5em，compact 模式（自学）<br>\answern：3em，normal 模式（作业，默认）<br>\answere：5em，exam 模式（测试） |
+| `ANS-001` | 答题空间命令与留白量 | \answern：3em，normal 模式（作业，默认） |
 | `ANS-002` | 答题空间插入位置 | 每道解答题 \item 内容结束后；最后一道解答题不插入 |
 | `ANS-003` | 答题空间禁止线条 | 仅用 \vspace 留白 |
-| `ANS-004` | 教师版三种模式 | compact：itemsep 0.5em，题下 2em，文件名后缀 -教师版-紧凑<br>normal（默认）：itemsep 1.5em，题下 6em，文件名后缀 -教师版<br>exam：Q18 起每题独占一页，移除 itemsep，文件名后缀 -教师版-考试 |
 | `EXTRACT-001` | 图片目录命名 | 任意输入（DOCX / PDF，试题或答案）：Images-<文件名去扩展名>（与 ARTIFACT-003 一致，试题不再用 media） |
 | `EXTRACT-002` | 扫描件判定 | pandoc 输出仅含 ![](media/imageN.png) 且无正文 → 走 MinerU OCR |
 | `EXTRACT-003` | WMF 转 PNG | Pillow 渲染，600 DPI |
-| `ARTIFACT-001` | 试题卷标准产物集 | 源文件：<卷名>.tex / .pdf（无答题空间紧凑版，生成基准）<br>学生版：<卷名>-学生版.tex / .pdf（有答题空间）<br>教师版：<卷名>-教师版.tex / .pdf + <卷名>-教师版-考试.tex / .pdf<br>答题卡：<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py |
-| `ARTIFACT-002` | 产物命名后缀表 | 学生版（有答题空间）：-学生版<br>教师版（normal，题下 6em）：-教师版<br>教师版-考试（每题独占一页）：-教师版-考试<br>答题卡 A4：-答题卡-A4<br>答题卡 A3：-答题卡-A3 |
+| `ARTIFACT-001` | 试题卷标准产物集 | 试卷：<卷名>.tex / .pdf（含 \answern 答题空间，学生版/教师版合并后的唯一版本）<br>答题卡：<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py |
+| `ARTIFACT-002` | 产物命名后缀表 | 答题卡 A4：-答题卡-A4<br>答题卡 A3：-答题卡-A3 |
 | `ARTIFACT-003` | 图片文件夹统一命名 | Images-<卷名>（试题与答案一致，替代旧约定 media） |
 | `ARTIFACT-004` | 收尾与部署 | 每个含 tex 的试卷目录部署通用版 build.py；排版完成后用 scripts/finalize_paper.py 一键补齐产物集、编译并清理 preview-*.png |
 
@@ -407,10 +398,10 @@ python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "学生版.tex" --valid
 **8 种场景选择**与**图片+选项布局决策**见规则 `IMG-SCENE-001`，
 完整 LaTeX 示例见 `docs/conversion-rules.md` 的「图片场景示例」章节。
 
-#### 答题空间插入规则（学生版）
+#### 答题空间插入规则
 
-三个命令定义在 `templates/gaokao-template.tex` 导言区：`\answerc`(1.5em) / `\answern`(3em) / `\answere`(5em)，
-对应 compact / normal / exam 三种模式（`ANS-001`）。
+命令定义在 `templates/gaokao-template.tex` 导言区：`\answern`(3em)（`ANS-001`），
+由 `render_tex.py` 按 `meta.answer_space: normal`（默认）自动插入。
 
 **插入位置**：每道解答题的 `\item` 内容结束后、下一 `\item` 之前：
 
@@ -431,7 +422,6 @@ python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "学生版.tex" --valid
 - 最后一道解答题后**不插入**答题空间（避免尾部留白过多）
 - 答题空间命令前需有空行（`\par` 已包含在命令内）
 - 纯留白，**禁止** `\rule`、`tcolorbox`、`\fbox` 等任何带线条的命令
-- 教师版由 `scripts/gen_teacher.py` 生成，无需手动插入
 
 #### itemsep 经验值
 
@@ -471,11 +461,10 @@ python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "学生版.tex" --valid
 - 答案块结构：题目文本 → `\daan{...}` → `\jieti` → `\xijie`
 - 解答题多问：`\xiaoI` / `\xiaoII` / `\xiaoIII`
 - 选项为图片时用 `\eqimg[0.15]{imageN.png}`
-- **不需要生成教师版，不需要 `itemsep` 间距**
+- **不需要 `itemsep` 间距**
 
 #### 页数控制与间距调整
-- 学生版页数必须匹配试卷标注（`PAGE-001`）
-- 教师版不受标注约束，通常 ≤ 7 页，且移除 `itemsep`（`PAGE-004`）
+- 试卷页数必须匹配试卷标注（`PAGE-001`）
 - 自动迭代到目标页数：
   ```bash
   python "{SKILL_DIR}/scripts/auto_adjust.py" "<tex文件>" --target-pages 4
@@ -500,61 +489,13 @@ python "{SKILL_DIR}/scripts/match_paper.py" "<答案文档路径>" --json
 
 `matched` 为 `null` 时走 stage3，**不要报错退出**。
 
-### 步骤 5：生成教师版 → 三种模式
+### 步骤 5：试卷版本（学生版/教师版已合并）
 
-**注意：答案文档（文件名含"答案"）跳过此步。**
+**注意：答案文档（文件名含"答案"）无版本区分，直接渲染即可。**
 
-| 模式 | 说明 | 适用场景 |
-|------|------|---------|
-| `compact` | 解答题紧凑排版，下方留 2em | 自学、参考 |
-| `normal`（默认） | 每道解答题下方留 6em 答题空间 | 课后作业、练习册 |
-| `exam` | 解答题每题独占一页 | 课堂测试、考试模拟 |
-
-**通用规则（三种模式均遵守）：**
-- 前面三个大题（一～三）不分页，连续排版
-- **学生版也同步生成**：学生版每道解答题下方留白（`\answerc` / `\answern` / `\answere`），纯留白无线条
-
-**模式 A：`compact`（紧凑）**
-- 解答题 `\itemsep=0.5em`
-- 每道解答题下方留 `\vspace{2em}`（教师版）/ `\answerc`（学生版）
-- 适合自学、参考
-
-**模式 B：`normal`（标准，默认）**
-- 解答题 `\itemsep=1.5em`
-- 每道解答题下方留 `\vspace{6em}`（教师版）/ `\answern`（学生版）
-- 适合课后作业、练习册
-
-**模式 C：`exam`（考试）**
-- Q17 跟在「四、解答题」标题后，Q18 起每题独占一页
-- 移除 `itemsep`（分页替代了间隙作用）
-- 适合课堂测试、考试模拟
-
-**教师版由脚本生成，不要在对话里重写这段逻辑：**
-
-```bash
-# 模式 B：标准（默认）
-python "{SKILL_DIR}/scripts/gen_teacher.py" "学生版.tex" --mode normal
-
-# 模式 A：紧凑
-python "{SKILL_DIR}/scripts/gen_teacher.py" "学生版.tex" --mode compact
-
-# 模式 C：考试
-python "{SKILL_DIR}/scripts/gen_teacher.py" "学生版.tex" --mode exam
-```
-
-产出（与输入同目录）：
-
-| 模式 | 教师版文件名 | 学生版（有答题空间） |
-|------|-------------|---------------------|
-| compact | `<stem>-教师版-紧凑.tex` | `<stem>-学生版.tex` |
-| normal | `<stem>-教师版.tex` | 同上 |
-| exam | `<stem>-教师版-考试.tex` | 同上 |
-
-旧名 `<stem>-答题空间.tex` 已废弃：`gen_teacher.py` 检测到旧名文件且新名不存在时自动迁移（`ARTIFACT-002`）。
-
-脚本用**环境扫描**定位解答题块（`\begin{examenum}[start=N, ...]` 配对其 `\end{examenum}`），
-不依赖 `itemsep` 的具体取值——v3 内联脚本用 `content.find("[start=15, itemsep=2.5cm]")` 定位，
-itemsep 一改就返回 -1 并静默写出错误文件，该问题已修复。
+学生版与教师版已合并为**唯一试卷版本** `<卷名>.tex`：`render_tex.py` 渲染时默认按
+`meta.answer_space: normal` 在每道解答题（最后一题除外）后插入 `\answern`（3em 答题空间），
+无需任何后处理脚本；`-学生版` / `-教师版` 后缀废止（`ARTIFACT-001` / `ARTIFACT-002`）。
 
 ### 步骤 5-B：生成答题卡（可选）
 
@@ -584,7 +525,7 @@ python scripts/gen_answer_sheet.py "<试卷.tex>"
 
 **两道安全防护（默认开启）：**
 
-- **拒绝非学生版输入**：文件名含 `答案` / `教师版` / `答题卡` / `解析` / `详解` 时直接报错退出（退出码 4）——答题卡只能从学生版试题解析。
+- **拒绝非试卷输入**：文件名含 `答案` / `教师版` / `答题卡` / `解析` / `详解` 时直接报错退出（退出码 4）——答题卡只能从试卷解析。
 - **不覆盖手工版**：目标 `.tex` 已存在且开头没有本脚本的生成标记时，跳过并提示（退出码 5），原文件分毫不动。确认要替换加 `--force`，或换个 `--suffix`。
 
 **自动识别的题量来源**（读试卷 `.tex` 正文，不依赖文件名）：
@@ -659,17 +600,13 @@ answersheet.sty                宏包副本，供日后单独重编
 
 ### 步骤 6：编译 → 验证
 
-**试题文档（学生版 + 教师版，各编译两次）：**
+**试题文档（唯一版本，编译两次）：**
 ```bash
 cd "<输出目录>"
 xelatex -interaction=nonstopmode "文件名.tex"
 xelatex -interaction=nonstopmode "文件名.tex"
 grep -E "Overfull|^!" "文件名.log" | grep -v "infwarerr"
 pdfinfo "文件名.pdf" 2>/dev/null | grep Pages
-
-# 教师版：文件名随 --mode 变化（见步骤 5 产出表）
-xelatex -interaction=nonstopmode "文件名-教师版.tex"
-xelatex -interaction=nonstopmode "文件名-教师版.tex"
 ```
 
 **答案文档（只编译一个版本）：**
@@ -681,8 +618,7 @@ pdfinfo "文件名.pdf" 2>/dev/null | grep Pages
 ```
 
 **验证要点：**
-- 学生版/答案版页数应与试卷标注一致（`PAGE-001`）
-- 教师版页数不超过 7 页
+- 试卷/答案版页数应与试卷标注一致（`PAGE-001`）
 - 解答题编号正确
 - 答案文档的【答案】【解析】【详解】结构显示正确
 
@@ -722,7 +658,7 @@ rm -f *.aux *.log *.out *.toc *.synctex.gz   # 所有版本
 ```
 
 **保留（即标准产物集，`ARTIFACT-001`）：**
-- 试题文档：源文件 `<卷名>.tex/.pdf`、`<卷名>-学生版`、`<卷名>-教师版`、`<卷名>-教师版-考试`（tex + pdf）、图片
+- 试题文档：试卷 `<卷名>.tex/.pdf`（唯一版本，含答题空间）、图片
 - 答案文档：`.tex` 源文件、`.pdf`、`{图片目录}/`
 - 答题卡：`<卷名>-答题卡-A4.tex/.pdf` 与 `-A3` 版、`answersheet.sty`
 - 每卷目录：`build.py`
@@ -764,7 +700,7 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | `zhuantiGrade` | 年级 | 必填 |
 | `zhuantiDate` | 日期 | 必填 |
 | `tierNames` | 分层名称 | 基础巩固,能力提高,拔高挑战 |
-| `saqItemSep` | 解答题间距 | 2.5cm（学生版），教师版自动改 0.3em |
+| `saqItemSep` | 解答题间距 | 2.5cm |
 
 ### 周练卷变量表
 
@@ -828,7 +764,7 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | `split_combined.py` / `split_xj3.py` | 拆分合并卷 / 新课标卷 |
 | `finish_papers.py` | 批量收尾（一次性修复脚本已清理，规则前移到 md2tex.py） |
 
-**回归测试**：`python tests/run_all.py` 跑全部（`test_render.py` 渲染器排版决策 + `test_teacher.py` 教师版三模式 + `test_answer_sheet.py` 答题卡 + `test_finalize.py` 一键收尾 + `test_fixed/round2/round3` md2tex 回归）。
+**回归测试**：`python tests/run_all.py` 跑全部（`test_render.py` 渲染器排版决策 + `test_answer_sheet.py` 答题卡 + `test_finalize.py` 一键收尾 + `test_fixed/round2/round3` md2tex 回归）。
 端到端用例依赖题库样本，缺少时自动跳过（可用 `SHIJUAN_LIBRARY` 指定题库根目录）。改流水线后必须全部通过。
 
 ### 整理规范（历次会话沉淀）
@@ -859,7 +795,7 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | 图片错位/消失 | 列表环境中用了 `wrapfigure` | 改用 `minipage` 左右并排 |
 | 页数超限 | 添加了 2.5cm 间隙 | 加 `\linespread{1.05}\selectfont` |
 | Python 匹配不到 LaTeX | 字符串转义 | 用 raw string `r"\begin"` |
-| 教师版分页没生效 | `\b` 被当作退格符 | 所有含 `\b` 的字符串前加 `r` |
+| 分页/定位逻辑没生效 | `\b` 被当作退格符 | 所有含 `\b` 的字符串前加 `r` |
 | 中文不显示 | 非 ctex 模板 | 确认模板用 `ctexart` |
 | 编译有 Missing $ | 花括号不匹配 | 检查 `$...$` 配对 |
 | 解答题编号从1开始 | start 值不对 | `start=单选题数+多选题数+填空题数+1` |

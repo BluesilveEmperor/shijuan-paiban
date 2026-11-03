@@ -2,11 +2,12 @@
 """finalize_paper 一键收尾回归测试（需要 xelatex，缺失时整文件 skip）。
 
 覆盖（ARTIFACT-001 / ARTIFACT-002 / ARTIFACT-004）：
-1. 一键收尾生成完整标准产物集（学生版 / 教师版 / 教师版-考试 /
-   答题卡-A4 / 答题卡-A3 的 tex+pdf + build.py）
-2. 幂等：重复运行退出码仍为 0，产物不丢
-3. 答案文档（文件名含「答案」）只出三件：tex/pdf + build.py，
-   不生成教师版 / 学生版 / 答题卡
+1. 一键收尾生成完整标准产物集：试卷 <卷名>.tex/.pdf（学生版/教师版
+   合并后的唯一版本）+ 答题卡-A4 / 答题卡-A3 的 tex+pdf + build.py
+2. 不再生成 -学生版 / -教师版 后缀产物（版本合并，后缀废止）
+3. 幂等：重复运行退出码仍为 0，产物不丢
+4. 答案文档（文件名含「答案」）只出三件：tex/pdf + build.py，
+   不生成答题卡，源文件保留
 """
 import os
 import subprocess
@@ -45,7 +46,7 @@ def run_finalize(target):
 
 
 # ---------------------------------------------------------------- 样本试卷
-# 精简版高考模板：只保留 gen_teacher / gen_answer_sheet / build.py 都需要的
+# 精简版高考模板：只保留 gen_answer_sheet / build.py 都需要的
 # 宏包与环境（examenum / \blank / \answern），编译快且不依赖图片目录。
 PAPER = r"""\documentclass[12pt, a4paper]{ctexart}
 \usepackage{amsmath, amssymb}
@@ -84,7 +85,7 @@ PAPER = r"""\documentclass[12pt, a4paper]{ctexart}
 \end{document}
 """
 
-# ---------------------------------------------------------------- 1+2 试题卷
+# ---------------------------------------------------------------- 1+2+3 试题卷
 with tempfile.TemporaryDirectory() as td:
     d = Path(td)
     src = d / '2026测试模拟卷.tex'
@@ -95,10 +96,7 @@ with tempfile.TemporaryDirectory() as td:
     check_true('finalize-rc0', rc == 0, f'rc={rc}\n{out[-1500:]}')
 
     artifacts = [
-        f'{stem}.pdf',
-        f'{stem}-学生版.tex', f'{stem}-学生版.pdf',
-        f'{stem}-教师版.tex', f'{stem}-教师版.pdf',
-        f'{stem}-教师版-考试.tex', f'{stem}-教师版-考试.pdf',
+        f'{stem}.tex', f'{stem}.pdf',
         f'{stem}-答题卡-A4.tex', f'{stem}-答题卡-A4.pdf',
         f'{stem}-答题卡-A3.tex', f'{stem}-答题卡-A3.pdf',
         'build.py',
@@ -106,13 +104,19 @@ with tempfile.TemporaryDirectory() as td:
     for name in artifacts:
         check_true(f'artifact-{name}', (d / name).exists(), '缺失')
 
+    # 学生版/教师版已合并，后缀废止（ARTIFACT-001/002）
+    check_true('no-student-suffix',
+               not (d / f'{stem}-学生版.tex').exists(), '不应生成 -学生版')
+    check_true('no-teacher-suffix',
+               not (d / f'{stem}-教师版.tex').exists(), '不应生成 -教师版')
+
     # 幂等：产物已齐全时重跑，退出码仍为 0
     rc, out = run_finalize(src)
     check_true('finalize-idempotent', rc == 0, f'rc={rc}\n{out[-1500:]}')
     for name in artifacts:
         check_true(f'idempotent-{name}', (d / name).exists(), '重跑后缺失')
 
-# ---------------------------------------------------------------- 3 答案文档
+# ---------------------------------------------------------------- 4 答案文档
 with tempfile.TemporaryDirectory() as td:
     d = Path(td)
     ans = d / '2026测试模拟卷-答案.tex'
@@ -129,6 +133,8 @@ with tempfile.TemporaryDirectory() as td:
                not (d / f'{stem}-学生版.tex').exists(), '答案文档不应生成学生版')
     check_true('answer-no-sheet',
                not (d / f'{stem}-答题卡-A4.tex').exists(), '答案文档不应生成答题卡')
+    check_true('answer-source-kept', (d / ans.name).exists(),
+               '答案文档源 .tex 应保留')
 
 print()
 if fails:

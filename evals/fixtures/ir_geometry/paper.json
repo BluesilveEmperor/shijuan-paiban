@@ -4,7 +4,7 @@
     "template": "gaokao",
     "total_pages": 1,
     "images_dir": "images",
-    "answer_space": "compact"
+    "answer_space": "normal"
   },
   "sections": [
     {

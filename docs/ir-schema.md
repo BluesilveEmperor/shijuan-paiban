@@ -71,10 +71,10 @@
 | 字段 | 必填 | 说明 |
 |------|------|------|
 | `title` | 是 | 试卷标题 |
-| `template` | 否 | `gaokao`（学生版，默认）/ `answer`（答案版） |
+| `template` | 否 | `gaokao`（试卷，默认）/ `answer`（答案版） |
 | `total_pages` | 否 | 试卷标注页数，用于推导 `itemsep`（`PAGE-003`） |
 | `images_dir` | 否 | 图片目录名（`EXTRACT-001` / `ARTIFACT-003`）：统一 `Images-<卷名>` |
-| `answer_space` | 否 | `compact` / `normal`（默认）/ `exam`（`ANS-001`） |
+| `answer_space` | 否 | `normal`（默认，`\answern` 3em 答题空间）（`ANS-001`） |
 | `front_matter` | 否 | 自定义标题区原始 LaTeX，省略则用模板标准标题+注意事项 |
 
 ### section
@@ -112,14 +112,14 @@
 ## 使用
 
 ```bash
-# 渲染
-python scripts/render_tex.py paper.json -o 学生版.tex
+# 渲染（唯一试卷版本，默认含 \answern 答题空间）
+python scripts/render_tex.py paper.json -o 试卷.tex
 
 # 渲染后立即结构验证
-python scripts/render_tex.py paper.json -o 学生版.tex --validate
+python scripts/render_tex.py paper.json -o 试卷.tex --validate
 
-# 生成教师版（三种模式）
-python scripts/gen_teacher.py 学生版.tex --mode normal
+# 生成答题卡（A4/A3）
+python scripts/gen_answer_sheet.py 试卷.tex
 ```
 
 ## 逃生舱

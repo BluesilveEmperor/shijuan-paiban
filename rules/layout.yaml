@@ -191,7 +191,7 @@ rules:
   # ══════════════════════ 间距与页数 ══════════════════════
   - id: PAGE-001
     scope: spacing
-    title: 学生版页数
+    title: 试卷页数
     value: "严格匹配试卷标注页数"
     severity: error
     check: page_count
@@ -228,29 +228,17 @@ rules:
     check: null
     evidence: 10 份高考试卷实测区间
 
-  - id: PAGE-004
-    scope: spacing
-    title: 教师版移除 itemsep
-    value: "教师版不保留 itemsep（分页已替代间隙作用）"
-    severity: warning
-    check: teacher_no_itemsep
-    evidence: 保留 itemsep 会让教师版页数失控
-
   # ══════════════════════ 答题空间 ══════════════════════
   - id: ANS-001
     scope: answer
     title: 答题空间命令与留白量
     type: table
     rows:
-      - k: "\\answerc"
-        v: "1.5em，compact 模式（自学）"
       - k: "\\answern"
         v: "3em，normal 模式（作业，默认）"
-      - k: "\\answere"
-        v: "5em，exam 模式（测试）"
     severity: error
     check: answer_space
-    evidence: 三个命令定义在 templates/gaokao-template.tex 导言区
+    evidence: 命令定义在 templates/gaokao-template.tex 导言区
 
   - id: ANS-002
     scope: answer
@@ -273,21 +261,6 @@ rules:
     severity: error
     check: answer_space_lines
     evidence: 用户明确要求纯留白，保持试卷整洁
-
-  - id: ANS-004
-    scope: answer
-    title: 教师版三种模式
-    type: table
-    rows:
-      - k: compact
-        v: "itemsep 0.5em，题下 2em，文件名后缀 -教师版-紧凑"
-      - k: "normal（默认）"
-        v: "itemsep 1.5em，题下 6em，文件名后缀 -教师版"
-      - k: exam
-        v: "Q18 起每题独占一页，移除 itemsep，文件名后缀 -教师版-考试"
-    severity: error
-    check: null
-    evidence: v3 由 onepage/space 两模式扩展而来；旧后缀 -教师版-答题空间 已废弃
 
   # ══════════════════════ 输入提取 ══════════════════════
   - id: EXTRACT-001
@@ -323,12 +296,8 @@ rules:
     title: 试题卷标准产物集
     type: table
     rows:
-      - k: 源文件
-        v: "<卷名>.tex / .pdf（无答题空间紧凑版，生成基准）"
-      - k: 学生版
-        v: "<卷名>-学生版.tex / .pdf（有答题空间）"
-      - k: 教师版
-        v: "<卷名>-教师版.tex / .pdf + <卷名>-教师版-考试.tex / .pdf"
+      - k: 试卷
+        v: "<卷名>.tex / .pdf（含 \\answern 答题空间，学生版/教师版合并后的唯一版本）"
       - k: 答题卡
         v: "<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf"
       - k: 图片文件夹
@@ -337,28 +306,24 @@ rules:
         v: build.py
     severity: error
     check: null
-    evidence: 用户确认的五件套需求；与题库每卷 Images-* + build.py 的既有整理约定一致；答案文档（文件名含答案）只出 tex/.pdf + Images + build.py 三件
+    evidence: 用户确认的三件套需求；学生版与教师版合并为唯一试卷版本（render_tex.py 直接产出，含 \answern 答题空间），-学生版/-教师版 后缀废止；与题库每卷 Images-* + build.py 的既有整理约定一致；答案文档（文件名含答案）只出 tex/.pdf + Images + build.py 三件
 
   - id: ARTIFACT-002
     scope: artifacts
     title: 产物命名后缀表
     type: table
     rows:
-      - k: 学生版（有答题空间）
-        v: "-学生版"
-      - k: 教师版（normal，题下 6em）
-        v: "-教师版"
-      - k: 教师版-考试（每题独占一页）
-        v: "-教师版-考试"
       - k: 答题卡 A4
         v: "-答题卡-A4"
       - k: 答题卡 A3
         v: "-答题卡-A3"
     forbidden:
-      - "-答题空间（旧名，由 -学生版 取代，gen_teacher 自动迁移）"
+      - "-学生版（学生版/教师版已合并，后缀废止）"
+      - "-教师版（学生版/教师版已合并，后缀废止）"
+      - "-答题空间（旧名，已废弃）"
     severity: error
     check: null
-    evidence: 用户要求学生版/教师版/答题卡命名对称可辨；旧名 -答题空间 与 -教师版 系列不对称
+    evidence: 学生版与教师版合并为唯一试卷版本 <卷名>.tex，不再有版本后缀；仅答题卡保留 A4/A3 后缀
 
   - id: ARTIFACT-003
     scope: artifacts
@@ -374,4 +339,4 @@ rules:
     value: "每个含 tex 的试卷目录部署通用版 build.py；排版完成后用 scripts/finalize_paper.py 一键补齐产物集、编译并清理 preview-*.png"
     severity: warning
     check: null
-    evidence: finalize_paper.py 端到端实测（生成六件 tex、部署 build.py、6/6 编译成功、清单全 OK）
+    evidence: finalize_paper.py 端到端实测（生成答题卡、部署 build.py、编译成功、清单全 OK）；学生版/教师版合并后收尾仅补答题卡与编译

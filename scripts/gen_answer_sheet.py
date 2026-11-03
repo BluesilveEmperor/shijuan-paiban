@@ -910,10 +910,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[ERROR] 找不到文件：{src}", file=sys.stderr)
         return 2
 
-    # 答题卡要从「学生版试题」解析；答案/教师版/答题卡本身都不适用
+    # 答题卡要从「试卷」解析；答案/答题卡本身都不适用（教师版为旧版产物，一并拦截）
     if re.search(r"答案|教师版|答题卡|解析|详解|分析|细目表", src.stem):
-        print(f"[ERROR] 「{src.name}」不是学生版试题（含 答案/教师版/答题卡 字样），"
-              f"请改用同目录的学生版 .tex。", file=sys.stderr)
+        print(f"[ERROR] 「{src.name}」不适用于生成答题卡（含 答案/教师版/答题卡 字样），"
+              f"请改用同目录的试卷 .tex（<卷名>.tex）。", file=sys.stderr)
         return 4
 
     spec = parse_exam_tex(src)
@@ -968,7 +968,7 @@ def main(argv: list[str] | None = None) -> int:
         hint = ""
         raw = src.read_text(encoding="utf-8", errors="replace")
         if "\\item" not in raw:
-            hint = ("\n        该文件里没有任何 \\item，像是未转换的 Markdown 或非学生版试题，"
+            hint = ("\n        该文件里没有任何 \\item，像是未转换的 Markdown 或非试卷文件，"
                     "请先把它排成 LaTeX 试卷。")
         print("[ERROR] 未解析出任何题量，请用 --single/--multi/--blanks 手动指定。" + hint,
               file=sys.stderr)

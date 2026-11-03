@@ -10,7 +10,7 @@ render_tex.py - Question IR → LaTeX 确定性渲染器
 同一份 IR 渲染两次结果逐字节一致，因此可以单测、可以 diff、可以 eval。
 
 用法:
-  python scripts/render_tex.py paper.json -o 学生版.tex
+  python scripts/render_tex.py paper.json -o 试卷.tex
   python scripts/render_tex.py paper.json -o out.tex --template answer
   python scripts/render_tex.py paper.json --stdout
   python scripts/render_tex.py --schema              # 打印 IR schema 示例
@@ -42,7 +42,7 @@ SECTION_ITEMSEP = {            # TASKS-COL-001 邻近的结构默认值
     "fill_blank": "0.8em",
 }
 SAQ_ITEMSEP_TABLE = {3: 2.25, 4: 2.0, 5: 1.75, 6: 1.35}   # PAGE-003
-ANSWER_SPACE_CMD = {"compact": r"\answerc", "normal": r"\answern", "exam": r"\answere"}  # ANS-001
+ANSWER_SPACE_CMD = {"normal": r"\answern"}  # ANS-001
 IMAGE_OPTION_WIDTH = "0.12"     # IMG-W-004
 SINGLE_IMAGE_WIDTH = "0.30"     # IMG-W-002
 MULTI_IMAGE_SPEC = {2: ("0.42", "3cm"), 3: ("0.28", "2.5cm")}  # IMG-W-003
@@ -448,10 +448,10 @@ FIELD_DOC = """
 IR 字段说明
 ───────────
 meta.title          试卷标题
-meta.template       gaokao（学生版，默认）| answer（答案版）
+meta.template       gaokao（试卷，默认）| answer（答案版）
 meta.total_pages    试卷标注页数，用于推导 itemsep（PAGE-003）
 meta.images_dir     图片目录名（EXTRACT-001 / ARTIFACT-003：统一 Images-<卷名>）
-meta.answer_space   compact | normal（默认）| exam（ANS-001）
+meta.answer_space   normal（默认）（ANS-001）
 meta.front_matter   可选，自定义标题区原始 LaTeX
 
 section.heading     大题标题（含题量与分值）

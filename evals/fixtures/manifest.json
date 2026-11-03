@@ -4,7 +4,7 @@
   "cases": [
     {
       "id": "standard",
-      "title": "标准学生版（单选/多选/填空/解答 + 答题空间）",
+      "title": "标准试卷（单选/多选/填空/解答 + 答题空间）",
       "tex": "standard/standard.tex",
       "is_answer": false,
       "expected_pages": 1,
@@ -172,7 +172,7 @@
         ],
         "min_images": 5,
         "answer_space": {
-          "cmd": "\\answerc",
+          "cmd": "\\answern",
           "count": 2
         },
         "forbidden": [

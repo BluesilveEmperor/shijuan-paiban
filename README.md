@@ -13,9 +13,8 @@
 - **失败归因闭环**：`evolve.py` 按 `rule_id` 聚合失败生成规则候选，候选须过 A/B 门禁才可入库
 - **自动模板选择**：根据文件名是否含"答案"自动选用试题模板或答案模板
 - **三段式试题匹配**：答案文档自动查找同目录对应的 `.tex` 试题文件（`match_paper.py`）
-- **教师版生成**：`gen_teacher.py` 支持 compact / normal / exam 三模式，环境扫描定位，不依赖 itemsep 取值
 - **答题卡生成**：从排好的试卷 `.tex` 自动识别题量与分值，生成 A4 / A3 答题卡（`scripts/gen_answer_sheet.py`）；按分值比例自动分页分栏，带考生号填涂表、注意事项、黑白模式
-- **标准产物集**：每份试题卷输出统一五件套——源文件 / `-学生版`（有答题空间）/ `-教师版` + `-教师版-考试` / `-答题卡-A4` + `-答题卡-A3` / `Images-<卷名>` + `build.py`（`ARTIFACT-001~004`）；`finalize_paper.py` 一键收尾：补齐产物 → 部署 `build.py` → 编译清理 → 产物清单校验，幂等可重跑
+- **标准产物集**：每份试题卷输出统一三件套——试卷 `<卷名>.tex/.pdf`（学生版/教师版合并后的唯一版本，含 `\answern` 答题空间）/ `-答题卡-A4` + `-答题卡-A3` / `Images-<卷名>` + `build.py`（`ARTIFACT-001~004`）；`finalize_paper.py` 一键收尾：补齐答题卡 → 部署 `build.py` → 编译清理 → 产物清单校验，幂等可重跑
 - **错题卷支持**：自动解析错题文件（图片/PDF），按难度排序排版，含错因分析/正确解法/变式
 - **周练卷支持**：参数化生成周练卷，含学生版/教师版/每题一页版
 - **图片智能处理**：8 种场景自动选择（`IMG-SCENE-001`）、并排限高、`\graphicspath` 自动对齐
@@ -23,7 +22,7 @@
 - **环境检查**：执行前自动检查 XeLaTeX/pandoc/Python/MinerU 等环境，缺少时引导配置
 - **MD→TEX 批量流水线**：`md2tex.py` / `md2ans.py` / `batch_convert.py` / `convert_new_papers.py` 等脚本批量把 MD 中间产物转换为试题/答案 tex
 - **题库维护**：维护 `{题库根}`（环境变量 `SHIJUAN_LIBRARY`，默认 `D:\Music\试题加题库`）；每个含 tex 文件夹部署一键编译 `build.py`（通用版编全部 tex ×2；书稿版只编 main.tex ×3）
-- **回归测试**：`tests/` 下 6 套测试（渲染器排版决策、教师版三模式、md2tex 清洗规则、答题卡、一键收尾），`python tests/run_all.py` 一键跑完
+- **回归测试**：`tests/` 下 7 套测试（渲染器排版决策、md2tex 清洗规则、答题卡、一键收尾、tex 宽度），`python tests/run_all.py` 一键跑完
 
 ## 快速开始
 
@@ -100,8 +99,8 @@ echo "token: '你的API密钥'" > ~/.mineru/config.yaml
 读模板 → 知能力（自动选择试题/答案模板）
     ↓
 写 LaTeX → 逐题转换
-    ├── 答案文档 → 跳过教师版
-    └── 试题文档 → 生成教师版（解答题分页）
+    ├── 答案文档 → 跳过答题卡
+    └── 试题文档 → 生成答题卡（A4/A3）
     ↓
 编译 → 验证（XeLaTeX × 2）
     ↓
@@ -127,7 +126,7 @@ echo "token: '你的API密钥'" > ~/.mineru/config.yaml
 
 所有模板已内嵌在 SKILL.md 中，无需额外文件：
 
-- **gaokao-template.tex**：高考数学试卷模板，支持学生版/教师版
+- **gaokao-template.tex**：高考数学试卷模板（唯一版本，含 `\answern` 答题空间）
   - 12pt + 2.5cm 边距、tasks 选择题环境、examenum 大题编号
   - 自定义命令：`\blank`、`\mycircled`、`\Parallel` 等
 
@@ -167,7 +166,7 @@ MinerU SDK 自动提取图片，保存到输出目录。图片目录命名为 `I
 | 特性 | 试题文档 | 答案文档 |
 |------|---------|---------|
 | 模板 | gaokao-template.tex | gaokao-answer-template.tex |
-| 教师版 | 生成（解答题分页） | 不生成 |
+| 答题卡 | 生成（A4/A3） | 不生成 |
 | 选项排版 | `tasks` 环境 | `\eqimg` 或 LaTeX 公式 |
 | 答案结构 | 无 | `\daan` → `\jieti` → `\xijie` |
 | 页数控制 | 严格匹配标注页数 | 无限制 |
@@ -213,7 +212,7 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | UnicodeEncodeError（Windows） | 加 `PYTHONIOENCODING=utf-8` 前缀 |
 | 中文不显示 | 确认模板用 `ctexart` |
 | 解答题编号从 1 开始 | `start` 值 = 单选题数 + 多选题数 + 填空题数 + 1 |
-| 教师版分页没生效 | Python 字符串必须用 raw string `r"\begin"` |
+| 分页/定位逻辑没生效 | Python 字符串必须用 raw string `r"\begin"` |
 | 环境检查失败 | 按提示安装缺失依赖，必须项（XeLaTeX/pandas/Python）不可跳过 |
 
 ## MinerU API 限制（PDF 输入）
@@ -288,7 +287,6 @@ shijuan-paiban/
 ├── tests/
 │   ├── run_all.py              # 一键跑全部
 │   ├── test_render.py          # 渲染器排版决策单测
-│   ├── test_teacher.py         # 教师版三模式 + 答题空间不重复插入
 │   ├── test_answer_sheet.py    # 答题卡生成单测
 │   ├── test_finalize.py        # finalize_paper 一键收尾单测
 │   ├── test_fixed.py / test_round2.py / test_round3.py   # md2tex 回归
@@ -300,7 +298,6 @@ shijuan-paiban/
     ├── evolve.py               # ★ 失败归因 + 规则候选 + A/B 门禁
     ├── gen_rules_doc.py        # ★ 从 layout.yaml 生成文档规则表
     ├── finalize_paper.py       # ★ 一键收尾（补齐标准产物集 + 部署 build.py + 编译清理 + 清单校验）
-    ├── gen_teacher.py          # 教师版生成（compact/normal/exam）
     ├── extract_docx.py         # 内置 DOCX 解包（替代外部 docx skill）
     ├── match_paper.py          # 答案文档三段式匹配试题 tex
     ├── auto_adjust.py          # 编译后页数自适应

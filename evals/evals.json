@@ -14,7 +14,7 @@
         "page_count": 4,
         "has_tasks_env": true,
         "has_examenum_env": true,
-        "has_teacher_version": true,
+        "has_answer_space": true,
         "no_overfull_errors": true
       },
       "manual_checks": [
@@ -213,53 +213,14 @@
       "category": "page_control",
       "prompt": "排版一份标注'本试卷共4页'但内容较多的试卷.docx",
       "input_type": "docx",
-      "expected_output": "学生版严格控制在 4 页",
+      "expected_output": "试卷严格控制在 4 页",
       "expected_checks": {
         "compiles": true,
         "page_count": 4,
         "has_linespread_if_needed": true
       },
       "manual_checks": [
-        "超页时优先调 itemsep，其次 \\linespread{1.05}",
-        "教师版不受页数限制",
-        "教师版无 itemsep（PAGE-004）"
-      ]
-    },
-    {
-      "id": 13,
-      "category": "teacher_compact",
-      "prompt": "排版试题文档，生成教师版（compact 模式）",
-      "input_type": "docx",
-      "expected_output": "教师版解答题紧凑排版，每题下方留 2em，文件名为 <stem>-教师版-紧凑.tex",
-      "expected_checks": {
-        "compiles": true,
-        "teacher_version_exists": true,
-        "filename_suffix": "-教师版-紧凑",
-        "itemsep": "0.5em",
-        "has_vspace_2em": true
-      },
-      "manual_checks": [
-        "每道解答题末尾有 \\vspace{2em}",
-        "适合自学参考，页数明显少于 normal"
-      ]
-    },
-    {
-      "id": 14,
-      "category": "teacher_exam",
-      "prompt": "排版试题文档，生成教师版（exam 模式）",
-      "input_type": "docx",
-      "expected_output": "教师版第 2 道解答题起每题独占一页，移除 itemsep，文件名为 <stem>-教师版-考试.tex",
-      "expected_checks": {
-        "compiles": true,
-        "teacher_version_exists": true,
-        "filename_suffix": "-教师版-考试",
-        "no_itemsep_in_teacher": true,
-        "has_newpage": true
-      },
-      "manual_checks": [
-        "第 1 道解答题跟在「四、解答题」标题后",
-        "第 2 道起每题独占一页",
-        "末题后无多余分页"
+        "超页时优先调 itemsep，其次 \\linespread{1.05}"
       ]
     },
     {

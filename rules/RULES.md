@@ -44,19 +44,17 @@
 
 | ID | 规则 | 取值 | 说明 |
 |----|------|------|------|
-| `PAGE-001` | 学生版页数 | 严格匹配试卷标注页数 | 试卷标注「共 4 页」而实际 5 页属硬伤 |
+| `PAGE-001` | 试卷页数 | 严格匹配试卷标注页数 | 试卷标注「共 4 页」而实际 5 页属硬伤 |
 | `PAGE-002` | 超页压缩手段（按优先级） | 减小解答题 itemsep；导言区加 \linespread{1.05}\selectfont；最后手段：调整 margin | 先动行距会破坏整体观感，应优先调 itemsep |
 | `PAGE-003` | 解答题 itemsep 经验值 | 4 页 3 题：2.0 ~ 2.5cm<br>4 页 4 题：1.8 ~ 2.2cm<br>4 页 5 题：1.5 ~ 2.0cm<br>4 页 6 题：1.2 ~ 1.5cm<br>itemsep < 1.0cm 仍超页：降 linespread 至 0.95 | 10 份高考试卷实测区间 |
-| `PAGE-004` | 教师版移除 itemsep | 教师版不保留 itemsep（分页已替代间隙作用） | 保留 itemsep 会让教师版页数失控 |
 
 ### 答题空间
 
 | ID | 规则 | 取值 | 说明 |
 |----|------|------|------|
-| `ANS-001` | 答题空间命令与留白量 | \answerc：1.5em，compact 模式（自学）<br>\answern：3em，normal 模式（作业，默认）<br>\answere：5em，exam 模式（测试） | 三个命令定义在 templates/gaokao-template.tex 导言区 |
+| `ANS-001` | 答题空间命令与留白量 | \answern：3em，normal 模式（作业，默认） | 命令定义在 templates/gaokao-template.tex 导言区 |
 | `ANS-002` | 答题空间插入位置 | 每道解答题 \item 内容结束后；最后一道解答题不插入 | 末题插入会在页尾留大片空白 |
 | `ANS-003` | 答题空间禁止线条 | 仅用 \vspace 留白 | 禁止：`\rule`、tcolorbox、`\fbox`、虚线、角标<br>用户明确要求纯留白，保持试卷整洁 |
-| `ANS-004` | 教师版三种模式 | compact：itemsep 0.5em，题下 2em，文件名后缀 -教师版-紧凑<br>normal（默认）：itemsep 1.5em，题下 6em，文件名后缀 -教师版<br>exam：Q18 起每题独占一页，移除 itemsep，文件名后缀 -教师版-考试 | v3 由 onepage/space 两模式扩展而来；旧后缀 -教师版-答题空间 已废弃 |
 
 ### 输入提取
 
@@ -70,9 +68,9 @@
 
 | ID | 规则 | 取值 | 说明 |
 |----|------|------|------|
-| `ARTIFACT-001` | 试题卷标准产物集 | 源文件：<卷名>.tex / .pdf（无答题空间紧凑版，生成基准）<br>学生版：<卷名>-学生版.tex / .pdf（有答题空间）<br>教师版：<卷名>-教师版.tex / .pdf + <卷名>-教师版-考试.tex / .pdf<br>答题卡：<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py | 用户确认的五件套需求；与题库每卷 Images-* + build.py 的既有整理约定一致；答案文档（文件名含答案）只出 tex/.pdf + Images + build.py 三件 |
-| `ARTIFACT-002` | 产物命名后缀表 | 学生版（有答题空间）：-学生版<br>教师版（normal，题下 6em）：-教师版<br>教师版-考试（每题独占一页）：-教师版-考试<br>答题卡 A4：-答题卡-A4<br>答题卡 A3：-答题卡-A3 | 禁止：-答题空间（旧名，由 -学生版 取代，gen_teacher 自动迁移）<br>用户要求学生版/教师版/答题卡命名对称可辨；旧名 -答题空间 与 -教师版 系列不对称 |
+| `ARTIFACT-001` | 试题卷标准产物集 | 试卷：<卷名>.tex / .pdf（含 \answern 答题空间，学生版/教师版合并后的唯一版本）<br>答题卡：<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py | 用户确认的三件套需求；学生版与教师版合并为唯一试卷版本（render_tex.py 直接产出，含 \answern 答题空间），-学生版/-教师版 后缀废止；与题库每卷 Images-* + build.py 的既有整理约定一致；答案文档（文件名含答案）只出 tex/.pdf + Images + build.py 三件 |
+| `ARTIFACT-002` | 产物命名后缀表 | 答题卡 A4：-答题卡-A4<br>答题卡 A3：-答题卡-A3 | 禁止：-学生版（学生版/教师版已合并，后缀废止）、-教师版（学生版/教师版已合并，后缀废止）、-答题空间（旧名，已废弃）<br>学生版与教师版合并为唯一试卷版本 <卷名>.tex，不再有版本后缀；仅答题卡保留 A4/A3 后缀 |
 | `ARTIFACT-003` | 图片文件夹统一命名 | Images-<卷名>（试题与答案一致，替代旧约定 media） | 题库每卷 Images-* 目录的既有约定；试题用 media 与答案用 Images-* 双标准增加记忆负担 |
-| `ARTIFACT-004` | 收尾与部署 | 每个含 tex 的试卷目录部署通用版 build.py；排版完成后用 scripts/finalize_paper.py 一键补齐产物集、编译并清理 preview-*.png | finalize_paper.py 端到端实测（生成六件 tex、部署 build.py、6/6 编译成功、清单全 OK） |
+| `ARTIFACT-004` | 收尾与部署 | 每个含 tex 的试卷目录部署通用版 build.py；排版完成后用 scripts/finalize_paper.py 一键补齐产物集、编译并清理 preview-*.png | finalize_paper.py 端到端实测（生成答题卡、部署 build.py、编译成功、清单全 OK）；学生版/教师版合并后收尾仅补答题卡与编译 |
 
 > 规则版本 v3，更新于 2026-11-02。修改规则请编辑 `rules/layout.yaml` 后运行 `python scripts/gen_rules_doc.py`。
