@@ -66,30 +66,231 @@ echo "token: '你的API密钥'" > ~/.mineru/config.yaml
 
 ## 使用方法
 
-### DOCX 输入
+### 三种入口
+
+| 入口 | 适合场景 | 用法 |
+|------|----------|------|
+| **对话触发**（推荐） | 单份/少量试卷，自动跑完整流程 | 在 Claude / DevEco 中给出文件路径和需求 |
+| **命令行** | 批量、自动化、调试单个步骤 | 直接调用 `scripts/` 下的脚本 |
+| **IR 渲染** | 需要可复现的结构化排版 | 写 `paper.json` → `render_tex.py` |
+
+> `{SKILL_DIR}` 指本仓库（`SKILL.md` 所在目录）。下面所有命令都在**试卷工作目录**执行，产物也写在这里。
+
+### 1. 对话触发（最省事）
+
+直接把文件拖进对话，或给出绝对路径，再说一句要做什么即可。技能会自动识别文件类型、试题/答案、模板，不需要手动指定。
+
+#### 常用说法
+
+| 需求 | 示例说法 |
+|------|----------|
+| 排版 DOCX 试卷 | `把 D:\试卷\2026模拟卷.docx 排版成 LaTeX，输出到同目录` |
+| 排版 PDF 试卷 | `把 D:\试卷\2026模拟卷.pdf 转成 tex 并编译` |
+| 排版答案 | `排版这个答案：D:\试卷\新一卷数学-答案.docx` |
+| 生成答题卡 | `给 D:\试卷\2026模拟卷.tex 配一份 A4+A3 答题卡` |
+| 只重编已有 tex | `重新编译 D:\试卷\2026模拟卷.tex，检查页数和 Overfull` |
+| 调整页数 | `这份卷子要压到 4 页，帮我调一下` |
+| 批量处理 | `把 D:\试卷\2025\ 下所有 docx 都排版了` |
+| 错题/专题/周练 | `把这些错题整理成错题卷` / `排成专题卷` |
+
+> 文件名含「答案」会自动使用答案模板；含「专题/专项」「周练/周测/周考」「错题/纠错/订正」会自动选择对应模板（见下文「模板系统」）。
+
+#### 对话触发后技能会做什么
+
+1. 检查 XeLaTeX / pandoc / Python / Pillow / MinerU 等环境。
+2. 读取源文件：DOCX 用 pandoc + 内置 `extract_docx.py`；PDF 用 MinerU SDK。
+3. 提取图片到 `Images-<卷名>/`，WMF/EMF 转 PNG。
+4. 生成 `paper.json` 并用 `render_tex.py` 渲染（或按模板直接写 `.tex`）。
+5. XeLaTeX 连编两遍，跑结构验证 + 视觉验证；页数不符时自动调 `itemsep` / 行距 / 边距。
+6. `finalize_paper.py` 收尾：生成答题卡 → 部署 `build.py` → 编译清理 → 隐藏 `temp_scripts/`。
+
+### 2. 命令行：完整流程
+
+#### 2.1 DOCX → PDF
 
 ```bash
-# 排版 DOCX 试题文档
-# （在 Claude / DevEco 中直接说）
-"帮我把 2024高考真题.docx 排版成 LaTeX"
+SKILL_DIR="/path/to/shijuan-paiban"   # 本仓库目录
+WORK="/path/to/试卷目录"               # 建议与源文件同目录
+DOCX="/path/to/2026模拟卷.docx"
 
-# 排版 DOCX 答案文档（文件名含"答案"自动识别）
-"排版这个答案文档 新一卷数学-答案.docx"
+cd "$WORK"
+
+# 1) 先看结构：有文本就正常排版；只有图片说明是扫描件，需要走 OCR
+pandoc "$DOCX" -t markdown --wrap=none --track-changes=all -o "2026模拟卷.md"
+
+# 2) 解包取图（默认 Images-<文件名>/；WMF/EMF 转 PNG，600 DPI）
+python "$SKILL_DIR/scripts/extract_docx.py" "$DOCX" "$WORK" --convert-wmf
+
+# 3) 写 paper.json 后渲染（格式见 docs/ir-schema.md；--schema 可打印示例）
+python "$SKILL_DIR/scripts/render_tex.py" paper.json -o "2026模拟卷.tex" --validate
+
+# 4) 编译两遍（第二遍保证页码/目录/交叉引用正确）
+xelatex -interaction=nonstopmode "2026模拟卷.tex"
+xelatex -interaction=nonstopmode "2026模拟卷.tex"
+
+# 5) 结构与视觉验证
+python "$SKILL_DIR/scripts/validate_tex.py" "2026模拟卷.tex" --expected-pages 4
+python "$SKILL_DIR/scripts/visual_verify.py" "2026模拟卷.pdf" --dpi 150
+
+# 6) 页数不符时自动调整（按 itemsep → linespread → margin 顺序）
+python "$SKILL_DIR/scripts/auto_adjust.py" "2026模拟卷.tex" --target-pages 4
+
+# 7) 一键收尾：答题卡 + build.py + 编译清理 + 隐藏 temp_scripts
+python "$SKILL_DIR/scripts/finalize_paper.py" "2026模拟卷.tex"
 ```
 
-**流程**：pandoc 提取 → 解包取图片 → WMF→PNG → 模板排版 → 编译验证
+> 扫描件 DOCX（pandoc 只能提取 `![](media/imageN.png)`）先解包页面图，再用 MinerU OCR；命令见 `SKILL.md` 步骤 1-A。
 
-### PDF 输入
+#### 2.2 PDF → PDF
 
 ```bash
-# 排版 PDF 试卷
-"帮我把 2024高考真题.pdf 排版成 LaTeX"
-
-# 排版 PDF 答案文档
-"排版这个 pdf 答案 新一卷数学-答案.pdf"
+WORK="/path/to/试卷目录"
+PDF="/path/to/2026模拟卷.pdf"
+python "$SKILL_DIR/scripts/math_pdf_extract.py" "$PDF" --output-dir "$WORK/math-output" --language ch
+# 扫描件加 --ocr；只解析部分页加 --pages 1-10
 ```
 
-**流程**：检查 MinerU 配置 → MinerU SDK 提取 Markdown+图片 → 模板排版 → 编译验证
+提取得到 Markdown + 图片后，从第 3 步开始同上（写 `paper.json` → 渲染 → 编译 → 验证 → 收尾）。
+
+#### 2.3 答案文档
+
+```bash
+WORK="/path/to/试卷目录"
+ANSWER="/path/to/新一卷数学-答案.docx"
+python "$SKILL_DIR/scripts/extract_docx.py" "$ANSWER" "$WORK" --convert-wmf
+
+# 写答案版 paper.json（meta.template = "answer"）后渲染
+python "$SKILL_DIR/scripts/render_tex.py" answer.json -o "新一卷数学-答案.tex" --validate
+python "$SKILL_DIR/scripts/finalize_paper.py" "新一卷数学-答案.tex" --skip-answersheet
+```
+
+- 答案文档不生成答题卡；`finalize_paper.py` 会自动识别文件名中的「答案」并跳过。
+- 同一目录下已有试题 tex 时，可用 `match_paper.py` 查找对应关系：
+
+```bash
+python "$SKILL_DIR/scripts/match_paper.py" "$ANSWER" --json
+```
+
+#### 2.4 生成答题卡
+
+```bash
+# A4 + A3 两版一起生成（不加 --layout 时只出 A4）
+python "$SKILL_DIR/scripts/gen_answer_sheet.py" "2026模拟卷.tex" --layout both
+
+# 只要 A4，且暂时不编译
+python "$SKILL_DIR/scripts/gen_answer_sheet.py" "2026模拟卷.tex" --layout a4 --no-compile
+
+# 题量/分值解析不准时手动覆盖
+python "$SKILL_DIR/scripts/gen_answer_sheet.py" "2026模拟卷.tex" --layout a4 \
+  --single 8 --multi 3 --blanks 3 --solves "15/13,16/15,17/15"
+```
+
+- 从试卷 `.tex` 自动识别题量与分值；输出 `2611数学答题卡（A4）-<考试名>.tex/.pdf` 与 `（A3）` 版。
+- `--force` 允许覆盖已有手工答题卡；`--bw` 黑白；`--print-spec` 只打印解析结果。
+
+#### 2.5 只重编/调整已有 tex
+
+```bash
+cd "$WORK"
+
+python build.py                 # 编译当前目录全部 *.tex ×2
+python build.py "试卷.tex"       # 只编指定文件
+python build.py --book          # 书稿根：只编 main.tex ×3
+python build.py --times 3       # 自定义连编次数
+python build.py --no-bar        # 关闭进度条
+python build.py --keep-build    # 保留 _build/ 中间目录
+```
+
+`build.py` 以脚本所在目录为工作目录，可以从任意位置运行；根目录只有 `main.tex` 时会自动按书稿版编 3 遍。
+
+#### 2.6 IR 最小示例
+
+`paper.json`：
+
+```json
+{
+  "meta": {
+    "title": "2026 届高三模拟考试",
+    "template": "gaokao",
+    "total_pages": 4,
+    "images_dir": "Images-2026模拟卷",
+    "answer_space": "normal"
+  },
+  "sections": [
+    {
+      "heading": "一、选择题：本题共 1 小题，每小题 5 分，共 5 分。",
+      "type": "choice_single",
+      "questions": [
+        {
+          "stem": "已知集合 $A=\\{1,2\\}$，则 $A \\cup \\varnothing=$",
+          "options": [
+            {"label": "A", "text": "$\\varnothing$"},
+            {"label": "B", "text": "$\\{1\\}$"},
+            {"label": "C", "text": "$\\{2\\}$"},
+            {"label": "D", "text": "$\\{1,2\\}$"}
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+渲染与检查：
+
+```bash
+python "$SKILL_DIR/scripts/render_tex.py" paper.json -o "试卷.tex" --validate
+python "$SKILL_DIR/scripts/render_tex.py" paper.json --stdout   # 只看输出，不写文件
+python "$SKILL_DIR/scripts/render_tex.py" --schema             # 打印完整字段说明
+```
+
+复杂 TikZ / 特殊表格用 `raw_tex` 逃生舱；其余尽量用 IR，编号、环境嵌套、图片场景、答题空间由渲染器统一决定。
+
+#### 2.7 批量处理
+
+```bash
+# 收尾整个目录（处理目录内全部源 .tex；答案文档自动跳过答题卡）
+python "$SKILL_DIR/scripts/finalize_paper.py" "/path/to/试卷目录"
+
+# MD 批量转 tex（先 --help 看参数）
+python "$SKILL_DIR/scripts/batch_convert.py" --help
+python "$SKILL_DIR/scripts/convert_new_papers.py" --help
+```
+
+### 3. 输出位置与产物
+
+所有产物写在**试卷工作目录**（源文件所在目录，或命令中显式指定的 `WORK`）：
+
+| 产物 | 文件名 | 说明 |
+|------|--------|------|
+| 试卷 | `<卷名>.tex` / `.pdf` | 唯一版本（学生版/教师版已合并），含 `\answern` 答题空间 |
+| 答题卡 | `2611数学答题卡（A4）-<考试名>.tex` / `.pdf` + `（A3）` | 试题卷才生成 |
+| 图片 | `Images-<卷名>/` | 无图片时可缺席 |
+| 编译脚本 | `build.py` | 收尾时自动部署 |
+| 临时脚本 | `.temp_scripts/` | 隐藏保留，不属于交付产物 |
+
+答案文档只出 `tex` / `pdf` + `Images-<卷名>/` + `build.py`，不生成答题卡。
+
+### 4. 常用参数速查
+
+| 脚本 | 常用参数 | 作用 |
+|------|----------|------|
+| `render_tex.py` | `-o`、`--template gaokao/answer`、`--validate`、`--schema` | IR → tex |
+| `validate_tex.py` | `--expected-pages N`、`--is-answer`、`--quiet` | 规则级结构验证 |
+| `visual_verify.py` | `--dpi 150`、`--output-dir DIR` | PDF → PNG 视觉检查 |
+| `auto_adjust.py` | `--target-pages N`、`--max-rounds N` | 页数自适应 |
+| `gen_answer_sheet.py` | `--layout a4/a3/both`、`--no-compile`、`--force`、`--bw` | 答题卡 |
+| `finalize_paper.py` | `--force`、`--skip-answersheet` | 一键收尾；传目录处理全部 |
+| `build.py` | `--book`、`--times N`、`--no-bar`、`--keep-build` | 批量/逐卷编译 |
+| `math_pdf_extract.py` | `--output-dir`、`--ocr`、`--language ch`、`--pages 1-10` | PDF 提取 |
+| `extract_docx.py` | `--convert-wmf`、`--dpi 600`、`--images-dir` | DOCX 解包取图 |
+
+### 5. 使用提示
+
+- **工作目录与临时脚本**：技能目录只读、`temp_scripts/` 生命周期见下方「运行时约定」。
+- **Windows 编码**：PowerShell 下先执行 `$env:PYTHONIOENCODING='utf-8'`，避免中文/公式输出乱码。
+- **页数**：把试卷标注页数写进 `paper.json` 的 `meta.total_pages`，验证时用 `--expected-pages`；不一致可跑 `auto_adjust.py`。
+- **编译失败**：先看 `.log` 中以 `!` 开头的行和 `Overfull \hbox`，也可直接跑 `build.py` 看错误摘要。
 
 ## 运行时约定
 
