@@ -7,6 +7,7 @@
 
 用法：
     python build.py                 # 通用版：编译全部 *.tex，每个连编两次
+                                    # （根目录只有 main.tex 时自动按书稿版编三次）
     python build.py --book          # 书稿版：只编 main.tex，连编三次（目录页码稳定）
     python build.py --times 3       # 自定义连编次数
     python build.py a.tex b.tex     # 只编指定文件
@@ -14,6 +15,7 @@
     python build.py --keep-build    # 保留 _build/ 目录（默认编译后自动清理）
 
 行为：
+    * 以脚本所在目录为工作目录，可从任意位置运行（python path/to/build.py）
     * 自动探测 xelatex：shutil.which → 各盘 texlive → MiKTeX → Linux/macOS
       （不假设固定盘符/年份，WSL 与 Windows 都能用）
     * 中间产物（.aux/.log/.out）统一写到 _build/，不污染源目录
@@ -32,7 +34,7 @@ import shutil
 import subprocess
 import sys
 
-HERE = os.getcwd()
+HERE = os.path.dirname(os.path.abspath(__file__))
 BUILD = os.path.join(HERE, "_build")
 
 try:
@@ -197,6 +199,7 @@ def main():
     argv = sys.argv[1:]
     book = no_bar = keep_build = False
     times = 2
+    times_explicit = False
     args = []
     i = 0
     while i < len(argv):
@@ -210,6 +213,7 @@ def main():
         elif a == "--times":
             if i + 1 < len(argv):
                 times = int(argv[i + 1])
+                times_explicit = True
                 i += 1
             else:
                 print("[ERROR] --times 需要一个数字")
@@ -225,6 +229,12 @@ def main():
         print("[ERROR] 未找到 xelatex，请安装 TeX Live 或 MiKTeX 并加入 PATH")
         return 1
     print(f"[OK] xelatex: {xelatex}")
+
+    # 书稿根目录通常只有 main.tex（章节在子目录）：未显式指定时自动按书稿版编 3 遍
+    if (not args and not book and not times_explicit
+            and sorted(glob.glob(os.path.join(HERE, "*.tex"))) ==
+            [os.path.join(HERE, "main.tex")]):
+        book = True
 
     if args:
         texs = [os.path.join(HERE, a) for a in args]

@@ -773,7 +773,7 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 
 ```
 {题库根}\
-├── 高考真题（模拟）卷\        # 190 个成卷文件夹 + 5 个年份源目录（2022.6–2026.6，源目录不动）
+├── 高考真题（模拟）卷\        # 190 个成卷文件夹 + 5 个年份目录（2022.6–2026.6，已补 build.py）
 │   └── <卷名>\               # 每卷：试题 tex + *答案.tex + Images-*\ + build.py
 ├── 考研数学真题卷\
 │   ├── 2008年\ … 2025年\     # 18 个年份文件夹：数学（一/二/三）真题+解答共 6 tex + Images ×3 + build.py
@@ -788,8 +788,9 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | 变体 | 位置 | 行为 |
 |------|------|------|
 | 通用版 | 每个试卷/高校/年份文件夹 | 编译文件夹内全部 `*.tex` ×2，统计 log 中 `^!` 行数为错误数，清理 `.aux/.log/.out`，保留 PDF |
-| 书稿版 | `题库/` | 只编译 `main.tex` ×3（目录页码稳定），其余同上 |
+| 书稿版 | `题库/` | 只编译 `main.tex` ×3（目录页码稳定），其余同上；根目录只有 `main.tex` 时通用版自动切换为书稿版 |
 
+- 以脚本所在目录为工作目录，可从任意位置运行（如 `python "D:\...\某卷\build.py"`）
 - `find_xelatex()` 按机器实际探测，顺序：`shutil.which('xelatex'/'xelatex.exe')` → 常见安装位置逐一试探（如 `<盘符>:\texlive\<年份>\bin\windows\xelatex.exe`、`/mnt/<盘符>/texlive/...`、`/usr/local/bin/xelatex`、`/usr/bin/xelatex`），命中即用；**不要假设固定盘符/年份**
 - 新整理的含 tex 文件夹都应部署一份 `build.py`（从任一已有文件夹复制母本即可）
 

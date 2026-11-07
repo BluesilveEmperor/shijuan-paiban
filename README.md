@@ -23,7 +23,7 @@
 - **pip 同款进度条**：`build.py` 编译时用 rich 渲染彩色进度条（粉色进行中 / 绿色完成），未装 rich 自动回退 tqdm 彩色条，再回退纯文本；输出重定向时自动关闭
 - **环境检查**：执行前自动检查 XeLaTeX/pandoc/Python/MinerU 等环境，缺少时引导配置
 - **MD→TEX 批量流水线**：`md2tex.py` / `md2ans.py` / `batch_convert.py` / `convert_new_papers.py` 等脚本批量把 MD 中间产物转换为试题/答案 tex
-- **题库维护**：维护 `{题库根}`（环境变量 `SHIJUAN_LIBRARY`，默认 `D:\Music\试题加题库`）；每个含 tex 文件夹部署一键编译 `build.py`（通用版编全部 tex ×2；书稿版只编 main.tex ×3）
+- **题库维护**：维护 `{题库根}`（环境变量 `SHIJUAN_LIBRARY`，默认 `D:\Music\试题加题库`）；每个含 tex 文件夹部署一键编译 `build.py`（通用版编全部 tex ×2；根目录只有 `main.tex` 时自动按书稿版编 3 遍；可从任意位置运行）
 - **回归测试**：`tests/` 下 7 套测试（渲染器排版决策、md2tex 清洗规则、答题卡、一键收尾、tex 宽度），`python tests/run_all.py` 一键跑完
 
 ## 快速开始
@@ -242,11 +242,11 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 
 | 目录 | 内容 |
 |------|------|
-| `高考真题（模拟）卷\` | 190 个成卷文件夹（tex+答案+Images+build.py）+ 5 个年份源目录（2022.6–2026.6，不动） |
+| `高考真题（模拟）卷\` | 190 个成卷文件夹（tex+答案+Images+build.py）+ 5 个年份目录（2022.6–2026.6，已补 build.py） |
 | `考研数学真题卷\` | 18 个年份文件夹（2008年–2025年，数学一/二/三）+ 71 个 `2024-<大学>` 文件夹 + `题库\` 书稿工程 |
 | `高三数学\` | 源材料 + `.math-output`（MD 中间产物） |
 
-- **一键编译**：每个含 tex 的文件夹都有 `build.py`（通用版：编全部 tex ×2；书稿版：只编 `main.tex` ×3），自动探测 xelatex（`shutil.which` → 各盘 `?:\texlive\*\bin\windows\` 探测，不写死路径）；终端显示 pip 同款彩色进度条
+- **一键编译**：每个含 tex 的文件夹都有 `build.py`（通用版：编全部 tex ×2；根目录只有 `main.tex` 时自动按书稿版编 ×3），自动探测 xelatex（`shutil.which` → 各盘 `?:\texlive\*\bin\windows\` 探测，不写死路径），可从任意位置运行；终端显示 pip 同款彩色进度条
 - **整理规范**：只动副本不动原件；图片先核实引用再删；`pdfinfo` 判定编译产物（Creator=LaTeX）才删；整理后全量并行编译验证 0 error
 
 ## 质量保障
