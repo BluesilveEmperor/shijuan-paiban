@@ -57,6 +57,31 @@ flowchart TD
 
 需要答题卡时，追加一条命令即可（见「步骤 5-B」），题量与分值自动从排好的试卷 `.tex` 里读。
 
+## ⛔ 硬约束：技能安装目录只读（`ACCESS-001`）
+
+处理试卷期间，`{SKILL_DIR}` **只读**：
+
+- 禁止在 `{SKILL_DIR}` 内新建、修改、删除任何文件——包括临时脚本、`paper.json`、`.tex` / `.pdf`、图片、日志、`__pycache__`、`preview-*.png`。
+- 所有可写内容（中间产物、成品、日志）只放**试卷工作目录**（试卷 `.tex` 所在目录）。
+- 调用本技能脚本时设置 `PYTHONDONTWRITEBYTECODE=1`（bash）或 `$env:PYTHONDONTWRITEBYTECODE=1`（PowerShell），防止在 `scripts/` 下生成 `__pycache__`。
+- 技能维护（改规则、跑仓库回归测试）不属于「使用技能」，可以写 `{SKILL_DIR}`。
+
+收尾自检：`git -C "{SKILL_DIR}" status --short` 应无新增/改动（维护技能时除外）。
+
+## 临时脚本目录：`temp_scripts/`（`ACCESS-002`）
+
+为单份试卷临时生成/改写的提取、转换、排版脚本，按下面规则存放：
+
+1. 统一放**试卷工作目录**下的 `temp_scripts/`，不要散落在试卷根目录，更不要写进 `{SKILL_DIR}`。
+2. 从该目录运行：`python temp_scripts/xxx.py ...`；若脚本要 `import` 技能自带模块或调用其子进程，先设 `PYTHONDONTWRITEBYTECODE=1`（或脚本开头 `sys.dont_write_bytecode = True`），避免在 `{SKILL_DIR}/scripts/` 生成 `__pycache__`。
+3. 收尾时把整个目录重命名为点前缀 `.temp_scripts/`，Windows 下同时设置隐藏属性（资源管理器默认不可见，需开启「显示隐藏文件」才能看到）：
+
+```bash
+python "{SKILL_DIR}/scripts/hide_temp_scripts.py" "<试卷工作目录>"
+```
+
+`finalize_paper.py` 收尾时会自动执行这一步。目录保留备查，不进入默认产物清单；再次运行需要临时脚本时，可先把 `.temp_scripts/` 改回 `temp_scripts/`（Windows 需先去掉隐藏属性）。
+
 ## 输入格式自动识别
 
 **根据文件扩展名自动选择提取流程：**
@@ -81,7 +106,7 @@ flowchart TD
 | 产物 | 文件名 | 说明 |
 |------|--------|------|
 | 试卷 | `<卷名>.tex` / `.pdf` | **唯一版本**（学生版/教师版已合并），含 `\answern` 答题空间 |
-| 答题卡 | `<卷名>-答题卡-A4.tex` / `.pdf` + `-A3` | A4 / A3 两种版式 |
+| 答题卡 | `2611数学答题卡（A4）-<考试名>.tex` / `.pdf` + `（A3）` | A4 / A3 两种版式 |
 | 图片文件夹 | `Images-<卷名>/` | 见上文命名约定 |
 | 编译脚本 | `build.py` | 一键编译（通用版母本 `{SKILL_DIR}/scripts/build.py`） |
 
@@ -223,7 +248,7 @@ else:
 配置好后执行提取：
 ```bash
 MATH_EXTRACT="{SKILL_DIR}/scripts/math_pdf_extract.py"
-PYTHONIOENCODING=utf-8 python "$MATH_EXTRACT" "<pdf路径>" --output-dir ./math-output --language ch
+PYTHONIOENCODING=utf-8 python "$MATH_EXTRACT" "<pdf路径>" --output-dir "<试卷工作目录>/math-output" --language ch
 ```
 
 **脚本参数：**
@@ -287,11 +312,15 @@ ls ./math-output/  # 确认 .md 和图片文件存在
 
 有两种方式，**优先用方式 A**：
 
+> 需要写一次性提取/转换/排版脚本时，放试卷工作目录的 `temp_scripts/` 并在其中运行（见「临时脚本目录」）；不要写进 `{SKILL_DIR}`，也不要散落在试卷根目录。
+
 #### 方式 A（推荐）：IR + 确定性渲染器
 
 你只负责「理解」——把题目切分成结构化 JSON；排版由脚本做，因此结果可复现、可验证。
 
 ```bash
+cd "<试卷工作目录>"
+
 # 1. 写 paper.json（格式见 docs/ir-schema.md，或 --schema 打印示例）
 python "{SKILL_DIR}/scripts/render_tex.py" --schema
 
@@ -327,11 +356,13 @@ python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "试卷.tex" --validate
 | `STRUCT-ENV-002` | 解答题环境 | examenum |
 | `STRUCT-BLANK-001` | 填空题空位 | \blank（模板已定义，下划线 2cm） |
 | `STRUCT-GLYPH-001` | 圈号字符 ①-⑩ 字形映射 | 导言区用 newunicodechar 把 ①-⑩ 映射到 \mycircled |
+| `STRUCT-DIV-001` | 卷部分分隔线（第 I/II 卷） | 选择题部分开始处（单选+多选+填空之前） → \textbf{第I卷（选择题部分（共 <分值> 分））}<br>解答题部分开始处（四、解答题标题之前） → \textbf{第II卷（非选择题，共 <分值> 分）} |
 | `IMG-W-001` | 单张图片宽度硬上限 | 0.35\textwidth |
 | `IMG-W-002` | 单张题目配图默认宽度 | 0.30\textwidth |
 | `IMG-W-003` | 并排图片宽度与高度 | 2 张并排：minipage 0.42\textwidth，图高 3cm<br>3 张并排：minipage 0.28\textwidth，图高 2.5cm |
 | `IMG-W-004` | 选项图片宽度 | 0.12\textwidth |
-| `IMG-ALIGN-001` | 图片对齐方式 | \centering |
+| `IMG-ALIGN-001` | 图片对齐方式（一般场景） | \centering |
+| `IMG-ALIGN-002` | 立体几何大题配图对齐 | 解答题立体几何题单个立体图（TikZ 或图片） → flushright 靠右（图与图注如「（第 16 题图）」均右对齐）<br>解答题立体几何题多张图（如折叠前后图 1/图 2） → center 居中并排（minipage 并排 + 各自图注）<br>选择题/填空题配图 → center 居中（遵循 IMG-ALIGN-001） |
 | `IMG-SCENE-001` | 图片场景选择 | 小装饰图（行内） → \includegraphics[height=0.6em]<br>列表内单图（无论有无子问） → minipage 左右并排（0.62 文字 + 0.30 图片）<br>图片作为选项 → tasks(4)，图宽 0.12\textwidth<br>图片与长选项并排 → minipage 左选项右图片<br>多张图片并排 → figure[H] + minipage，必须限高<br>TikZ 图 → \resizebox{0.35\textwidth}{!}{...}<br>图片位于 \\begin{examenum} 之前（列表外） → wrapfigure{r}{0.30\textwidth} 右侧环绕 |
 | `TASKS-COL-001` | tasks 列数判定 | 含图片且平均长度 < 80 字符 → 4 列<br>含图片且平均长度 ≥ 80 字符 → 2 列<br>平均可见长度 > 25 字符（含公式或纯文字） → 2 列<br>默认（简短选项，含短公式如 $\{0\}$） → 4 列 |
 | `TASKS-COL-002` | 禁止竖排图片选项 | 禁止图片选项使用 tasks(1) |
@@ -347,10 +378,12 @@ python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "试卷.tex" --validate
 | `EXTRACT-001` | 图片目录命名 | 任意输入（DOCX / PDF，试题或答案）：Images-<文件名去扩展名>（与 ARTIFACT-003 一致，试题不再用 media） |
 | `EXTRACT-002` | 扫描件判定 | pandoc 输出仅含 ![](media/imageN.png) 且无正文 → 走 MinerU OCR |
 | `EXTRACT-003` | WMF 转 PNG | Pillow 渲染，600 DPI |
-| `ARTIFACT-001` | 试题卷标准产物集 | 试卷：<卷名>.tex / .pdf（含 \answern 答题空间，学生版/教师版合并后的唯一版本）<br>答题卡：<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py |
-| `ARTIFACT-002` | 产物命名后缀表 | 答题卡 A4：-答题卡-A4<br>答题卡 A3：-答题卡-A3 |
+| `ARTIFACT-001` | 试题卷标准产物集 | 试卷：<卷名>.tex / .pdf（含 \answern 答题空间，学生版/教师版合并后的唯一版本）<br>答题卡：2611数学答题卡（A4）-<考试名>.tex / .pdf + 2611数学答题卡（A3）-<考试名>.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py |
+| `ARTIFACT-002` | 产物命名后缀表 | 答题卡 A4：2611数学答题卡（A4）-<考试名>（由 gen_answer_sheet.py 的 sheet_stem() 统一推导：源卷名含「数学卷/数学试卷-」前缀时去前缀换「数学答题卡（A4/A3）-」，数字前缀随源卷保留；否则回退旧格式 <卷名>-答题卡-A4）<br>答题卡 A3：2611数学答题卡（A3）-<考试名>（推导规则同上） |
 | `ARTIFACT-003` | 图片文件夹统一命名 | Images-<卷名>（试题与答案一致，替代旧约定 media） |
 | `ARTIFACT-004` | 收尾与部署 | 每个含 tex 的试卷目录部署通用版 build.py；排版完成后用 scripts/finalize_paper.py 一键补齐产物集、编译并清理 preview-*.png |
+| `ACCESS-001` | 技能安装目录只读 | 使用技能处理试卷期间，{SKILL_DIR} 只读：不得在其中新建、修改、删除任何文件 |
+| `ACCESS-002` | 临时脚本统一放 temp_scripts 并隐藏 | 每卷的提取/转换/排版临时脚本统一放 <试卷工作目录>/temp_scripts/ 并从该目录运行；收尾时重命名为 .temp_scripts 并设置 Windows 隐藏属性 |
 
 > 完整规则（含禁止项与证据）见 [docs/conversion-rules.md](docs/conversion-rules.md)，机器可读源见 [rules/layout.yaml](rules/layout.yaml)。
 <!-- RULES:END index -->
@@ -391,7 +424,7 @@ python "{SKILL_DIR}/scripts/render_tex.py" paper.json -o "试卷.tex" --validate
 #### 图片排版约束
 
 **核心三条**：
-- **始终用 `\centering`，禁止 `\raggedleft`**（`IMG-ALIGN-001`，图注必须居中于图片正下方）
+- **一般场景用 `\centering`，禁止 `\raggedleft`**（`IMG-ALIGN-001`，图注必须居中于图片正下方）；**例外**：立体几何解答题单个立体图用 `flushright` 靠右、多图并排仍居中（`IMG-ALIGN-002`；LaTeX 无 `right` 环境）
 - 单张硬上限 `0.35\textwidth`，默认 `0.30\textwidth`；选项图 `0.12\textwidth`（`IMG-W-001` / `IMG-W-002` / `IMG-W-004`）
 - 多图并排必须限高 `height=Xcm,keepaspectratio`（`IMG-W-003`：2 张 3cm / 3 张 2.5cm）
 
@@ -573,8 +606,8 @@ python scripts/gen_answer_sheet.py "<试卷.tex>"
 **输出物**（与试卷同目录）：
 
 ```
-<卷名>-答题卡-A4.tex / .pdf    A4，4 个版面（显式 -A4 后缀，ARTIFACT-002）
-<卷名>-答题卡-A3.tex / .pdf    A3 横向，2 张纸（--layout a3/both 时）
+2611数学答题卡（A4）-<考试名>.tex / .pdf    A4，4 个版面（命名规范见 ARTIFACT-002）
+2611数学答题卡（A3）-<考试名>.tex / .pdf    A3 横向，2 张纸（--layout a3/both 时）
 answersheet.sty                宏包副本，供日后单独重编
 ```
 
@@ -645,7 +678,7 @@ python "{SKILL_DIR}/scripts/auto_adjust.py" "文件名.tex" --target-pages 4
 
 ### 步骤 7：清理与收尾
 
-**推荐：一键收尾**（自动补齐标准产物集 → 部署 build.py → 编译全部 tex ×2 → 清理中间文件与 `preview-*.png` → 打印产物清单校验，见「标准产物集」章节）：
+**推荐：一键收尾**（自动补齐标准产物集 → 部署 build.py → 编译全部 tex ×2 → 清理中间文件与 `preview-*.png` → 隐藏 `temp_scripts/` → 打印产物清单校验，见「标准产物集」章节）：
 
 ```bash
 python "{SKILL_DIR}/scripts/finalize_paper.py "<文件名.tex>"
@@ -655,18 +688,24 @@ python "{SKILL_DIR}/scripts/finalize_paper.py "<文件名.tex>"
 ```bash
 rm -rf "<临时目录>"
 rm -f *.aux *.log *.out *.toc *.synctex.gz   # 所有版本
+python "{SKILL_DIR}/scripts/hide_temp_scripts.py" "<试卷工作目录>"
 ```
 
 **保留（即标准产物集，`ARTIFACT-001`）：**
 - 试题文档：试卷 `<卷名>.tex/.pdf`（唯一版本，含答题空间）、图片
 - 答案文档：`.tex` 源文件、`.pdf`、`{图片目录}/`
-- 答题卡：`<卷名>-答题卡-A4.tex/.pdf` 与 `-A3` 版、`answersheet.sty`
+- 答题卡：`2611数学答题卡（A4）-<考试名>.tex/.pdf` 与 `（A3）` 版、`answersheet.sty`
 - 每卷目录：`build.py`
+
+> `temp_scripts/` 不是交付产物：收尾后应是隐藏的 `.temp_scripts/`；试卷根目录不应出现散落的临时 `*.py`。
 
 ### 步骤 8：日志采集与上传
 
+**在试卷工作目录执行**（`log-runtime/` 属于可写产物，禁止写进 `{SKILL_DIR}`）：
+
 ```python
 import sys
+sys.dont_write_bytecode = True  # ACCESS-001：不在 skill 目录生成 __pycache__
 sys.path.insert(0, "<skill目录>/scripts")
 from logger import TaskLogger
 from uploader import silent_upload

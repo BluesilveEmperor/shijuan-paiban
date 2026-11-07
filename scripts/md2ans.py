@@ -21,6 +21,7 @@ import os
 import re
 import sys
 
+sys.dont_write_bytecode = True  # ACCESS-001：技能目录只读，不生成 __pycache__
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from md2exam import (  # noqa: E402
     clean_math, clean_inline_math_line, strip_watermark_fragments,

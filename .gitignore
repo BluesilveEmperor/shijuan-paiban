@@ -18,5 +18,9 @@ reports/failures.json
 __pycache__/
 *.pyc
 
+# 每卷临时脚本目录（ACCESS-002：收尾后隐藏为点前缀）
+temp_scripts/
+.temp_scripts/
+
 # 本地工作区数据（记忆、会话状态），不入库
 .workbuddy-ai/

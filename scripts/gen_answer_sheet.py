@@ -20,9 +20,12 @@ gen_answer_sheet.py — 从试卷 .tex 自动生成答题卡（A4 / A3）
 
 输出（与试卷同目录）
 --------------------
-    <卷名>-答题卡-A4.tex / .pdf    （layout=a4，ARTIFACT-002 显式 -A4 后缀）
-    <卷名>-答题卡-A3.tex / .pdf     （layout=a3）
+    2611数学答题卡（A4）-<考试名>.tex / .pdf    （layout=a4；源卷名含「数学卷/数学试卷-」前缀）
+    2611数学答题卡（A3）-<考试名>.tex / .pdf     （layout=a3）
     answersheet.sty                 （宏包副本，供日后单独重编）
+
+    前缀数字随源卷保留（如 2611数学卷-嘉兴一模 → 2611数学答题卡（A4）-嘉兴一模）；
+    无法识别前缀时回退旧格式 <卷名>-答题卡-A4 / -A3（ARTIFACT-002）。
 
 解析失败的兜底
 --------------
@@ -53,6 +56,20 @@ for _s in (sys.stdout, sys.stderr):
 SCRIPTS_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPTS_DIR.parent
 STY_SRC = SKILL_DIR / "templates" / "answer-sheet" / "answersheet.sty"
+
+# ── 输出名规范 ──────────────────────────────────────────────────────────
+# 源卷「2611数学卷-嘉兴一模」→ 答题卡「2611数学答题卡（A4）-嘉兴一模」
+# 前缀数字随源卷保留；无「数学卷/数学试卷-」前缀时回退旧格式 <卷名>-答题卡-A4
+_SHEET_PREFIX_RE = re.compile(r"^(?P<yy>\d{0,4})数学(?:卷|试卷)[-—](?P<exam>.+)$")
+
+
+def sheet_stem(paper_stem: str, layout: str, suffix: str = "答题卡") -> str:
+    """由试卷名推导答题卡文件名（不含扩展名），layout ∈ {a4, a3}。"""
+    side = "A4" if layout == "a4" else "A3"
+    m = _SHEET_PREFIX_RE.match(paper_stem)
+    if m and m.group("exam"):
+        return f"{m.group('yy')}数学{suffix}（{side}）-{m.group('exam')}"
+    return f"{paper_stem}-{suffix}-{side}"
 
 # =========================================================================
 #  answersheet.sty 中的版式常量（cm）——必须与宏包保持一致
@@ -997,7 +1014,7 @@ def main(argv: list[str] | None = None) -> int:
         else:
             pages = args.pages if args.pages is not None else a4_panels
 
-        name = f"{src.stem}-{args.suffix}" + ("-A4" if layout == "a4" else "-A3")
+        name = sheet_stem(src.stem, layout, args.suffix)
         tex = out_dir / f"{name}.tex"
 
         # 不覆盖别人的手工文件：只认本脚本写的（带生成标记）

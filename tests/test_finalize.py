@@ -92,6 +92,10 @@ with tempfile.TemporaryDirectory() as td:
     src.write_text(PAPER, encoding='utf-8')
     stem = src.stem
 
+    # ACCESS-002：临时脚本目录应在收尾后隐藏为 .temp_scripts/
+    (d / 'temp_scripts').mkdir()
+    (d / 'temp_scripts' / 'probe.py').write_text('# 临时脚本\n', encoding='utf-8')
+
     rc, out = run_finalize(src)
     check_true('finalize-rc0', rc == 0, f'rc={rc}\n{out[-1500:]}')
 
@@ -103,6 +107,21 @@ with tempfile.TemporaryDirectory() as td:
     ]
     for name in artifacts:
         check_true(f'artifact-{name}', (d / name).exists(), '缺失')
+
+    check_true('temp-scripts-hidden',
+               (d / '.temp_scripts' / 'probe.py').exists()
+               and not (d / 'temp_scripts').exists(),
+               '收尾后 temp_scripts/ 应重命名为 .temp_scripts/')
+
+    if os.name == 'nt':
+        import ctypes
+        get_attrs = ctypes.windll.kernel32.GetFileAttributesW
+        get_attrs.argtypes = [ctypes.c_wchar_p]
+        get_attrs.restype = ctypes.c_uint32
+        attrs = get_attrs(str(d / '.temp_scripts'))
+        check_true('temp-scripts-windows-hidden',
+                   attrs != 0xFFFFFFFF and bool(attrs & 0x2),
+                   f'Windows 隐藏属性未设置: attrs={attrs:#x}')
 
     # 学生版/教师版已合并，后缀废止（ARTIFACT-001/002）
     check_true('no-student-suffix',

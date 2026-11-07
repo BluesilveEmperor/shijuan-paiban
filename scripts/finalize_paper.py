@@ -6,8 +6,8 @@
 
     <卷名>.tex / .pdf                试卷（唯一版本，含 \\answern 答题空间；
                                       学生版/教师版已合并，后缀废止）
-    <卷名>-答题卡-A4.tex / .pdf
-    <卷名>-答题卡-A3.tex / .pdf
+    2611数学答题卡（A4）-<考试名>.tex / .pdf
+    2611数学答题卡（A3）-<考试名>.tex / .pdf
     Images-<卷名>/                    图片文件夹（无图时允许缺席）
     build.py                         一键编译脚本（自动部署）
     answersheet.sty                  答题卡宏包副本（随答题卡生成）
@@ -28,7 +28,9 @@
     2. gen_answer_sheet.py --layout both --no-compile → 答题卡 A4 + A3
     3. 部署 build.py（母本 scripts/build.py，已存在则不动）
     4. 运行 build.py：编译全部 tex ×2，回拷 PDF，清理中间文件
-    5. 清理 preview-*.png；逐项校验产物集，打印清单
+    5. 清理 preview-*.png；临时脚本目录 temp_scripts/ 隐藏为 .temp_scripts/
+       （Windows 下同时设置隐藏属性）
+    6. 逐项校验产物集，打印清单
 
 退出码：0 全部产物齐全；1 有产物缺失或生成失败。
 """
@@ -40,9 +42,20 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True  # ACCESS-001：技能目录只读，不生成 __pycache__
+
 SCRIPTS = Path(__file__).resolve().parent
 GEN_SHEET = SCRIPTS / "gen_answer_sheet.py"
 BUILD_MASTER = SCRIPTS / "build.py"
+
+from hide_temp_scripts import hide_temp_scripts  # noqa: E402
+
+try:  # 答题卡命名规范与 gen_answer_sheet.py 保持同一实现
+    from gen_answer_sheet import sheet_stem  # noqa: E402
+except ImportError:  # 兜底：旧命名格式
+    def sheet_stem(paper_stem, layout, suffix="答题卡"):
+        side = "A4" if layout == "a4" else "A3"
+        return f"{paper_stem}-{suffix}-{side}"
 
 ANSWER_HINT = "答案"
 DERIVED_HINTS = ("教师版", "学生版", "答题卡", "答题空间")
@@ -50,7 +63,8 @@ DERIVED_HINTS = ("教师版", "学生版", "答题卡", "答题空间")
 
 def run_py(cmd, cwd):
     """以 UTF-8 环境运行子进程，返回退出码。"""
-    env = dict(os.environ, PYTHONIOENCODING="utf-8")
+    env = dict(os.environ, PYTHONIOENCODING="utf-8",
+               PYTHONDONTWRITEBYTECODE="1")
     proc = subprocess.run([sys.executable, *cmd], cwd=str(cwd), env=env)
     return proc.returncode
 
@@ -90,8 +104,8 @@ def process_source(src, force=False, skip_answersheet=False):
     if not is_answer:
         # 答题卡 A4 + A3
         if not skip_answersheet:
-            a4 = d / f"{stem}-答题卡-A4.tex"
-            a3 = d / f"{stem}-答题卡-A3.tex"
+            a4 = d / f"{sheet_stem(stem, 'a4')}.tex"
+            a3 = d / f"{sheet_stem(stem, 'a3')}.tex"
             if force or not (a4.exists() and a3.exists()):
                 cmd = [str(GEN_SHEET), str(src), "--layout", "both", "--no-compile"]
                 if force:
@@ -123,8 +137,8 @@ def process_source(src, force=False, skip_answersheet=False):
     # 产物校验清单
     required = [src.name, f"{stem}.pdf", "build.py"]
     if not is_answer and not skip_answersheet and sheet_ok:
-        required += [f"{stem}-答题卡-A4.tex", f"{stem}-答题卡-A4.pdf",
-                     f"{stem}-答题卡-A3.tex", f"{stem}-答题卡-A3.pdf"]
+        required += [f"{sheet_stem(stem, 'a4')}.tex", f"{sheet_stem(stem, 'a4')}.pdf",
+                     f"{sheet_stem(stem, 'a3')}.tex", f"{sheet_stem(stem, 'a3')}.pdf"]
 
     tag = "（答案文档）" if is_answer else ""
     print(f"\n== 产物清单 [{src.name}] {tag}==")
@@ -173,6 +187,16 @@ def main():
         if missing:
             total_missing += missing
             failed_sources.append(src.name)
+
+    # ACCESS-002：收尾把每卷的一次性脚本目录隐藏为 .temp_scripts/
+    for folder in sorted({src.parent for src in sources}):
+        try:
+            hidden = hide_temp_scripts(folder)
+        except OSError as exc:
+            print(f"[WARN] 无法隐藏 temp_scripts/：{exc}", file=sys.stderr)
+            continue
+        if hidden:
+            print(f"[OK] 已隐藏临时脚本目录：{hidden}")
 
     if failed_sources:
         print(f"\n[ERROR] {len(failed_sources)} 个试卷产物缺失："

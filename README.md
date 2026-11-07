@@ -14,11 +14,13 @@
 - **自动模板选择**：根据文件名是否含"答案"自动选用试题模板或答案模板
 - **三段式试题匹配**：答案文档自动查找同目录对应的 `.tex` 试题文件（`match_paper.py`）
 - **答题卡生成**：从排好的试卷 `.tex` 自动识别题量与分值，生成 A4 / A3 答题卡（`scripts/gen_answer_sheet.py`）；按分值比例自动分页分栏，带考生号填涂表、注意事项、黑白模式
-- **标准产物集**：每份试题卷输出统一三件套——试卷 `<卷名>.tex/.pdf`（学生版/教师版合并后的唯一版本，含 `\answern` 答题空间）/ `-答题卡-A4` + `-答题卡-A3` / `Images-<卷名>` + `build.py`（`ARTIFACT-001~004`）；`finalize_paper.py` 一键收尾：补齐答题卡 → 部署 `build.py` → 编译清理 → 产物清单校验，幂等可重跑
+- **标准产物集**：每份试题卷输出统一产物集——试卷 `<卷名>.tex/.pdf`（学生版/教师版合并后的唯一版本，含 `\answern` 答题空间）/ `2611数学答题卡（A4）-<考试名>` + `（A3）` / `Images-<卷名>` + `build.py`（`ARTIFACT-001~004`）；`finalize_paper.py` 一键收尾：补齐答题卡 → 部署 `build.py` → 编译清理 → 隐藏 `temp_scripts/` → 产物清单校验，幂等可重跑
+- **只读运行**：使用期间技能安装目录 `{SKILL_DIR}` 只读；每卷一次性提取/排版脚本放工作目录 `temp_scripts/`，收尾自动隐藏为 `.temp_scripts/`（Windows 同时设置隐藏属性，资源管理器默认不可见；`ACCESS-001` / `ACCESS-002`）
 - **错题卷支持**：自动解析错题文件（图片/PDF），按难度排序排版，含错因分析/正确解法/变式
 - **周练卷支持**：参数化生成周练卷，含学生版/教师版/每题一页版
 - **图片智能处理**：8 种场景自动选择（`IMG-SCENE-001`）、并排限高、`\graphicspath` 自动对齐
 - **编译验证**：XeLaTeX 编译、Overfull 检测、`validate_tex.py` 规则级结构验证、`visual_verify.py` 视觉验证
+- **pip 同款进度条**：`build.py` 编译时用 rich 渲染彩色进度条（粉色进行中 / 绿色完成），未装 rich 自动回退 tqdm 彩色条，再回退纯文本；输出重定向时自动关闭
 - **环境检查**：执行前自动检查 XeLaTeX/pandoc/Python/MinerU 等环境，缺少时引导配置
 - **MD→TEX 批量流水线**：`md2tex.py` / `md2ans.py` / `batch_convert.py` / `convert_new_papers.py` 等脚本批量把 MD 中间产物转换为试题/答案 tex
 - **题库维护**：维护 `{题库根}`（环境变量 `SHIJUAN_LIBRARY`，默认 `D:\Music\试题加题库`）；每个含 tex 文件夹部署一键编译 `build.py`（通用版编全部 tex ×2；书稿版只编 main.tex ×3）
@@ -35,7 +37,9 @@
 
 **DOCX 输入额外依赖：**
 - Pillow（`pip install Pillow`）— WMF→PNG 转换
-- docx skill（解包脚本）
+
+**可选依赖：**
+- rich（`pip install rich`）— `build.py` 的 pip 同款彩色进度条；未安装时自动回退 tqdm / 纯文本
 
 **PDF 输入额外依赖：**
 - MinerU SDK（`pip install mineru-open-sdk`）
@@ -48,8 +52,8 @@
 git clone https://github.com/BluesilveEmperor/shijuan-paiban.git
 cd shijuan-paiban
 
-# 2. 安装通用依赖
-pip install Pillow
+# 2. 安装通用依赖（rich 可选，用于 build.py 彩色进度条）
+pip install Pillow rich
 
 # 3. 如需 PDF 输入支持
 pip install mineru-open-sdk
@@ -87,6 +91,11 @@ echo "token: '你的API密钥'" > ~/.mineru/config.yaml
 
 **流程**：检查 MinerU 配置 → MinerU SDK 提取 Markdown+图片 → 模板排版 → 编译验证
 
+## 运行时约定
+
+- **技能安装目录只读**（`ACCESS-001`）：处理试卷期间不在 `{SKILL_DIR}` 内新建、修改、删除任何文件（含临时脚本、`paper.json`、`.tex`/`.pdf`、图片、日志、`__pycache__`）；所有可写内容只放试卷工作目录。调用脚本时建议设置 `PYTHONDONTWRITEBYTECODE=1`。
+- **临时脚本集中存放**（`ACCESS-002`）：每卷一次性提取/转换/排版脚本统一放 `<试卷工作目录>/temp_scripts/` 并从该目录运行，不散落在试卷根目录；收尾时由 `finalize_paper.py` 自动重命名为 `.temp_scripts/`，Windows 下同时设置隐藏属性，资源管理器默认不可见。目录保留备查，不进入交付产物清单。
+
 ## 工作流概览
 
 ```
@@ -104,7 +113,7 @@ echo "token: '你的API密钥'" > ~/.mineru/config.yaml
     ↓
 编译 → 验证（XeLaTeX × 2）
     ↓
-清理辅助文件
+清理辅助文件 → 隐藏 temp_scripts/（Windows 设置隐藏属性）
     ↓
 日志采集与上传
 ```
@@ -214,6 +223,8 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | 解答题编号从 1 开始 | `start` 值 = 单选题数 + 多选题数 + 填空题数 + 1 |
 | 分页/定位逻辑没生效 | Python 字符串必须用 raw string `r"\begin"` |
 | 环境检查失败 | 按提示安装缺失依赖，必须项（XeLaTeX/pandas/Python）不可跳过 |
+| 看不到 `temp_scripts/` | 收尾已重命名为 `.temp_scripts/` 并设置 Windows 隐藏属性；开启「显示隐藏的项目」或先 `attrib -h` 再改名 |
+| 进度条没有颜色 | `pip install rich`（或 `tqdm`）；输出被重定向到文件时会自动关闭进度条 |
 
 ## MinerU API 限制（PDF 输入）
 
@@ -235,7 +246,7 @@ silent_upload(log_runtime_dir="log-runtime", task_name="试卷排版")
 | `考研数学真题卷\` | 18 个年份文件夹（2008年–2025年，数学一/二/三）+ 71 个 `2024-<大学>` 文件夹 + `题库\` 书稿工程 |
 | `高三数学\` | 源材料 + `.math-output`（MD 中间产物） |
 
-- **一键编译**：每个含 tex 的文件夹都有 `build.py`（通用版：编全部 tex ×2；书稿版：只编 `main.tex` ×3），自动探测 xelatex（`shutil.which` → 各盘 `?:\texlive\*\bin\windows\` 探测，不写死路径）
+- **一键编译**：每个含 tex 的文件夹都有 `build.py`（通用版：编全部 tex ×2；书稿版：只编 `main.tex` ×3），自动探测 xelatex（`shutil.which` → 各盘 `?:\texlive\*\bin\windows\` 探测，不写死路径）；终端显示 pip 同款彩色进度条
 - **整理规范**：只动副本不动原件；图片先核实引用再删；`pdfinfo` 判定编译产物（Creator=LaTeX）才删；整理后全量并行编译验证 0 error
 
 ## 质量保障
@@ -273,7 +284,7 @@ shijuan-paiban/
 │   ├── conversion-rules.md     # 转换规则 + LaTeX 示例（规则表为生成区块）
 │   ├── ir-schema.md            # Question IR 结构说明
 │   ├── 进化方案_v4.md           # 架构演进方案与诊断
-│   └── 试卷排版技能工作流与排版细节.{md,tex,pdf}
+│   └── 试卷排版技能工作流与排版细节.{md,tex}
 ├── evals/
 │   ├── evals.json              # 人工评估用例（22 条场景描述）
 │   └── fixtures/               # 可执行样本（7 份，_generate.py 从模板拼装）
@@ -297,7 +308,8 @@ shijuan-paiban/
     ├── eval_run.py             # ★ 评估执行器（编译+验证+打分）
     ├── evolve.py               # ★ 失败归因 + 规则候选 + A/B 门禁
     ├── gen_rules_doc.py        # ★ 从 layout.yaml 生成文档规则表
-    ├── finalize_paper.py       # ★ 一键收尾（补齐标准产物集 + 部署 build.py + 编译清理 + 清单校验）
+    ├── finalize_paper.py       # ★ 一键收尾（补齐产物集 + 部署 build.py + 编译清理 + 隐藏 temp_scripts）
+    ├── hide_temp_scripts.py    # ★ temp_scripts/ → .temp_scripts/（Windows 隐藏属性；ACCESS-002）
     ├── extract_docx.py         # 内置 DOCX 解包（替代外部 docx skill）
     ├── match_paper.py          # 答案文档三段式匹配试题 tex
     ├── auto_adjust.py          # 编译后页数自适应
@@ -318,6 +330,7 @@ shijuan-paiban/
 
 - **PDF 提取脚本已内嵌**：`scripts/math_pdf_extract.py`（封装 MinerU SDK）
 - **DOCX 解包已内嵌**：`scripts/extract_docx.py`（标准库 zipfile + Pillow），**不再依赖外部 docx skill**
+- **rich（可选）**：`pip install rich` 启用 `build.py` 的 pip 同款彩色进度条；未安装时回退 tqdm / 纯文本
 
 ## 许可证
 
@@ -326,6 +339,6 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 ## 相关链接
 
 - [MinerU 官网](https://mineru.net)
-- [工作流与排版细节全解](docs/试卷排版技能工作流与排版细节.pdf) — 完整技能说明（含 [Markdown](docs/试卷排版技能工作流与排版细节.md) / [LaTeX](docs/试卷排版技能工作流与排版细节.tex) 源文件）
+- [工作流与排版细节全解](docs/试卷排版技能工作流与排版细节.md) — 完整技能说明（含 [LaTeX](docs/试卷排版技能工作流与排版细节.tex) 源文件）
 - [GitHub](https://github.com/BluesilveEmperor/shijuan-paiban/tree/math)
 - [GitCode](https://gitcode.com/GLY-NXD/shijuan-paiban/tree/math)

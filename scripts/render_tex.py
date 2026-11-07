@@ -24,6 +24,7 @@ import json
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True  # ACCESS-001：技能目录只读，不生成 __pycache__
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import tex_width  # noqa: E402  宽度估算（TASKS-COL-001 可行性判定）
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""build.py — 一键编译本文件夹内的 .tex（母本，带 tqdm 进度条）
+"""build.py — 一键编译本文件夹内的 .tex（母本，带 pip 同款彩色进度条）
 
 部署方式：把本文件复制到任一含 .tex 的试卷/高校/年份/书稿文件夹即可。
 （各文件夹里的 build.py 都应是本文件的副本，改母本后同步覆盖）
@@ -20,7 +20,8 @@
     * 每个 .tex 连编 N 次（lastpage 页码、目录、交叉引用才准），PDF 回拷到当前目录
     * 编译成功后自动清理：删除 _build/ 目录 + 当前目录下散落的 .aux/.log/.out/.toc
     * 统计 log 中以 "!" 开头的错误行，失败打印前几条
-    * tqdm 进度条显示当前文件；输出被重定向时自动关闭；未装 tqdm 自动降级
+    * rich 进度条（pip 同款配色：粉色进行中 / 绿色完成）；未装 rich 退回
+      tqdm 彩色条；两者都没有则纯文本；输出被重定向时自动关闭
     * 全部成功退出码 0，有失败退出码 1（便于 xargs / CI 判失败）
 """
 
@@ -35,9 +36,63 @@ HERE = os.getcwd()
 BUILD = os.path.join(HERE, "_build")
 
 try:
+    from rich.table import Column
+    from rich.console import Console
+    from rich.progress import (
+        BarColumn,
+        MofNCompleteColumn,
+        Progress,
+        SpinnerColumn,
+        TaskProgressColumn,
+        TextColumn,
+        TimeElapsedColumn,
+        TimeRemainingColumn,
+    )
+except ImportError:
+    Progress = None
+
+try:
     from tqdm import tqdm
 except ImportError:
     tqdm = None
+
+
+class _RichBar:
+    """pip 同款彩色进度条（rich 默认主题：粉色进行中，完成转绿）。"""
+
+    def __init__(self, total=0, disable=False):
+        self.console = Console(highlight=False)
+        self.progress = Progress(
+            SpinnerColumn(style="cyan"),
+            TextColumn(
+                "{task.description}",
+                style="cyan",
+                markup=False,
+                table_column=Column(no_wrap=True, overflow="ellipsis",
+                                    max_width=34),
+            ),
+            BarColumn(bar_width=None),
+            TaskProgressColumn(),
+            MofNCompleteColumn(),
+            TimeElapsedColumn(),
+            TimeRemainingColumn(),
+            console=self.console,
+            disable=disable,
+        )
+        self.task = self.progress.add_task("准备编译", total=total)
+        self.progress.start()
+
+    def set_description_str(self, desc):
+        self.progress.update(self.task, description=desc)
+
+    def write(self, s, **_k):
+        self.console.print(s, markup=False, highlight=False, soft_wrap=True)
+
+    def update(self, n=1):
+        self.progress.advance(self.task, n)
+
+    def close(self):
+        self.progress.stop()
 
 
 class _PlainBar:
@@ -124,6 +179,20 @@ def cleanup(keep_build=False):
                 pass
 
 
+def make_bar(total, no_bar=False):
+    """优先 rich（pip 同款彩色条），其次 tqdm 彩色条，均未安装则返回 None。"""
+    if Progress is not None:
+        return _RichBar(total=total,
+                        disable=(no_bar or not sys.stdout.isatty()))
+    if tqdm is not None:
+        return tqdm(total=total, ncols=90, dynamic_ncols=True, file=sys.stdout,
+                    disable=(True if no_bar else None),
+                    colour="magenta", ascii=" ━",
+                    bar_format="{desc}  {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} "
+                               "[{elapsed}<{remaining}]")
+    return None
+
+
 def main():
     argv = sys.argv[1:]
     book = no_bar = keep_build = False
@@ -173,15 +242,11 @@ def main():
         return 0
 
     bad, failed = 0, []
-    if tqdm is None:
-        print("[提示] 未安装 tqdm，进度条不可用；pip install tqdm 可启用")
+    bar = make_bar(len(texs), no_bar=no_bar)
+    if bar is None:
+        print("[提示] 未安装 rich 或 tqdm，进度条不可用；"
+              "pip install rich 可启用 pip 同款彩色进度条")
         bar = _PlainBar(total=len(texs))
-    else:
-        bar = tqdm(total=len(texs), ncols=90,
-                   dynamic_ncols=True, file=sys.stdout,
-                   disable=(None if not no_bar else True),
-                   bar_format="{desc}  {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} "
-                              "[{elapsed}<{remaining}]")
     for tex in texs:
         name = os.path.basename(tex)
         short = name if len(name) <= 30 else name[:27] + "…"

@@ -13,6 +13,7 @@
 | `STRUCT-ENV-002` | 解答题环境 | examenum | 模板以 newlist 定义三级嵌套 examenum，普通 enumerate 无法复用模板缩进体系 |
 | `STRUCT-BLANK-001` | 填空题空位 | \blank（模板已定义，下划线 2cm） | 自造下划线导致同一份试卷内空位宽度不一致 |
 | `STRUCT-GLYPH-001` | 圈号字符 ①-⑩ 字形映射 | 导言区用 newunicodechar 把 ①-⑩ 映射到 \mycircled | ctexart 默认字体缺 ①-⑩ 字形，直接写会静默丢字——题干「如图①②③所示」渲染成「如图 所示」且编译不报错（ir_geometry 实测） |
+| `STRUCT-DIV-001` | 卷部分分隔线（第 I/II 卷） | 选择题部分开始处（单选+多选+填空之前） → \textbf{第I卷（选择题部分（共 <分值> 分））}<br>解答题部分开始处（四、解答题标题之前） → \textbf{第II卷（非选择题，共 <分值> 分）} | 用户 2026-11 确认的标准格式（2611金华十校实排）：卷号用半角罗马字母 I/II（勿用 Ⅱ 全角字形，字体可能缺字），第I卷外层括号内嵌套「（共 N 分）」双层括号写法；第II卷为单层括号「非选择题，共 N 分」。分值随卷计算；无分值信息时省略括号只写「第I卷（选择题部分）」。源 markdown 中「第Ⅱ卷(非选择题…)」说明性标题仍按 md2exam 的 section_note 逻辑跳过，不注册题型区块 |
 
 ### 图片排版
 
@@ -22,7 +23,8 @@
 | `IMG-W-002` | 单张题目配图默认宽度 | 0.30\textwidth | 0.30 在 4 页卷中留出足够文本环绕空间，与 IMG-W-001 的硬上限不冲突 |
 | `IMG-W-003` | 并排图片宽度与高度 | 2 张并排：minipage 0.42\textwidth，图高 3cm<br>3 张并排：minipage 0.28\textwidth，图高 2.5cm | 并排不限高时三视图会把整道题顶到下一页 |
 | `IMG-W-004` | 选项图片宽度 | 0.12\textwidth | 4 × 0.12 = 0.48，为 label 与 column-sep 留出余量 |
-| `IMG-ALIGN-001` | 图片对齐方式 | \centering | 禁止：`\raggedleft`<br>raggedleft 使图注与图片左边缘错位，图注必须居中于图片正下方 |
+| `IMG-ALIGN-001` | 图片对齐方式（一般场景） | \centering | 禁止：`\raggedleft`<br>raggedleft 使图注与图片左边缘错位，图注必须居中于图片正下方；立体几何解答题配图例外，见 IMG-ALIGN-002 |
+| `IMG-ALIGN-002` | 立体几何大题配图对齐 | 解答题立体几何题单个立体图（TikZ 或图片） → flushright 靠右（图与图注如「（第 16 题图）」均右对齐）<br>解答题立体几何题多张图（如折叠前后图 1/图 2） → center 居中并排（minipage 并排 + 各自图注）<br>选择题/填空题配图 → center 居中（遵循 IMG-ALIGN-001） | 用户 2026-11 实排确认：立体几何解答题单图靠右更贴近原卷版式（2611金华十校第 16 题实测，flushright 环境；注意 LaTeX 无 right 环境）；多图并排保持居中（2611嘉兴一模第 17 题图 1/图 2 实测） |
 | `IMG-SCENE-001` | 图片场景选择 | 小装饰图（行内） → \includegraphics[height=0.6em]<br>列表内单图（无论有无子问） → minipage 左右并排（0.62 文字 + 0.30 图片）<br>图片作为选项 → tasks(4)，图宽 0.12\textwidth<br>图片与长选项并排 → minipage 左选项右图片<br>多张图片并排 → figure[H] + minipage，必须限高<br>TikZ 图 → \resizebox{0.35\textwidth}{!}{...}<br>图片位于 \\begin{examenum} 之前（列表外） → wrapfigure{r}{0.30\textwidth} 右侧环绕 | 实测 wrapfigure 放在 examenum 列表内会静默丢图——图片完全不渲染且编译不报错（evals/fixtures/ir_geometry 第 2 题）。因此列表内单图一律走 minipage，wrapfigure 仅限列表外场景 |
 
 ### 选项排版
@@ -68,9 +70,16 @@
 
 | ID | 规则 | 取值 | 说明 |
 |----|------|------|------|
-| `ARTIFACT-001` | 试题卷标准产物集 | 试卷：<卷名>.tex / .pdf（含 \answern 答题空间，学生版/教师版合并后的唯一版本）<br>答题卡：<卷名>-答题卡-A4.tex / .pdf + <卷名>-答题卡-A3.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py | 用户确认的三件套需求；学生版与教师版合并为唯一试卷版本（render_tex.py 直接产出，含 \answern 答题空间），-学生版/-教师版 后缀废止；与题库每卷 Images-* + build.py 的既有整理约定一致；答案文档（文件名含答案）只出 tex/.pdf + Images + build.py 三件 |
-| `ARTIFACT-002` | 产物命名后缀表 | 答题卡 A4：-答题卡-A4<br>答题卡 A3：-答题卡-A3 | 禁止：-学生版（学生版/教师版已合并，后缀废止）、-教师版（学生版/教师版已合并，后缀废止）、-答题空间（旧名，已废弃）<br>学生版与教师版合并为唯一试卷版本 <卷名>.tex，不再有版本后缀；仅答题卡保留 A4/A3 后缀 |
+| `ARTIFACT-001` | 试题卷标准产物集 | 试卷：<卷名>.tex / .pdf（含 \answern 答题空间，学生版/教师版合并后的唯一版本）<br>答题卡：2611数学答题卡（A4）-<考试名>.tex / .pdf + 2611数学答题卡（A3）-<考试名>.tex / .pdf<br>图片文件夹：Images-<卷名>/<br>编译脚本：build.py | 用户确认的三件套需求；学生版与教师版合并为唯一试卷版本（render_tex.py 直接产出，含 \answern 答题空间），-学生版/-教师版 后缀废止；与题库每卷 Images-* + build.py 的既有整理约定一致；答案文档（文件名含答案）只出 tex/.pdf + Images + build.py 三件 |
+| `ARTIFACT-002` | 产物命名后缀表 | 答题卡 A4：2611数学答题卡（A4）-<考试名>（由 gen_answer_sheet.py 的 sheet_stem() 统一推导：源卷名含「数学卷/数学试卷-」前缀时去前缀换「数学答题卡（A4/A3）-」，数字前缀随源卷保留；否则回退旧格式 <卷名>-答题卡-A4）<br>答题卡 A3：2611数学答题卡（A3）-<考试名>（推导规则同上） | 禁止：-学生版（学生版/教师版已合并，后缀废止）、-教师版（学生版/教师版已合并，后缀废止）、-答题空间（旧名，已废弃）<br>学生版与教师版合并为唯一试卷版本 <卷名>.tex，不再有版本后缀；答题卡名与试卷名共享同一 <考试名> 主体 |
 | `ARTIFACT-003` | 图片文件夹统一命名 | Images-<卷名>（试题与答案一致，替代旧约定 media） | 题库每卷 Images-* 目录的既有约定；试题用 media 与答案用 Images-* 双标准增加记忆负担 |
 | `ARTIFACT-004` | 收尾与部署 | 每个含 tex 的试卷目录部署通用版 build.py；排版完成后用 scripts/finalize_paper.py 一键补齐产物集、编译并清理 preview-*.png | finalize_paper.py 端到端实测（生成答题卡、部署 build.py、编译成功、清单全 OK）；学生版/教师版合并后收尾仅补答题卡与编译 |
 
-> 规则版本 v3，更新于 2026-11-02。修改规则请编辑 `rules/layout.yaml` 后运行 `python scripts/gen_rules_doc.py`。
+### 访问约束
+
+| ID | 规则 | 取值 | 说明 |
+|----|------|------|------|
+| `ACCESS-001` | 技能安装目录只读 | 使用技能处理试卷期间，{SKILL_DIR} 只读：不得在其中新建、修改、删除任何文件 | 禁止：在 {SKILL_DIR} 下写 paper.json / .tex / .pdf / 图片 / 日志、在 {SKILL_DIR} 下生成 __pycache__ / log-runtime / preview-*.png、修改技能自带脚本、模板、规则（维护技能时除外）<br>用户 2026-11 明确要求：使用本 skill 时只能以只读形式访问安装目录；所有可写内容放试卷工作目录 |
+| `ACCESS-002` | 临时脚本统一放 temp_scripts 并隐藏 | 每卷的提取/转换/排版临时脚本统一放 <试卷工作目录>/temp_scripts/ 并从该目录运行；收尾时重命名为 .temp_scripts 并设置 Windows 隐藏属性 | 禁止：在试卷工作目录根部散落 *.py 临时脚本、在 {SKILL_DIR} 内存放临时脚本、收尾后保留可见的 temp_scripts/<br>用户 2026-11 要求：对应试卷的提取和排版脚本在对应文件夹新建 temp_scripts 目录存储和使用，完成后隐藏；跨平台隐藏采用 .temp_scripts 点前缀，Windows 下同时设置 FILE_ATTRIBUTE_HIDDEN，资源管理器默认不可见 |
+
+> 规则版本 v3，更新于 2026-11-07。修改规则请编辑 `rules/layout.yaml` 后运行 `python scripts/gen_rules_doc.py`。

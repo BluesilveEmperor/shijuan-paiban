@@ -23,6 +23,7 @@ import struct
 import sys
 from collections import Counter
 
+sys.dont_write_bytecode = True  # ACCESS-001：技能目录只读，不生成 __pycache__
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import tex_width  # noqa: E402  宽度估算（TASKS-COL-001 可行性判定）
 
