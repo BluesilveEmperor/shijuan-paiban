@@ -1,0 +1,10341 @@
+{
+  "subject": "english",
+  "version": "1.0",
+  "source": "evals/fixtures_english/manifest.json + md/tex + _报告.txt + _质检.txt",
+  "generator": "scripts/ops/analyze_english_corpus.py",
+  "summary": {
+    "papers": 52,
+    "variants": {
+      "full": 47,
+      "no_listening": 5
+    },
+    "question_start": {
+      "full": 47,
+      "no_listening": 5
+    },
+    "question_count": {
+      "35": 41,
+      "15": 5,
+      "34": 4,
+      "33": 2
+    },
+    "blanknum_distinct_count": {
+      "30": 30,
+      "29": 9,
+      "28": 5,
+      "27": 3,
+      "25": 2,
+      "15": 1,
+      "26": 1,
+      "24": 1
+    },
+    "blanknum_full_coverage": 28,
+    "choices_pattern": {
+      "20/15/1": 24,
+      "21/15/1": 6,
+      "0/15/1": 5,
+      "19/16/1": 5,
+      "20/16/1": 3,
+      "19/15/1": 2,
+      "21/14/2": 1,
+      "17/16/2": 1,
+      "20/15/2": 1,
+      "19/14/1": 1,
+      "18/14/2": 1,
+      "22/13/1": 1,
+      "21/14/1": 1
+    },
+    "cz_count": {
+      "15": 45,
+      "14": 4,
+      "13": 2,
+      "16": 1
+    },
+    "writinglines": {
+      "['8', '8']": 47,
+      "[]": 2,
+      "['8']": 2,
+      "['4', '4', '4', '4', '8', '8']": 1
+    },
+    "notice_count": {
+      "1": 48,
+      "0": 4
+    },
+    "passagelabel_count": {
+      "4": 48,
+      "3": 4
+    },
+    "tabular_count": {
+      "0": 31,
+      "1": 15,
+      "2": 6
+    },
+    "md_images_total": 7,
+    "md_image_papers": [
+      14,
+      26,
+      40
+    ],
+    "md_html_table_papers": 21,
+    "md_escaped_blanks_total": 1435,
+    "watermark_papers": [
+      5,
+      6,
+      14,
+      17,
+      19,
+      22,
+      23,
+      25,
+      26,
+      33,
+      34,
+      37,
+      46,
+      47,
+      50,
+      51
+    ],
+    "garbage_token_papers": [
+      36,
+      38,
+      41,
+      42,
+      45
+    ],
+    "leaked_body_in_sectitle_papers": [
+      36
+    ],
+    "par_total": 7824,
+    "report_pages_zero": [
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52
+    ],
+    "example_papers": [
+      2,
+      9,
+      20,
+      21,
+      24,
+      27
+    ],
+    "example_total": 6,
+    "parttitle_variants": {
+      "第四部分 写作（共两节，满分 40 分）": 42,
+      "第三部分 语言知识运用（共两节，满分 30 分）": 34,
+      "第二部分 阅读理解（共两节，满分 50 分）": 33,
+      "第一部分 听力（共两节，满分 30 分）": 31,
+      "第二部分 阅读理解（共两节，满分50分）": 18,
+      "第三部分 语言知识运用（共两节，满分30分）": 16,
+      "第一部分 听力（共两节，满分30分）": 11,
+      "第四部分 写作（共两节，满分40分）": 9,
+      "第一部分 听力(共两节，满分 30 分)": 2,
+      "第三部分 语言运用（共两节，满分 30 分）": 1,
+      "第一部分听力(共两节，满分30分)": 1,
+      "第二部分阅读理解(共两节，满分50分)": 1,
+      "第三部分语言知识运用(共两节，满分30分)": 1,
+      "第四部分写作(共两节，满分40分)": 1,
+      "第一部分 听力 (共两节，满分 30 分)": 1,
+      "第一部分 听力 (共两节, 满分 30 分)": 1
+    },
+    "sectitle_variants_top15": {
+      "第一节（共15小题；每小题1分，满分15分）": 48,
+      "第一节（满分15分）": 46,
+      "第二节（共10小题；每小题1.5分，满分15分）": 44,
+      "第二节（满分25分）": 43,
+      "第二节（共5小题；每小题2.5分，满分12.5分）": 42,
+      "第一节（共15小题：每小题2.5分，满分37.5分）": 31,
+      "第一节（共5小题：每小题1.5分，满分7.5分）": 27,
+      "第二节（共15小题：每小题1.5分，满分22.5分）": 27,
+      "第一节（共15小题；每小题2.5分，满分37.5分）": 17,
+      "第一节（共5小题；每小题1.5分，满分7.5分）": 9,
+      "第二节（共 15 小题；每小题 1.5 分，满分 22.5 分）": 5,
+      "第二节（共10小题；每小题1.5ladnepen分，满分15分）": 5,
+      "第一节（共5小题：每小题1.5分，满分7.5分）微信公众号IAI English": 4,
+      "第一节 (满分 15 分)": 4,
+      "第二节 (满分 25 分)": 4
+    }
+  },
+  "rules": [
+    {
+      "id": "EC-001",
+      "title": "卷式二分",
+      "statement": "卷分两类：完整卷 4 板块 / 题号 1-35；无听力卷 3 板块 / 题号 21-35（注意事项注明「笔试不考听力」）。",
+      "evidence": "full=47, no_listening=5",
+      "implication": "IR 顶层先判定 variant；无听力卷不得凭空补 1-20 题。"
+    },
+    {
+      "id": "EC-002",
+      "title": "题号地图",
+      "statement": "question 只覆盖 1-35（或 21-35）；36-65 全部由 \\blanknum 承载；\\cz{41..55} 承载完形选项；66/67 写作不编号。",
+      "evidence": "question 起号 1/21；blanknum 取值域 36-65；cz 每卷 13-16 行",
+      "implication": "渲染器按题号段分派块类型，不要用一个计数器贯穿全文。"
+    },
+    {
+      "id": "EC-003",
+      "title": "选项列数由小节决定",
+      "statement": "choices(3)=听力（含无题号例题）、choices(2)=阅读、choices(1)=七选五；数量会漂移，不能靠数量反推题型。",
+      "evidence": "choices 模式分布 {'20/15/1': 24, '21/15/1': 6, '0/15/1': 5, '19/16/1': 5, '20/16/1': 3, '19/15/1': 2, '21/14/2': 1, '17/16/2': 1, '20/15/2': 1, '19/14/1': 1, '18/14/2': 1, '22/13/1': 1, '21/14/1': 1}；听力例题 6 处",
+      "implication": "md→IR 时先读 parttitle/sectitle 定 section，再按选项数分派环境。"
+    },
+    {
+      "id": "EC-004",
+      "title": "七选五断档是正常的",
+      "statement": "36-40 嵌在短文里的 \\blanknum，不是 \\question；质检里的「断档 36-40」是正常现象。",
+      "evidence": "QA 断档 36-40 出现于 52 卷；blanknum 起始号均为 36",
+      "implication": "校验器对 36-40 缺 \\question 不得报错；只检查 \\blanknum。"
+    },
+    {
+      "id": "EC-005",
+      "title": "完形题号双通道",
+      "statement": "完形题号同时可出现在 \\cz{41..55} 与短文 \\blanknum{41..55}；后者缺失不代表漏题。",
+      "evidence": "cz 行数分布 {15: 45, 14: 4, 13: 2, 16: 1}",
+      "implication": "以 \\cz 为完形题量来源，\\blanknum 只作补充；缺 41-55 仅告警。"
+    },
+    {
+      "id": "EC-006",
+      "title": "填空缺号常态化",
+      "statement": "36-65 完整覆盖仅部分卷；OCR 会漏号或重复号，不得按「必须齐全」硬断言。",
+      "evidence": "完整覆盖 28/52；有缺失 22 卷；有重复 3 卷",
+      "implication": "缺号/重号记 WARN 并交人工对照原卷，禁止自动补题。"
+    },
+    {
+      "id": "EC-007",
+      "title": "写作区形态",
+      "statement": "写作两节通常是两次 \\writinglines{8}；存在缺失、单块或拆成多块的 OCR 变体。",
+      "evidence": "形态分布 {\"['8', '8']\": 47, '[]': 2, \"['8']\": 2, \"['4', '4', '4', '4', '8', '8']\": 1}",
+      "implication": "IR 用 writing 块记录「节次 + 行数」，渲染时归一为两次 8 行。"
+    },
+    {
+      "id": "EC-008",
+      "title": "表格来自 HTML table",
+      "statement": "部分卷含两列 tabular（第二列 p{} 固定宽度 + 竖线），源 markdown 是 HTML <table>；跨栏宽表需人工调列宽。",
+      "evidence": "含 tabular 21 卷；md 含 <table> 21 卷",
+      "implication": "保留 raw_tex 逃生舱；表格不要强行转成 IR 普通块。"
+    },
+    {
+      "id": "EC-009",
+      "title": "图片在转排中丢失",
+      "statement": "源 md 有图片引用，但成品 tex 完全没有 \\includegraphics；这批样本不能作为图片回归基准。",
+      "evidence": "md 图片 7 处 / 3 卷；tex 图片 0",
+      "implication": "补图片提取 + \\includegraphics 规则后再把图片卷纳入基准；当前须标记 image_loss。"
+    },
+    {
+      "id": "EC-010",
+      "title": "OCR 噪声会渗入标题",
+      "statement": "公众号水印、「ladnepen」等 OCR 垃圾串以及整段正文被吸入 \\sectitle，转换时必须清洗。",
+      "evidence": "水印 16 卷；垃圾串 5 卷；正文泄漏 1 卷",
+      "implication": "在 md→IR 前加清洗层；sectitle 只允许「第X节（...）」结构，超长即判异常。"
+    },
+    {
+      "id": "EC-011",
+      "title": "标题标点变体需归一",
+      "statement": "parttitle 存在全/半角括号、空格有无、「语言运用/语言知识运用」等写法；sectitle 混用「：」「；」。",
+      "evidence": "parttitle 变体 16 种，sectitle 变体 49 种",
+      "implication": "按 canon_part() 归一后再匹配板块；不要把原始字符串当枚举值。"
+    },
+    {
+      "id": "EC-012",
+      "title": "\\par 洪流不是内容",
+      "statement": "成品 tex 大量使用 \\par 逐行断开（源 md 每行一条），属于转换副产物。",
+      "evidence": "共 7824 个 \\par，约 150 个/卷",
+      "implication": "IR 不保留 \\par；渲染器按段落重新生成，避免把换行写进结构化数据。"
+    },
+    {
+      "id": "EC-013",
+      "title": "报告页数字段部分失效",
+      "statement": "_报告.txt 后 22 卷页数为 0（pdfinfo 失败），不能作为页数断言依据。",
+      "evidence": "页数为 0 的卷 22 个",
+      "implication": "页数门禁改用「重新编译 + pdfinfo」实时取，不读陈旧报告。"
+    },
+    {
+      "id": "EC-014",
+      "title": "本批样本无答案卷",
+      "statement": "52 套只有试题；答案 PDF 仅在外部题库，答案模式只有模板与冒烟测试，没有 52 份答案基准。",
+      "evidence": "manifest 的 source_answer_pdf 有路径，fixtures 无答案 md/tex",
+      "implication": "答案卷流水线需另起一批样本，不能拿试题 tex 加 [answers] 冒充。"
+    },
+    {
+      "id": "EC-015",
+      "title": "md/tex 文件名不可互推",
+      "statement": "md 保留考试名中的「+」和空格，tex 统一替换为「_」；映射以 manifest 为权威。",
+      "evidence": "如 11_2412  3+3+3.md → 11_2412_3_3_3.tex",
+      "implication": "批量脚本读 manifest，禁止字符串替换猜文件名。"
+    },
+    {
+      "id": "EC-016",
+      "title": "听力例题无题号",
+      "statement": "部分卷听力第一节前有 `\\question{例：How much is the shirt?}` + choices(3) 的例题，不计入正式题号。",
+      "evidence": "例题 6 卷：[2, 9, 20, 21, 24, 27]",
+      "implication": "题号校验跳过「例：」开头的 question；题量统计可含例题，题号集合不可含。"
+    }
+  ],
+  "flag_papers": {
+    "blanknum_duplicate": [
+      5,
+      7,
+      31
+    ],
+    "blanknum_missing": [
+      2,
+      3,
+      4,
+      7,
+      9,
+      10,
+      17,
+      19,
+      21,
+      28,
+      30,
+      32,
+      33,
+      34,
+      35,
+      38,
+      39,
+      40,
+      41,
+      44,
+      47,
+      48
+    ],
+    "body_text_leaked_into_sectitle": [
+      36
+    ],
+    "choices_count_drift": [
+      2,
+      5,
+      6,
+      9,
+      10,
+      12,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      24,
+      25,
+      26,
+      27,
+      37,
+      40,
+      43,
+      45,
+      46,
+      49,
+      50
+    ],
+    "cloze_rows_short": [
+      6,
+      12,
+      16,
+      18,
+      26,
+      33
+    ],
+    "garbage_token_in_sectitle": [
+      36,
+      38,
+      41,
+      42,
+      45
+    ],
+    "html_table": [
+      2,
+      3,
+      4,
+      8,
+      9,
+      14,
+      16,
+      17,
+      18,
+      24,
+      27,
+      30,
+      32,
+      33,
+      35,
+      37,
+      38,
+      40,
+      44,
+      48,
+      49
+    ],
+    "image_loss": [
+      14,
+      26,
+      40
+    ],
+    "listening_example": [
+      2,
+      9,
+      20,
+      21,
+      24,
+      27
+    ],
+    "no_listening": [
+      4,
+      15,
+      29,
+      34,
+      51
+    ],
+    "notice_missing": [
+      5,
+      8,
+      10,
+      31
+    ],
+    "page_count_unavailable": [
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52
+    ],
+    "watermark_leaked_into_sectitle": [
+      5,
+      6,
+      14,
+      17,
+      19,
+      22,
+      23,
+      25,
+      26,
+      33,
+      34,
+      37,
+      46,
+      47,
+      50,
+      51
+    ],
+    "writinglines_anomaly": [
+      16,
+      18,
+      19,
+      31,
+      42
+    ]
+  },
+  "papers": [
+    {
+      "index": 1,
+      "exam": "2402武汉二调",
+      "md": "md/01_2402武汉二调.md",
+      "tex": "tex/01_2402武汉二调.tex",
+      "source_pdf": "202402武汉二调.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题；每小题1.5分，满分7.5分）",
+        "第二节（共 15 小题；每小题 1.5 分，满分 22.5 分）",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 144,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 20
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2402武汉二调",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": []
+    },
+    {
+      "index": 2,
+      "exam": "2409南京九调",
+      "md": "md/02_2409南京九调.md",
+      "tex": "tex/02_2409南京九调.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 1,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        57
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 2,
+        "(2)": 14,
+        "(3)": 21
+      },
+      "choice_items": {
+        "(1)": {
+          "5": 1,
+          "7": 1
+        },
+        "(2)": {
+          "4": 14
+        },
+        "(3)": {
+          "3": 21
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 163,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 25,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 20
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2409南京九调",
+        "questions": 36,
+        "choices": 37,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 2,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "listening_example",
+        "blanknum_missing",
+        "choices_count_drift",
+        "html_table"
+      ]
+    },
+    {
+      "index": 3,
+      "exam": "2409山东潍坊开学考",
+      "md": "md/03_2409山东潍坊开学考.md",
+      "tex": "tex/03_2409山东潍坊开学考.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          2,
+          2
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        54,
+        55
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 2,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 156,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 2,
+        "escaped_blanks": 26,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 24
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2409山东潍坊开学考",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing",
+        "html_table"
+      ]
+    },
+    {
+      "index": 4,
+      "exam": "2410惠州二调",
+      "md": "md/04_2410惠州二调.md",
+      "tex": "tex/04_2410惠州二调.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "no_listening",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          16,
+          16
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          2,
+          2
+        ]
+      },
+      "question_numbers": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        56
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 2,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 155,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 2,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 3,
+          "##": 20
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2410惠州二调",
+        "questions": 15,
+        "choices": 16,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 15,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          21,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "no_listening",
+        "blanknum_missing",
+        "html_table"
+      ]
+    },
+    {
+      "index": 5,
+      "exam": "2410湖北新八省联考协作体",
+      "md": "md/05_2410湖北新八省联考协作体.md",
+      "tex": "tex/05_2410湖北新八省联考协作体.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          35,
+          35
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          0,
+          0
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        57,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [
+        57
+      ],
+      "choices": {
+        "(1)": 2,
+        "(2)": 16,
+        "(3)": 17
+      },
+      "choice_items": {
+        "(1)": {
+          "6": 1,
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 15
+        },
+        "(3)": {
+          "3": 17
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 0,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分40分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分 25 分）"
+      ],
+      "par_count": 154,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 2,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 14
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2410湖北新八省联考协作体",
+        "questions": 34,
+        "choices": 35,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 34,
+        "cloze": 15,
+        "seven_of_five": 2,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          16,
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "notice_missing",
+        "watermark_leaked_into_sectitle",
+        "blanknum_duplicate",
+        "choices_count_drift"
+      ]
+    },
+    {
+      "index": 6,
+      "exam": "2411南开三模",
+      "md": "md/06_2411南开三模.md",
+      "tex": "tex/06_2411南开三模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 21
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 21
+        }
+      },
+      "cz_count": 13,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分40分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）微信公众号IAI English",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 160,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 16,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 23
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2411南开三模",
+        "questions": 34,
+        "choices": 37,
+        "cloze": 13,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 34,
+        "cloze": 13,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          14,
+          36,
+          37,
+          38,
+          39,
+          40,
+          42,
+          46
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "cloze_rows_short",
+        "choices_count_drift"
+      ]
+    },
+    {
+      "index": 7,
+      "exam": "2411宁波一模",
+      "md": "md/07_2411宁波一模.md",
+      "tex": "tex/07_2411宁波一模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        60,
+        57,
+        58,
+        59,
+        60,
+        61,
+        63,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        62
+      ],
+      "blanknum_duplicate": [
+        60,
+        63
+      ],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 154,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 24
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2411宁波一模",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing",
+        "blanknum_duplicate"
+      ]
+    },
+    {
+      "index": 8,
+      "exam": "2411浙江9+1高二期中考",
+      "md": "md/08_2411浙江9+1高二期中考.md",
+      "tex": "tex/08_2411浙江9_1高二期中考.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          0,
+          0
+        ],
+        "tabular": [
+          2,
+          2
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 2,
+      "notice_count": 0,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 132,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 2,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 18
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2411浙江9+1高二期中考",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "notice_missing",
+        "html_table"
+      ]
+    },
+    {
+      "index": 9,
+      "exam": "2411湖丽衢一模",
+      "md": "md/09_2411湖丽衢一模.md",
+      "tex": "tex/09_2411湖丽衢一模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 1,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 21
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 21
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分听力(共两节，满分30分)",
+        "第二部分阅读理解(共两节，满分50分)",
+        "第三部分语言知识运用(共两节，满分30分)",
+        "第四部分写作(共两节，满分40分)"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节(共5小题：每小题1.5分，满分7.5分)",
+        "第二节(共15小题：每小题1.5分，满分22.5分)",
+        "第一节(共15小题：每小题2.5分，满分37.5分)",
+        "第二节(共5小题；每小题2.5分，满分12.5分)",
+        "第一节完形填空(共15小题；每小题1分，满分15分)",
+        "第二节(共10小题；每小题1.5分，满分15分)",
+        "第一节(满分15分)",
+        "第二节(满分25分)"
+      ],
+      "par_count": 147,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 2,
+        "escaped_blanks": 0,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 22
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2411湖丽衢一模",
+        "questions": 36,
+        "choices": 37,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "listening_example",
+        "blanknum_missing",
+        "choices_count_drift",
+        "html_table"
+      ]
+    },
+    {
+      "index": 10,
+      "exam": "2411稽阳联考",
+      "md": "md/10_2411稽阳联考.md",
+      "tex": "tex/10_2411稽阳联考.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          0,
+          0
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        40,
+        41,
+        42,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        39,
+        43,
+        44,
+        45
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 16,
+        "(3)": 19
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 15
+        },
+        "(3)": {
+          "3": 19
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 0,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 142,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 25,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 24
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2411稽阳联考",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "notice_missing",
+        "blanknum_missing",
+        "choices_count_drift"
+      ]
+    },
+    {
+      "index": 11,
+      "exam": "2412  3+3+3",
+      "md": "md/11_2412  3+3+3.md",
+      "tex": "tex/11_2412_3_3_3.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节 (共 5 小题；每小题 1.5 分，满分 7.5 分)",
+        "第二节 (共 15 小题；每小题 1.5 分，满分 22.5 分)",
+        "第一节 (共 15 小题；每小题 2.5 分，满分 37.5 分)",
+        "第二节 (共 5 小题；每小题 2.5 分，满分 12.5 分)",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节 (共 10 小题；每小题 1.5 分，满分 15 分)",
+        "第一节 (满分 15 分)",
+        "第二节 (满分 25 分)"
+      ],
+      "par_count": 144,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 28,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 3,
+          "##": 25
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2412  3+3+3",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": []
+    },
+    {
+      "index": 12,
+      "exam": "2412Z20",
+      "md": "md/12_2412Z20.md",
+      "tex": "tex/12_2412Z20.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 16,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 14,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共 15 小题：每小题 1.5 分，满分 22.5 分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 184,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 25
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2412Z20",
+        "questions": 35,
+        "choices": 37,
+        "cloze": 14,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 14,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          52
+        ]
+      },
+      "flags": [
+        "cloze_rows_short",
+        "choices_count_drift"
+      ]
+    },
+    {
+      "index": 13,
+      "exam": "2412北斗星盟",
+      "md": "md/13_2412北斗星盟.md",
+      "tex": "tex/13_2412北斗星盟.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 3,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题；每小题1.5分，满分7.5分）",
+        "第二节（共15小题；每小题1.5分，满分22.5分）",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 142,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 19
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2412北斗星盟",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": []
+    },
+    {
+      "index": 14,
+      "exam": "2412四川巴蜀",
+      "md": "md/14_2412四川巴蜀.md",
+      "tex": "tex/14_2412四川巴蜀.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分40分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题；每小题1.5分，满分7.5分）",
+        "第二节（共15小题；每小题1.5分，满分22.5分）",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节 概要写作（满分25分）"
+      ],
+      "par_count": 149,
+      "md_markers": {
+        "images": 1,
+        "html_tables": 1,
+        "escaped_blanks": 29,
+        "watermark_hits": 42,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 23
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2412四川巴蜀",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "image_loss",
+        "html_table"
+      ]
+    },
+    {
+      "index": 15,
+      "exam": "2412广州零调",
+      "md": "md/15_2412广州零调.md",
+      "tex": "tex/15_2412广州零调.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "no_listening",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          16,
+          16
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 141,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 11
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2412广州零调",
+        "questions": 15,
+        "choices": 16,
+        "cloze": 15,
+        "pages": 7,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 15,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          21,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "no_listening"
+      ]
+    },
+    {
+      "index": 16,
+      "exam": "2412浙江省县域教研联盟",
+      "md": "md/16_2412浙江省县域教研联盟.md",
+      "tex": "tex/16_2412浙江省县域教研联盟.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 2,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1,
+          "8": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 13,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分 25 分）"
+      ],
+      "par_count": 143,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 30,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 22
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2412浙江省县域教研联盟",
+        "questions": 35,
+        "choices": 37,
+        "cloze": 13,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 13,
+        "seven_of_five": 2,
+        "range": [
+          1,
+          53
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "cloze_rows_short",
+        "choices_count_drift",
+        "writinglines_anomaly",
+        "html_table"
+      ]
+    },
+    {
+      "index": 17,
+      "exam": "2412皖南八校",
+      "md": "md/17_2412皖南八校.md",
+      "tex": "tex/17_2412皖南八校.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        55
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 16,
+        "(3)": 19
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 15
+        },
+        "(3)": {
+          "3": 19
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）微信公众号IAI English",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 153,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 29,
+        "watermark_hits": 2,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 20
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2412皖南八校",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "blanknum_missing",
+        "choices_count_drift",
+        "html_table"
+      ]
+    },
+    {
+      "index": 18,
+      "exam": "2412诸暨一模",
+      "md": "md/18_2412诸暨一模.md",
+      "tex": "tex/18_2412诸暨一模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          2,
+          2
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 21
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 21
+        }
+      },
+      "cz_count": 14,
+      "passagelabel_count": 4,
+      "tabular_count": 2,
+      "notice_count": 1,
+      "writinglines": [],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 168,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 2,
+        "escaped_blanks": 30,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 24
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2412诸暨一模",
+        "questions": 35,
+        "choices": 37,
+        "cloze": 14,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 14,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          46
+        ]
+      },
+      "flags": [
+        "cloze_rows_short",
+        "choices_count_drift",
+        "writinglines_anomaly",
+        "html_table"
+      ]
+    },
+    {
+      "index": 19,
+      "exam": "2501南京盐城期末",
+      "md": "md/19_2501南京盐城期末.md",
+      "tex": "tex/19_2501南京盐城期末.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          34,
+          34
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        56
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 14,
+        "(3)": 19
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 14
+        },
+        "(3)": {
+          "3": 19
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 164,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 4,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 19
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2501南京盐城期末",
+        "questions": 33,
+        "choices": 34,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 33,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          4,
+          11,
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "blanknum_missing",
+        "choices_count_drift",
+        "writinglines_anomaly"
+      ]
+    },
+    {
+      "index": 20,
+      "exam": "2501合肥期末",
+      "md": "md/20_2501合肥期末.md",
+      "tex": "tex/20_2501合肥期末.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 1,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 21
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 21
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 3,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题；每小题1.5分，满分7.5分）",
+        "第二节（共 15 小题；每小题 1.5 分，满分 22.5 分）",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 154,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 20
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2501合肥期末",
+        "questions": 36,
+        "choices": 37,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "listening_example",
+        "choices_count_drift"
+      ]
+    },
+    {
+      "index": 21,
+      "exam": "2501武汉武昌期末",
+      "md": "md/21_2501武汉武昌期末.md",
+      "tex": "tex/21_2501武汉武昌期末.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 1,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        42
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 16,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题；每小题1.5分，满分7.5分）",
+        "第二节（共 15 小题；每小题 1.5 分，满分 22.5 分）",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 148,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 28,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 21
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2501武汉武昌期末",
+        "questions": 36,
+        "choices": 37,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "listening_example",
+        "blanknum_missing",
+        "choices_count_drift"
+      ]
+    },
+    {
+      "index": 22,
+      "exam": "2501河北唐山期末",
+      "md": "md/22_2501河北唐山期末.md",
+      "tex": "tex/22_2501河北唐山期末.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分 25 分）"
+      ],
+      "par_count": 164,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 2,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 19
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2501河北唐山期末",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle"
+      ]
+    },
+    {
+      "index": 23,
+      "exam": "2501淄博期末",
+      "md": "md/23_2501淄博期末.md",
+      "tex": "tex/23_2501淄博期末.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 146,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 2,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 19
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2501淄博期末",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle"
+      ]
+    },
+    {
+      "index": 24,
+      "exam": "2501烟台期末",
+      "md": "md/24_2501烟台期末.md",
+      "tex": "tex/24_2501烟台期末.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 1,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 21
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 21
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题；每小题1.5分，满分7.5分）",
+        "第二节（共15小题；每小题1.5分，满分22.5分）",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 161,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 23
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2501烟台期末",
+        "questions": 36,
+        "choices": 37,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "listening_example",
+        "choices_count_drift",
+        "html_table"
+      ]
+    },
+    {
+      "index": 25,
+      "exam": "2502南昌一模",
+      "md": "md/25_2502南昌一模.md",
+      "tex": "tex/25_2502南昌一模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          35,
+          35
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 19
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 19
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分40分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）微信公众号IAI English",
+        "第二节（共15小题：每小题1.5分，满分22.5分",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 130,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 42,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 18
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2502南昌一模",
+        "questions": 34,
+        "choices": 35,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 34,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          14,
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "choices_count_drift"
+      ]
+    },
+    {
+      "index": 26,
+      "exam": "2503南京盐城一模",
+      "md": "md/26_2503南京盐城一模.md",
+      "tex": "tex/26_2503南京盐城一模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 21
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 21
+        }
+      },
+      "cz_count": 14,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力(共两节，满分 30 分)",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节(共 5 小题；每小题 1.5 分，满分 7.5 分)",
+        "第二节(共 15 小题;每小题 1.5 分,满分 22.5 分)",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 158,
+      "md_markers": {
+        "images": 1,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 2,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 21
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2503南京盐城一模",
+        "questions": 35,
+        "choices": 37,
+        "cloze": 14,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 14,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          54
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "cloze_rows_short",
+        "choices_count_drift",
+        "image_loss"
+      ]
+    },
+    {
+      "index": 27,
+      "exam": "2503合肥二模",
+      "md": "md/27_2503合肥二模.md",
+      "tex": "tex/27_2503合肥二模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          37,
+          37
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 1,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 16,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 3,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题；每小题1.5分，满分7.5分）",
+        "第二节（共 15 小题；每小题 1.5 分，满分 22.5 分）",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 131,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 17
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2503合肥二模",
+        "questions": 36,
+        "choices": 37,
+        "cloze": 15,
+        "pages": 8,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "listening_example",
+        "choices_count_drift",
+        "html_table"
+      ]
+    },
+    {
+      "index": 28,
+      "exam": "2503太原一模",
+      "md": "md/28_2503太原一模.md",
+      "tex": "tex/28_2503太原一模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        52
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分40分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 154,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 25
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2503太原一模",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing"
+      ]
+    },
+    {
+      "index": 29,
+      "exam": "2503广东一模",
+      "md": "md/29_2503广东一模.md",
+      "tex": "tex/29_2503广东一模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "no_listening",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          16,
+          16
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 143,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 3,
+          "##": 12
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2503广东一模",
+        "questions": 15,
+        "choices": 16,
+        "cloze": 15,
+        "pages": 7,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 15,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          21,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "no_listening"
+      ]
+    },
+    {
+      "index": 30,
+      "exam": "2503济南一模",
+      "md": "md/30_2503济南一模.md",
+      "tex": "tex/30_2503济南一模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        45,
+        46,
+        47
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力 (共两节，满分 30 分)",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节 (共 5 小题; 每小题 1.5 分, 满分 7.5 分)",
+        "第二节 (共 15 小题; 每小题 1.5 分, 满分 22.5 分)",
+        "第一节 (共 15 小题；每小题 2.5 分，满分 37.5 分)",
+        "第二节 (共 5 小题；每小题 2.5 分，满分 12.5 分)",
+        "第一节 (共 15 小题；每小题 1 分，满分 15 分)",
+        "第二节 (共 10 小题; 每小题 1.5 分, 满分 15 分)",
+        "第一节 (满分 15 分)",
+        "第二节 (满分 25 分)"
+      ],
+      "par_count": 143,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 23,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 20
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2503济南一模",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 9,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing",
+        "html_table"
+      ]
+    },
+    {
+      "index": 31,
+      "exam": "2503湖北十一校",
+      "md": "md/31_2503湖北十一校.md",
+      "tex": "tex/31_2503湖北十一校.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          0,
+          0
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        40,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [
+        40
+      ],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 14
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 0,
+      "writinglines": [
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题；每小题1.5分，满分7.5分）",
+        "第二节（共15小题；每小题1.5分，满分22.5分）",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 144,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 4,
+          "##": 22
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2503湖北十一校",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "notice_missing",
+        "blanknum_duplicate",
+        "writinglines_anomaly",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 32,
+      "exam": "2503福建一模",
+      "md": "md/32_2503福建一模.md",
+      "tex": "tex/32_2503福建一模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 141,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 24,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 24
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2503福建一模",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing",
+        "html_table",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 33,
+      "exam": "2503重庆八中",
+      "md": "md/33_2503重庆八中.md",
+      "tex": "tex/33_2503重庆八中.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        38
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 14,
+      "passagelabel_count": 3,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力 (共两节, 满分 30 分)",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节 (共 5 小题; 每小题 1.5 分, 满分 7.5 分)",
+        "第二节 (共 15 小题; 每小题 1.5 分, 满分 22.5 分)",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节 (共 5 小题; 每小题 2.5 分, 满分 12.5 分)",
+        "第一节 (共15小题；每小题1分，满分15分)",
+        "第二节 (共10小题; 每小题1.5分, 满分15分)",
+        "第一节 (满分 15 分)",
+        "第二节 (满分 25 分)"
+      ],
+      "par_count": 167,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 29,
+        "watermark_hits": 32,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 26
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2503重庆八中",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 14,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 14,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          43
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "blanknum_missing",
+        "cloze_rows_short",
+        "html_table",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 34,
+      "exam": "2504佛山二模",
+      "md": "md/34_2504佛山二模.md",
+      "tex": "tex/34_2504佛山二模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "no_listening",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          16,
+          16
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        44,
+        56
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分40分）"
+      ],
+      "parttitle_canon": [
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 141,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 26,
+        "watermark_hits": 2,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 3,
+          "##": 14
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504佛山二模",
+        "questions": 15,
+        "choices": 16,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 15,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          21,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "no_listening",
+        "watermark_leaked_into_sectitle",
+        "blanknum_missing",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 35,
+      "exam": "2504南师附中+杭州二中+长郡中学三校",
+      "md": "md/35_2504南师附中+杭州二中+长郡中学三校.md",
+      "tex": "tex/35_2504南师附中_杭州二中_长郡中学三校.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        39,
+        56,
+        57
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题；每小题1.5分，满分7.5分）",
+        "第二节（共 15 小题；每小题 1.5 分，满分 22.5 分）",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 149,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 24,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 18
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504南师附中+杭州二中+长郡中学三校",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing",
+        "html_table",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 36,
+      "exam": "2504宁波二模",
+      "md": "md/36_2504宁波二模.md",
+      "tex": "tex/36_2504宁波二模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分40分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）阅读下面短文，从短文后的选项中选出能填入空白处的最佳选项。选项中有两项为多余选项。The path to healthy weight combines two key elements. Exercise and eating habits form its foundation. Some believe they demand lots of effort or planning. But that's not true. In fact, the best way to work them into our lives is by making small changes that gradually become part of our routine. \\blanknum{36",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5ladnepen分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 160,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 0,
+        "garbage_tokens": 1,
+        "headings": {
+          "#": 3,
+          "##": 24
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504宁波二模",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "garbage_token_in_sectitle",
+        "body_text_leaked_into_sectitle",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 37,
+      "exam": "2504日照二模",
+      "md": "md/37_2504日照二模.md",
+      "tex": "tex/37_2504日照二模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": null,
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 16,
+        "(3)": 19
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 15
+        },
+        "(3)": {
+          "3": 19
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力(共两节，满分 30 分)",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节(共 5 小题；每小题 1.5 分，满分 7.5 分)",
+        "第二节(共 15 小题;每小题 1.5 分,满分 22.5 分)",
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 145,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 28,
+        "watermark_hits": 2,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 21
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504日照二模",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "choices_count_drift",
+        "html_table",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 38,
+      "exam": "2504武汉四调",
+      "md": "md/38_2504武汉四调.md",
+      "tex": "tex/38_2504武汉四调.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        39,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        38
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5ladnepen分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 139,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 29,
+        "watermark_hits": 0,
+        "garbage_tokens": 1,
+        "headings": {
+          "#": 2,
+          "##": 20
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504武汉四调",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          29,
+          36,
+          37,
+          38,
+          40
+        ]
+      },
+      "flags": [
+        "garbage_token_in_sectitle",
+        "blanknum_missing",
+        "html_table",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 39,
+      "exam": "2504泉州四检",
+      "md": "md/39_2504泉州四检.md",
+      "tex": "tex/39_2504泉州四检.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        45,
+        46,
+        47,
+        48,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        41,
+        42,
+        43,
+        44,
+        49
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 166,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 21,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 26
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504泉州四检",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 40,
+      "exam": "2504济宁枣庄二模",
+      "md": "md/40_2504济宁枣庄二模.md",
+      "tex": "tex/40_2504济宁枣庄二模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          34,
+          34
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          2,
+          2
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        39,
+        58
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 2,
+        "(2)": 14,
+        "(3)": 18
+      },
+      "choice_items": {
+        "(1)": {
+          "6": 1,
+          "7": 1
+        },
+        "(2)": {
+          "4": 14
+        },
+        "(3)": {
+          "3": 18
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 2,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 160,
+      "md_markers": {
+        "images": 5,
+        "html_tables": 2,
+        "escaped_blanks": 27,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 21
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504济宁枣庄二模",
+        "questions": 33,
+        "choices": 34,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 33,
+        "cloze": 15,
+        "seven_of_five": 2,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          18,
+          26,
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing",
+        "choices_count_drift",
+        "image_loss",
+        "html_table",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 41,
+      "exam": "2504湖丽衢二模",
+      "md": "md/41_2504湖丽衢二模.md",
+      "tex": "tex/41_2504湖丽衢二模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        55,
+        56,
+        57
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5ladnepen分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 146,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 26,
+        "watermark_hits": 0,
+        "garbage_tokens": 1,
+        "headings": {
+          "#": 2,
+          "##": 20
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504湖丽衢二模",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "garbage_token_in_sectitle",
+        "blanknum_missing",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 42,
+      "exam": "2504湖北四调",
+      "md": "md/42_2504湖北四调.md",
+      "tex": "tex/42_2504湖北四调.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "4",
+        "4",
+        "4",
+        "4",
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分40分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5ladnepen分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 142,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 0,
+        "garbage_tokens": 1,
+        "headings": {
+          "#": 2,
+          "##": 23
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504湖北四调",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "garbage_token_in_sectitle",
+        "writinglines_anomaly",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 43,
+      "exam": "2504福州四调",
+      "md": "md/43_2504福州四调.md",
+      "tex": "tex/43_2504福州四调.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 13,
+        "(3)": 22
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 13
+        },
+        "(3)": {
+          "3": 22
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 146,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 18
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504福州四调",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "choices_count_drift",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 44,
+      "exam": "2504稽阳联谊",
+      "md": "md/44_2504稽阳联谊.md",
+      "tex": "tex/44_2504稽阳联谊.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        54,
+        55
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 16,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 145,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 28,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 23
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504稽阳联谊",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 16,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 16,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing",
+        "html_table",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 45,
+      "exam": "2504金华十校",
+      "md": "md/45_2504金华十校.md",
+      "tex": "tex/45_2504金华十校.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 16,
+        "(3)": 19
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 15
+        },
+        "(3)": {
+          "3": 19
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5ladnepen分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 154,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 0,
+        "garbage_tokens": 1,
+        "headings": {
+          "#": 2,
+          "##": 21
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2504金华十校",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "garbage_token_in_sectitle",
+        "choices_count_drift",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 46,
+      "exam": "2505义乌二模",
+      "md": "md/46_2505义乌二模.md",
+      "tex": "tex/46_2505义乌二模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 16,
+        "(3)": 19
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "2": 1,
+          "4": 15
+        },
+        "(3)": {
+          "3": 19
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 156,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 29,
+        "watermark_hits": 10,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 20
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2505义乌二模",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "choices_count_drift",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 47,
+      "exam": "2505县域教研联盟二次",
+      "md": "md/47_2505县域教研联盟二次.md",
+      "tex": "tex/47_2505县域教研联盟二次.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        55,
+        57,
+        58,
+        59,
+        60
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分50分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分40分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）微信公众号IAI English",
+        "第二节（共15小题：每小题1.5分，满分22.5分",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 162,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 25,
+        "watermark_hits": 32,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 22
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2505县域教研联盟二次",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "blanknum_missing",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 48,
+      "exam": "2505强基联盟",
+      "md": "md/48_2505强基联盟.md",
+      "tex": "tex/48_2505强基联盟.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          1,
+          1
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [
+        57,
+        58
+      ],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 1,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分 15 分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 161,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 1,
+        "escaped_blanks": 25,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 23
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2505强基联盟",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "blanknum_missing",
+        "html_table",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 49,
+      "exam": "2505温州三模",
+      "md": "md/49_2505温州三模.md",
+      "tex": "tex/49_2505温州三模.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          2,
+          2
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 14,
+        "(3)": 21
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 14
+        },
+        "(3)": {
+          "3": 21
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 2,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）微",
+        "第二节 (共 15 小题: 每小题 1.5 分, 满分 22.5 分)",
+        "第一节 (共 15 小题: 每小题 2.5 分, 满分 37.5 分)",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节 (共 15 小题; 每小题 1 分, 满分 15 分)",
+        "第二节 (共 10 小题; 每小题 1.5 分, 满分 15 分)",
+        "第一节 (满分 15 分)",
+        "第二节 (满分 25 分)"
+      ],
+      "par_count": 148,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 2,
+        "escaped_blanks": 28,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 23
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2505温州三模",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "choices_count_drift",
+        "html_table",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 50,
+      "exam": "2505精诚联盟",
+      "md": "md/50_2505精诚联盟.md",
+      "tex": "tex/50_2505精诚联盟.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          35,
+          35
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 19
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 19
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分30分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共 15 小题：每小题 1.5 分，满分 22.5 分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 156,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 30,
+        "watermark_hits": 2,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 19
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2505精诚联盟",
+        "questions": 34,
+        "choices": 35,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 34,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          18,
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "watermark_leaked_into_sectitle",
+        "choices_count_drift",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 51,
+      "exam": "2505镇海中学",
+      "md": "md/51_2505镇海中学.md",
+      "tex": "tex/51_2505镇海中学.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "no_listening",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          16,
+          16
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分30分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共15小题；每小题2.5分，满分37.5分）",
+        "第二节（共5小题；每小题2.5分，满分12.5分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 129,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 28,
+        "watermark_hits": 2,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 11
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2505镇海中学",
+        "questions": 15,
+        "choices": 16,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 15,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          21,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "no_listening",
+        "watermark_leaked_into_sectitle",
+        "page_count_unavailable"
+      ]
+    },
+    {
+      "index": 52,
+      "exam": "2508湖南雅礼",
+      "md": "md/52_2508湖南雅礼.md",
+      "tex": "tex/52_2508湖南雅礼.tex",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf",
+      "variant": "full",
+      "documentclass_ok": true,
+      "env_pairs": {
+        "document": [
+          1,
+          1
+        ],
+        "choices": [
+          36,
+          36
+        ],
+        "cloze": [
+          0,
+          0
+        ],
+        "notice": [
+          1,
+          1
+        ],
+        "tabular": [
+          0,
+          0
+        ]
+      },
+      "question_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "example_count": 0,
+      "blanknum_numbers": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "blanknum_missing": [],
+      "blanknum_duplicate": [],
+      "choices": {
+        "(1)": 1,
+        "(2)": 15,
+        "(3)": 20
+      },
+      "choice_items": {
+        "(1)": {
+          "7": 1
+        },
+        "(2)": {
+          "4": 15
+        },
+        "(3)": {
+          "3": 20
+        }
+      },
+      "cz_count": 15,
+      "passagelabel_count": 4,
+      "tabular_count": 0,
+      "notice_count": 1,
+      "writinglines": [
+        "8",
+        "8"
+      ],
+      "parttitles": [
+        "第一部分 听力（共两节，满分 30 分）",
+        "第二部分 阅读理解（共两节，满分 50 分）",
+        "第三部分 语言知识运用（共两节，满分 30 分）",
+        "第四部分 写作（共两节，满分 40 分）"
+      ],
+      "parttitle_canon": [
+        "listening",
+        "reading",
+        "language",
+        "writing"
+      ],
+      "sectitles": [
+        "第一节（共5小题：每小题1.5分，满分7.5分）",
+        "第二节（共15小题：每小题1.5分，满分22.5分）",
+        "第一节（共15小题：每小题2.5分，满分37.5分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（共15小题；每小题1分，满分15分）",
+        "第二节（共10小题；每小题1.5分，满分15分）",
+        "第一节（满分15分）",
+        "第二节（满分25分）"
+      ],
+      "par_count": 140,
+      "md_markers": {
+        "images": 0,
+        "html_tables": 0,
+        "escaped_blanks": 28,
+        "watermark_hits": 0,
+        "garbage_tokens": 0,
+        "headings": {
+          "#": 2,
+          "##": 17
+        }
+      },
+      "tex_images": 0,
+      "report": {
+        "exam": "2508湖南雅礼",
+        "questions": 35,
+        "choices": 36,
+        "cloze": 15,
+        "pages": 0,
+        "compile": "2/2"
+      },
+      "qa": {
+        "questions": 35,
+        "cloze": 15,
+        "seven_of_five": 1,
+        "range": [
+          1,
+          55
+        ],
+        "gaps": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      "flags": [
+        "page_count_unavailable"
+      ]
+    }
+  ]
+}

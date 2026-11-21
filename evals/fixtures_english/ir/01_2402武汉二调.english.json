@@ -1,0 +1,1223 @@
+{
+  "meta": {
+    "subject": "english",
+    "kind": "shiti",
+    "source": "01_2402武汉二调.tex",
+    "preamble": "% !TEX program = xelatex\n\\documentclass{英语试卷}\n\\begin{document}\n",
+    "postamble": "\\end{document}\n",
+    "title": "武汉市 2024 届高中毕业生二月调研考试",
+    "exam_subject": "英语",
+    "variant": "full",
+    "question_count": 35,
+    "question_numbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35
+    ],
+    "example_count": 0,
+    "blank_numbers": [
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65
+    ],
+    "block_count": 174
+  },
+  "blocks": [
+    {
+      "type": "exam_title",
+      "mark": "",
+      "title": "武汉市 2024 届高中毕业生二月调研考试",
+      "subject": "英语"
+    },
+    {
+      "type": "para",
+      "text": "武汉市 2024 届高中毕业生二月调研考试",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "英语试卷",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "命题\\&审题：武汉市教育科学研究院",
+      "blanks": []
+    },
+    {
+      "type": "notice",
+      "lines": [
+        "\\par 1. 答题前，先将自己的姓名、准考证号填写在试卷和答题卡上，并将准考证号条形码粘贴在答题卡上的指定位置，\\par",
+        "\\par 2. 选择题的作答：每小题选出答案后，用 2B 铅笔把答题卡上对应题目的答案标号涂黑。写在试卷、草稿纸和答题卡上的非答题区域均无效。\\par",
+        "\\par 3. 非选择题的作答：用黑色签字笔直接答在答题卡上对应的答题区域内。写在试卷、草稿纸和答题卡上的非答题区域均无效，\\par",
+        "\\par 4. 考试结束后，请将本试卷和答题卡一并上交，\\par"
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第一部分 听力（共两节，满分 30 分）"
+    },
+    {
+      "type": "para",
+      "text": "做题时，先将答案标在试卷上。录音内容结束后，你将有两分钟的时间将试卷上的答案转涂到答题卡上。",
+      "blanks": []
+    },
+    {
+      "type": "section",
+      "text": "第一节（共5小题；每小题1.5分，满分7.5分）"
+    },
+    {
+      "type": "para",
+      "text": "听下面 5 段对话。每段对话后有一个小题，从题中所给的 A、B、C 三个选项中选出最佳选项，并标在试卷的相应位置。听完每段对话后，你都有 10 秒钟的时间来回答有关小题和阅读下一小题。每段对话仅读一遍。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "1. What are the speakers probably doing?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Discussing at work.",
+        "Talking on phone.",
+        "Driving on the way."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "2. What will the man do next?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Have a dessert.",
+        "Pay the check.",
+        "Ask for a beer."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "3. What do we know about the hamburger?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "It might go bad.",
+        "It's good-looking.",
+        "It looked funny."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "4. What are the speakers mainly talking about?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "The scenery",
+        "The transport.",
+        "The weather."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "5. How does the woman sound in the end?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Glad.",
+        "Surprised.",
+        "Impatient."
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共 15 小题；每小题 1.5 分，满分 22.5 分）"
+    },
+    {
+      "type": "para",
+      "text": "听下面 5 段对话或独白。每段对话或独白后有几个小题，从题中所给的 A、B、C 三个选项中选出最佳选项，并标在试卷的相应位置。听每段对话或独白前，你将有时间阅读各个小题，每小题 5 秒钟；听完后，各小题将给出 5 秒钟的作答时间。每段对话或独白读两遍。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "听第 6 段材料，回答第 6、7 题。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "6. What's the speakers' final decision?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "To play basketball.",
+        "To work out legs and forearms.",
+        "To exercise arms and stomach."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "7. When does the conversation probably take place?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Wednesday.",
+        "Tuesday.",
+        "Friday."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听第 7 段材料，回答第 8、9 题。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "8. What's Missy doing now?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Listening to music.",
+        "Playing in the garden.",
+        "Preparing for the exam."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "9. What does the woman suggest?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Talking with Missy.",
+        "Leaving Missy alone.",
+        "Meeting Mary outside."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听第 8 段材料，回答第 10 至 13 题。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "10. What is the man?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "A physician.",
+        "A host.",
+        "A manager."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "11. Why did Susan leave the job in the hospital?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "To take piano lessons.",
+        "To have more free time.",
+        "To try a new life."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "12. How does Susan feel about her job now?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Tiresome.",
+        "Content.",
+        "Unpleasant."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "13. What is the probable relationship between Susan and Carl?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Co-workers",
+        "Neighbors.",
+        "Classmates."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听第 9 段材料, 回答第 14 至 17 题,",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "14. Where does the conversation probably take place?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "In a park.",
+        "At a store.",
+        "In the street."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "15. What does the woman intend to do?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Meet her friend.",
+        "Go to Queen Street.",
+        "Go to church."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "16. What do we know about the Cock and Bull?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "It offers delicious steak.",
+        "It lies next to the bank.",
+        "It moved 30 years ago."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "17. What's the man like?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Open-minded.",
+        "Warm-hearted.",
+        "Well-educated."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听第 10 段材料, 回答第 18 至 20 题,",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "18. Who called for help about the cougar(美洲狮) attack?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "The cyclists.",
+        "The witnesses.",
+        "The police."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "19. What happened to the planes?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "They broke speed record.",
+        "They landed at high speed.",
+        "They arrived before schedule."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "20. Which place will probably suffer a second disaster?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Los Angeles County.",
+        "Ventura County.",
+        "Orange County."
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第二部分 阅读理解（共两节，满分 50 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（共15小题；每小题2.5分，满分37.5分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下列短文，从每题所给的 A、B、C 和 D 四个选项中，选出最佳答案。",
+      "blanks": []
+    },
+    {
+      "type": "passage_label",
+      "text": "A"
+    },
+    {
+      "type": "para",
+      "text": "Each fall, millions of butterflies across the U. S. and Canada fly up to 4,000 km to central Mexico. Travelers can see the butterflies overwintering on the Western Monarch Trail, a 465-mile, road trip-friendly conservation initiative that links over a dozen stops along the route.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Helping the butterflies",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Organizers created educational panels in English and Spanish explaining the butterflies' annual traveling and their trouble. The signs also outline ways travelers can help the butterflies recover, such as by supporting chemical-free farms and planting native nectar(花蜜) gardens.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Why butterflies fly to the California coast",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Many stops in Pismo State Beach Monarch Butterfly Grove and Andrew Molera State Park, are overwintering sites where, from October to February, travelers can see thousands of butterflies gathering in forests in areas with mild temperatures, dappled (斑驳的) sunlight, high dampness, and little to no wind.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Other sites, like the San Luis Obispo Botanical Garden and Avila Valley Barn, grow flowers that provide sugary, high-calorie food for the butterflies to eat. Butterflies settling here demonstrate how vital nectaring plants are to their survival.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "How to explore the Western Monarch Trail",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "The butterflies behavior varies at different times of day and depending on the weather. In the mornings, while temperatures are still cool, step out of the cabin(木屋) in the Fernwood Resort where you slay overnight, you'll find many butterflies hanging together on the branches and trunks of trees at the overwintering sites. As the day starts to heat up—typically by late morning or early afternoon—you'll be amazed at the phenomenon \"sunburst\"—the butterflies start flying around in search of nearby nectar. Keep your eyes skyward. Don't grab your camera. Just be in the moment.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "21. What's the Western Monarch Trail initiative aimed at?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Providing a travel route.",
+        "Encountering butterflies.",
+        "Promoting organic farming.",
+        "Advocating species conservation."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "22. What do we know about Andrew Molera State Park?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It holds many nectar gardens.",
+        "It's pleasant throughout winter.",
+        "It has sufficient food for butterflies.",
+        "It's home to butterflies all year around."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "23. What is guaranteed for the travelers along the Western Monarch Trail?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Signs to guide the route.",
+        "Cameras for recording videos.",
+        "Ready shelters to stay overnight.",
+        "Experience of watching \"sunburst\" at dawn."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "B"
+    },
+    {
+      "type": "para",
+      "text": "Josefa Marin went to New York from Mexico in 1987, supporting her daughter back home with the \\$140 a week she earned at a sweater factory. With that small income, she had to collect recyclables, trading in cans for five cents each.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "When the clothing factory closed down in the late 2000s, she became a full-time recycler, picking up cans and bottles to make ends meet",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Marin's story is not unique. Millions around the world make a living from picking through waste and reselling it—a vital role that keeps waste manageable. In New York City, the administrative department collects only about 28 percent of the cans that could be recycled. Rubbish collectors keep millions of additional recyclables out of landfills every year.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Yet collectors are ruled out by government policies. The United States Supreme Court in 1988 stated that household garbage is public property once it's on the street. That enables police to search rubbish for evidence, but that protection hasn't always been extended to recyclers. And in places like New York City, which is testing city-owned locked containers to hide garbage from rats, containers are made clearly inaccessible for collectors.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "\"There's value in the waste, and we feel that value should belong to the people, not the city or the corporations,\" says Ryan Castalia, director of a nonprofit recycling and community center in Brooklyn.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Recognized or not, waste pickers have long been treated with disrespect. Marin recalls an occasion when someone living next to a building where she was collecting cans threw water at her. \"Because I recycle doesn't mean I am less of a person than anyone else,\" she says.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Some governments are starting to realize that protecting the environment and humanity go hand in hand. The United Nation's 2030 Agenda for Sustainable Development, for example, calls for an end to poverty and all the risks it brings.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "24. What is the author's purpose of telling about Marin?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To highlight waste collectors' role.",
+        "To reflect laid-off workers' hardship.",
+        "To praise her devotion to her daughter.",
+        "To show the seriousness of unemployment."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "25. How does the author show the importance of waste pickers' work?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "By contrasting.",
+        "By citing reference.",
+        "By giving definitions.",
+        "By cause-effect analysis."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "26. What would Marin agree with?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Business is business.",
+        "No job is noble or humble.",
+        "The early birds catches worms.",
+        "One good turn deserves another."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "27. Which of the following is the best title for the text?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "How can we end poverty?",
+        "Who owns our garbage?",
+        "Who takes blame for waste?",
+        "How should we recycle rubbish?"
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "C"
+    },
+    {
+      "type": "para",
+      "text": "The greatest irony(讽刺) of the world-wide celebrations held in 2012 to honour the 200th anniversary(周年纪念) of the first edition of the Grimms' Hausm rehen involves the discovery that most people really don't know the original Grimms' tales published in 1812.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "If we return to take a closer look at the first edition, we'll find it was this edition that inspired scholars of folk culture throughout Europe to gather tales from the oral tradition and preserve them for future generations.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "When the Grimms Jacob and Wilhelm began collecting all kinds of folk tales and songs at the beginning of the 19th century, what attracted them to concentrate on old German literature was a belief that the most natural and pure forms of culture were to be located in the past, while modern literature, even though it might be remarkably rich, was artificial and thus could not express the genuine quality of folk culture that originated naturally from people's experience and bound the people together. Broadly speaking, the Grimms sought to collect and preserve ancient things consisting of tales, songs and documents. They intended to demonstrate how natural language, originating from the needs and customs of the common people, created genuine bonds and helped form civilized communities.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Turning to the first edition a reader might notice that, totally unlike the final edition of 1857, the first edition collects more genuine folk tales, keeping spoken and raw contents, despite the fact that the language is not as pleasing as that in later revised versions. For instance, Snow White's mother, not her stepmother, wants to kill the beautiful girl out of envy. The storytellers do not beat about the bush and they tell the truths they know, engaging people to learn from symbols how to engage their realities, even though magic, incredible transformation and cruelty are involved.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Lastly, the Grimms' little-known first edition reveals forgotten voices that are actually deep within us. Therefore, the irresistibility of the Grimms' tales are that really not theirs, but ours.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "28. According to the author, why should we rediscover the Grimms' first edition?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To explore its origin.",
+        "To appreciate its significance.",
+        "To honour its 200th anniversary.",
+        "To remember the Brothers Grimm."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "29. What is paragraph 3 of the text mainly about?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "The quality of the folk culture.",
+        "The contents of the first edition.",
+        "The feature of the old German literature.",
+        "The motivation of the Grimms collecting tales."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "30. What can we learn about Snow White in the first edition?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It is loosely based on the folk tale.",
+        "It instructs readers to integrate into life.",
+        "It is appealing for its beautiful language.",
+        "It exposes envy and cruelty of the stepmother."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "31. What can we infer about the Brothers Grimm from the text?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "They were collectors of antiques.",
+        "They kept their style in later editions.",
+        "They thought highly of modern literature.",
+        "They were pioneers in preserving folk culture."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "D"
+    },
+    {
+      "type": "para",
+      "text": "If you live on this planet, there's a decent chance you've seen the classic Star Trek Episode, in which captain Kirk and several members find themselves in what appears to be another universe.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "These days, it seems the idea of the multiverse—many worlds—is having its Hollywood moment. Its appeal as a storytelling device is obvious——characters explore a multi-world with varying degrees of similarity to our own, as well as different versions of themselves, Hence, it has been fully established in mainstream pop culture.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "While Hollywood can't seem to get enough of the multiverse, it remains deeply controversial (有争议的) among scientists. Advocates on the two sides show no mercy toward each other in their books, on their blogs. But physicists didn't pull the idea out of thin air— rather, several distinct lines of reasoning seem to point to the multiverse's existence. However, critics warn that making the multiverse legal could make it harder for the public to distinguish speculative(推测性的) theories from established fact, making it more difficult to keep pseudo-science(伪科学) at bay. Giving credit to such speculation risks \"turning fundamental physics into pseudo-science.\"",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "The multiverse controversy is rooted in the idea of testability. If we can't interact with these other universes, or detect them in any way, some experts insist that reduces them to mere philosophical speculation. But Carroll, an advocate for \"many worlds\", argues that mathematics is the language describing our physical theories; Since Schrdinger's equation (方程), on which Quantum(量子) mechanics rests, predicts the existence of many worlds, so be it.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Could a more expansive view of the universe itself be the next breakthrough? As Siegfried puts it: \"Every time in the past that we've thought, 'We've got it; this is what the whole universe is— —the people who've said, 'Maybe there's more than one of those' have always turned out to be right\".",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "32. Why is Hollywood so occupied with the multiverse?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It makes for engaging plots.",
+        "It is a much-talked-about topic.",
+        "It is helpful to popularize science.",
+        "It dominates the mainstream pop culture."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "33. What do the underlined words in paragraph 3 probably mean?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Out of date.",
+        "Out of place.",
+        "Out of nowhere.",
+        "Out of question."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "34. According to the opponents, the basic standard of fundamental physics is that \\_."
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "it can be detected somehow",
+        "it can be reasoned logically",
+        "it can be interpreted philosophically",
+        "it can be predicted by mathematics equation"
+      ]
+    },
+    {
+      "type": "question",
+      "text": "35. What might be the author's attitude toward the multiverse?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Doubtful.",
+        "Dismissive.",
+        "Unclear.",
+        "Approving."
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共5小题；每小题2.5分，满分12.5分）"
+    },
+    {
+      "type": "para",
+      "text": "根据短文内容，从短文后的选项中选出能填入空白处的最佳选项。选项中有两项为多余选项，",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "After building name \"standard\" cargo bikes, \\blanknum{36} this time with something very special. I wanted to build an ideal cargo bike combining the stability of a three-wheeler with the possibility to change directions like being on two wheels.",
+      "blanks": [
+        36
+      ]
+    },
+    {
+      "type": "para",
+      "text": "The firm step was to do extensive research. \\blanknum{37}. An incredible source of technical inspiration was the online Tilting Group. Although primarily concerned will t.llling (倾斜) concepts of engine driven construction, the group is surely the best place to find information about constructing a tilter.",
+      "blanks": [
+        37
+      ]
+    },
+    {
+      "type": "para",
+      "text": "After researching and outlining a few ideas. I grabbed some part, and started with a very simple prototype(雏形). Building such a vehicle needs a high degree of accuracy, which was not the case with my prototype \\blanknum{38} So I made a few more sketches (草图), which led to an improved version of the driving and tilting mechanism.",
+      "blanks": [
+        38
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Then I started building the tricycle. Building the structure was quite straightforward. As usual I took an old bike sport for the back triangle and then added the front part. After adding a cargo basket to the structure, \\blanknum{39}.",
+      "blanks": [
+        39
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Now came the hard part: the driving mechanism. I started with the usual design used for two-wheel cargo bikes, but it took me quite some time to figure out how to pass the driving force to both wheels without allowing the whole thing to lock itself in any angle. \\blanknum{40}, but I'm sure I can use the knowledge I gained one way or another.",
+      "blanks": [
+        40
+      ]
+    },
+    {
+      "type": "choices",
+      "columns": 1,
+      "indent": "  ",
+      "items": [
+        "The project was demanding",
+        "I decided to get my hands dirty again",
+        "I fell in love with three-wheeler bikes",
+        "I put all the parts together for the first time",
+        "It took me quite some time to understand the ideas behind it",
+        "The engine driven constructions were always the most difficult to fix",
+        "The consequence was that the driving mechanism locked itself occasionally"
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第三部分 语言知识运用（共两节，满分30分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（共15小题；每小题1分，满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，从短文后各题所给的 A、B、C 和 D 四个选项中，选出可以填入空白处的最佳选项，",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "When I was in third grade, my family and I took on an unforgettable trip accord the country. It turned out to be more than just a/an \\blanknum{41} .ourney; it was a journey of discovery into our \\blanknum{42}.",
+      "blanks": [
+        41,
+        42
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Every day, Dad \\blanknum{43} us with his trusty road map. Mom, the heart of our family. shared folk tales and painted pictures about the upcoming \\blanknum{44}. We went through diverse \\blanknum{45} from the thick forests is to the vast deserts of the Well.",
+      "blanks": [
+        43,
+        44,
+        45
+      ]
+    },
+    {
+      "type": "para",
+      "text": "One day, while hiking through the Grand Canyon. I \\blanknum{46} a particularly rough path. Frightened, I \\blanknum{47}, not knowing how to proceed. That's when my parents \\blanknum{48} As Dad showed me footholds. Mum coached me with calming \\blanknum{49} and reminded me of the breathtaking views that lay ahead. Then, I \\blanknum{50} the confidence as my feet \\blanknum{51} solid ground again. When I finally overcame my fear, I felt we became \\blanknum{52} as a family.",
+      "blanks": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "type": "para",
+      "text": "From then on, merry evening, we'd gather around a campfire for what we \\blanknum{53} called \"Family Reflection Time.\" During these sessions, we'd share laughs, \\blanknum{54}, and insights from the day's experiences.",
+      "blanks": [
+        53,
+        54
+      ]
+    },
+    {
+      "type": "para",
+      "text": "The trip taught me that the true meaning of travel isn't merely about reaching the destination but about the personal growth that happens on the route, and the family bond, formed when facing \\blanknum{55} together.",
+      "blanks": [
+        55
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 41,
+      "options": [
+        "crowded",
+        "physical",
+        "creature",
+        "necessary"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 42,
+      "options": [
+        "relationships",
+        "potentials",
+        "dreams",
+        "inspirations"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 43,
+      "options": [
+        "guided",
+        "encouraged",
+        "comforted",
+        "attracted"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 44,
+      "options": [
+        "events",
+        "stations",
+        "locations",
+        "shows"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 45,
+      "options": [
+        "cultures",
+        "landscapes",
+        "groups",
+        "countries"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 46,
+      "options": [
+        "imagined",
+        "constructed",
+        "smoothed",
+        "encountered"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 47,
+      "options": [
+        "froze",
+        "New",
+        "fell",
+        "forgot"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 48,
+      "options": [
+        "reached down",
+        "stood aside",
+        "stepped in",
+        "turned back"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 49,
+      "options": [
+        "words",
+        "worries",
+        "noises",
+        "thoughts"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 50,
+      "options": [
+        "lost",
+        "maintained",
+        "demonstrated",
+        "restored"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 51,
+      "options": [
+        "left",
+        "broke",
+        "found",
+        "dug"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 52,
+      "options": [
+        "nicer",
+        "tougher",
+        "braver",
+        "closer"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 53,
+      "options": [
+        "originally",
+        "affectionately",
+        "frequently",
+        "simply"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 54,
+      "options": [
+        "sympathy",
+        "conflict",
+        "learn",
+        "profits"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 55,
+      "options": [
+        "challenges",
+        "defeats",
+        "opposition",
+        "uncertainty"
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共10小题；每小题1.5分，满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，在空白处填入 1 个适当的单词或括号内单词的正确形式。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Zheng Chao, who grew up in Jiaoyao village, a high-altitude mountainous area with poor land, was raised by tea. His family, which has been growing tea \\blanknum{56} three generations, used to have trouble putting food on the table, \\blanknum{57} now he earn s 70,000yuan a year just from selling tea.",
+      "blanks": [
+        56,
+        57
+      ]
+    },
+    {
+      "type": "para",
+      "text": "In 2019, Kuang and seven other young people in the village set up a tea cooperative. With the support of the economic cooperative in their village, they \\blanknum{58}(successful)integrated the resources of the tea industry, and carried out the model of unified(统一的)planting, fertilization, processing and sales, attempting \\blanknum{59}(achieve) high quality and a good flavor. An old house in the village \\blanknum{60}(transform) into a tea processing and exhibition workshop, while the house facing the green \\blanknum{61}(mountain) and the tea garden became a separate tea tasting room.",
+      "blanks": [
+        58,
+        59,
+        60,
+        61
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Last year, the cooperative assigned 40 percent of its \\blanknum{62} (expect) earnings to the shareholders in the village. \\blanknum{63} Mao Huayan, Kuang's wife, received her bonus of 1,097 yuan, she felt like a child \\blanknum{64}(get) \"lucky\" money during Spring Festival. More important was the \\blanknum{65}(industry) development that helped them to accumulate wealth.",
+      "blanks": [
+        62,
+        63,
+        64,
+        65
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第四部分 写作（共两节，满分 40 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "假如你是李华,你和外国交换生 Peter 计划组织一场名为\"Cross-Cultural Food Exhibition\"的活动,请写一封邮件给 Peter,内容包括:",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "1. 你对活动形式的建议；",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "2. 约定时间讨论安排和分工。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "注意：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "1. 写作词数应为 80 左右;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "2. 请按如下格式写字答题卡的相应位置作答。",
+      "blanks": []
+    },
+    {
+      "type": "section",
+      "text": "第二节（满分25分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面材料，根据其内容和所给段落开头语续写两段，使之构成一篇完整的短文，",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "From the day Tony was born, Jeff refused to let his son's disabilities hold him back. Tony has cerebral palsy(脑灌), making it difficult for him to walk. Determined to show Tony that he could pursue his dream of being an athlete, when he was 15 years old, Jeff signed him up with Team Triumph, an organization that helps kids with disabilities engage in endurance sports.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "\"It gave me a new perspective on life,\" Tony said. He even dreamed of walking marathon one day. From then on, Tony became addicted to racing, and Jeff also wanted to be a part of it. Though Jeff had been a minor league baseball player, endurance(耐力) sports were new to him. He made up his mind to achieve Tony's dream and started doing things he never dreamed about. He began waking up at 4 a. m. So he could run in the silent street while pushing Tony in a special wheelchair called a racing chair. Every morning, he drove himself to run increasingly longer distances. Soon, he and Tony were entering 5K races, then on to Iron-man triathlons.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Finishing the Iron-man competition in under 16 hours would be another dream for Jeff and Tony. The big day came. The race began with a 2.4-mile swim in the river. Jeff helped Tony into a kayak(皮船). With one end of a rope tied to a belt around his back and the other end to the kayak, Jeff eased himself into the water. Swimming while dragging another person is quite tough. The pair completed the swim in 90 minutes, and then it was on to the next leg: a 112-mile bicycle ride. Their custom-built bike had an additional seal in the back for Tony that faced backward.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "After completing the demanding bike part in roughly nine hours, they set their sights on the final leg of the race—a 26.2-mile marathon with Jeff pushing Tony in the racing chair. They d been competing for 10 hours, with only 6 hours left for the race. The first 7 miles went smoothly.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "注意:",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "1. 续写词数应为 150 左右；2. 请按如下格式在答题卡的相应位置作答：",
+      "blanks": []
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 1: But at mile 19, Jeff began to worry they were going too slow."
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 2: Jeff handed Tony his rolling walker(助行器)."
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    }
+  ]
+}

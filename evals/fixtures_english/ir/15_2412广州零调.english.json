@@ -1,0 +1,907 @@
+{
+  "meta": {
+    "subject": "english",
+    "kind": "shiti",
+    "source": "15_2412广州零调.tex",
+    "preamble": "% !TEX program = xelatex\n\\documentclass{英语试卷}\n\\begin{document}\n",
+    "postamble": "\\end{document}\n",
+    "title": "2025 届广州市高三年级调研测试",
+    "exam_subject": "英语",
+    "variant": "no_listening",
+    "question_count": 15,
+    "question_numbers": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35
+    ],
+    "example_count": 0,
+    "blank_numbers": [
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65
+    ],
+    "block_count": 130
+  },
+  "blocks": [
+    {
+      "type": "exam_title",
+      "mark": "",
+      "title": "2025 届广州市高三年级调研测试",
+      "subject": "英语"
+    },
+    {
+      "type": "notice",
+      "lines": [
+        "\\par 1. 答卷前，考生务必用黑色字迹的钢笔或签字笔将自己的姓名、考生号、试室号和座位号填写在答题卡上。用2B铅笔将试卷类型（A）填涂在答题卡相应位置上，并在答题卡相应位置上填涂考生号。因笔试不考听力，试卷从第二部分开始，试题序号从“21\"开始。\\par",
+        "\\par 2. 作答选择题时，选出每小题答案后，用 2B 铅笔把答题卡对应题目选项的答案信息点除黑；如需改动，用橡皮擦干净后，再选涂其他答案。答案不能答在试卷上。\\par",
+        "\\par 3. 非选择题必须用黑色字迹的钢笔或签字笔作答，答案必须写在答题卡各题目指定区域内相应位置上，如需改动，先划掉原来的答案，然后再写上新答案；不准使用铅笔和涂改液。不按以上要求作答无效。\\par",
+        "\\par 4. 考生必须保持答题卡的整洁。考试结束后，将试卷和答题卡一并交回。\\par"
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第二部分 阅读理解（共两节，满分50分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（共15小题；每小题2.5分，满分37.5分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下列短文，从每题所给的 A、B、C 和 D 四个选项中，选出最佳答案，",
+      "blanks": []
+    },
+    {
+      "type": "passage_label",
+      "text": "A"
+    },
+    {
+      "type": "para",
+      "text": "December Contest: Pen Dance",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "There are many ways to dance, and a pen can make a fun partner. For this month's contest, put on some music you like, grab a pen, crayon, or paintbrush, and let your fingers dance beautiful patterns across the page. Send us your creative drawing, and we'll fill a dance hall with the most delightful creations in an upcoming issue of Fun Campus. Contest Rules",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "1. Your contest entry must be your very own work. Ideas and words should not be copied.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "2. Please submit only one entry per person.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "3. If you want your work returned, enclose a self-addressed, stamped envelope.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "4. Your entry must be signed by a parent or legal guardian, saying it's your own work and that no one helped you, and that Fun Campus has permission to publish it in print and online.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "5. For information on the Children's Online Privacy Protection Act, see the Privacy Policy page at funcampus.com.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "6. Be sure to include your name, age, and address on your entry",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "7. Email a photo or scan of artwork to funcampus.com. Entries must be emailed by December 30, 2024.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "8. We will publish the winning entries in an upcoming issue of Fun Campus.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "This December, let your pen become your dance partner, and let your creativity dance across the page. Happy drawing, and may your Pen Dance be filled with joy and inspiration!",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "21. What is the task for the contestants?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To draw a dancing scene.",
+        "To write a musical.",
+        "To perform in a dance hall.",
+        "To create an artwork."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "22. What is one rule of the contest?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Email submission is not allowed.",
+        "Participants need dancing experience.",
+        "The submitted works must be original.",
+        "Children should work with their parents."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "23. What should each participant submit along with their work?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "A return envelope.",
+        "Their signature.",
+        "An entry introduction.",
+        "Their personal information."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "B"
+    },
+    {
+      "type": "para",
+      "text": "The distinctive Northern Bald Ibis(秃头朱鹮), hunted nearly to extinction by the 17th century, was brought back by raising and rewilding efforts over the last two decades. But the birds don't know which direction to fly to migrate (迁徙) without wild-born elders leading the way. So a team of scientists and conservationists took on the role of parents and flight instructors.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Biologist Johannes Fritz and the Waldrapp team, an Austrian conservation group, have been teaching the birds their migration paths. Since 2002, they've increased the Central European population from zero to nearly 300 birds, changing the species' status from \"critically endangered\" to \"endangered\".",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "To prepare them for travel, the chicks are taken away, when they are just a few days old, to their human parents in the hope of \"imprinting\"—when the birds will bond with those humans to finally trust them along the migration route. Then the human parents sit on the back of a super light aircraft, waving and shouting words of support as it flies through the air.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "It's an odd scene: The aircraft looks like a flying car with a huge fan on the back and a yellow parachute keeping it in the air. Still, three dozen birds follow it sailing over the Alps.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Fritz, inspired by \"Father Goose\" Bill Lishman, who taught geese to fly alongside his ultralight plane, leads the birds on their migration.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "The first successful independent migration was in 2011, and more birds have followed the 550-kilometer route each year. The team hopes to have over 350 birds by 2028, making the population self-sustaining. However, climate change has affected their migration. In response, the team piloted a new route to southern Spain in 2023, which is longer and more challenging.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "The entire journey to Spain could take up to 50 days and end in early October. But Fritz says, \"The effort is bigger than just the Northern Bald Ibises. It's about paving the way for other threatened migratory species to fly.\"",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "24. What is the major challenge faced by the Northern Bald Ibises during their migration?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Long distances.",
+        "Absence of guidance.",
+        "Human hunting.",
+        "Limited resting spots."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "25. Why are the birds taken away when they are just a few days old?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To improve their flying skills.",
+        "To show them the migration route.",
+        "To build an emotional tie with humans.",
+        "To test their independence from their parents."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "26. What do the research team do during their flight?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "They shout like elder birds.",
+        "They try new migratory routes.",
+        "They encourage the birds to follow.",
+        "They use an airplane to find the way."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "27. What are Fritz's words in the last paragraph mainly about?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "The worth of the conservation effort.",
+        "The role of technology in the research.",
+        "The need to help other migratory species.",
+        "The promising future of wildlife migration"
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "C"
+    },
+    {
+      "type": "para",
+      "text": "Arm wrestling(扳手腕) was one of my favorite ways of playing with my brothers growing up. It allowed my younger brother and me to test our strength without getting tackled. I also put up a good fight when arm wrestling with my older brother and his friends. Their greater strength and experience made the challenge even more interesting. Every match seemed to end in a good laugh, no matter who won.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Now I'm a scientist who studies animals in the wild. I have seen that playing is a great way to socialize; there is so much more to play than fun and games. When humans and other animals play, they are building trust with siblings and friends. They learn how far they can push their partners before anyone becomes angry or physically hurt. That's called \"testing boundaries.\"",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Older playmates may self-handicap, appearing to be less competent than they really are to help younger players learn skills and explore their abilities. Play offers a safe space, where everyone knows the rules and can experiment with new ways to move, think, and respond to others.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Over the past 30 years, I've learned a lot about play by watching young male elephants test their strength through sparring (拳击) games with their friends and superiors. Group sparring matches are common at sunset, when several different elephant families show up at the water hole to drink.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "After the initial excitement of the arrival and a good long drink, young males slip away from the sides of their watchful moms and aunts to form sparring rings. An elder sister makes sure that the playing doesn't get out of hand, so she is ever present with a trunk on the back or over the head to calm the enthusiasm. That way, the younger males don't end up on the bottom of the pile.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Watching young elephants spar reminds me that play should be part of our everyday schedule — the less structure, the better.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "28. What does the author want to say by mentioning his/ her childhood experience?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Winning is not the true meaning of play.",
+        "Children prefer to play traditional games",
+        "Play is essential in children's development.",
+        "Arm wrestling is a safe way to test strength."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "29. What benefit of play does the author emphasize?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It brings fun.",
+        "It enables boundary breaking.",
+        "It settles conflicts.",
+        "It develops socializing skills."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "30. How do older playmates help the younger to learn during playtime?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "By pretending to be weaker.",
+        "By warning them of risks.",
+        "By testing their competence.",
+        "By teaching necessary skills."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "31. How would the author describe the elephant's sparring games?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Safe and fair.",
+        "Not strictly controlled.",
+        "Well-organized.",
+        "Highly competitive."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "D"
+    },
+    {
+      "type": "para",
+      "text": "Ne all know cacti(仙人掌) store water—but to survive, they also adjust their flower positions to gain more sunlight or shade, and so much more. Scientists have been copying the resilient plants' methods to help engineer our future.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "One of the most exciting advancements involves Copiapoa, a genus of cacti with at least 32 species found in the coastal Atacama Desert, the driest nonpolar desert on Earth. These cacti, typically five to six inches wide, can form gray-green bushes that spread out over an area otherwise empty of vegetation.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Documented by many scientists, Copiapoaas probably survive by \"drinking\" the salty fog that sweeps in from the sea every morning, as well as the dew — tiny bits of water — that forms on their spines (尖刺) and skin. This has inspired researcher Tegwen Malik from Swansea University to think about whether the dew-collecting process might be reproduced in metal structures.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Specifically, Malik took a close look at the one-and-a-quarter-inch spines of Copiapoaas and found that their surface has a series of tiny channels that broaden at the base. \"This creates a surface roughness that enables dewdrops to move along them even against gravity,\" she says.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Starting in 2013, she set out to re-create that structure by engineering a flat metal reproduction of the stems and spines of the Copiapoa, which she began testing under a series of different temperatures and humidities. After several years of experiments — testing indoor and outdoor conditions, and with various cooling methods — she finally got it to work. In 2023, Malik published a study showing that the irregular surface was 8 percent more efficient at harvesting dew than a flat sheet used as a baseline.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Malik imagines desert homes with water-collecting features to provide clean water in dry regions. \"The easiest way could be to place dew-harvesting surfaces on roofs, but you could also have these structures in tents in the desert,\" she says. \"We truly have hidden treasures in the Copiapoa, and we are only just learning some of their secrets.\"",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "32. What does the underlined word \"resilient\" mean in paragraph 1?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Highly adaptable to different soils.",
+        "Able to grow quickly and efficiently.",
+        "Resistant to diseases and harmful insects.",
+        "Capable of surviving difficult conditions."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "33. What drove Tegwen Malik to study Copiapoa?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Their metal-like surface.",
+        "Their mechanism to gather water.",
+        "Their typical appearance.",
+        "Their ability to form water drops."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "34. What was the main focus of Malik's experiment with the Copiapoa?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Recreating a flat metal copy of it.",
+        "Testing if its metal copy would work.",
+        "Seeing how it survives various climates.",
+        "Finding the most efficient cooling method for it."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "35. How may Malik's metal structure be applied?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To secure water supply in dry areas.",
+        "To clean salty water in desert homes.",
+        "To enable desert explorers to travel light.",
+        "To improve ways to discover hidden treasures."
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共5小题；每小题2.5分，满分12.5分）"
+    },
+    {
+      "type": "para",
+      "text": "根据短文内容，从短文后的选项中选出能填入空白处的最佳选项。选项中有两项为多余选项。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "As a baby, Jack's remarkable swimming journey began. At ten months, he already practised with swim aids. At six, he won his first swimming competition in a group for kids ten-and-under. At seven, he stayed at the pool from nine in the morning till eight hours later. His mother, recognizing his gift, took it as her duty to guide him. \\blanknum{36} By a young age, Jack had been ranked the number one swimmer of the country, a title he held for a record-breaking duration.",
+      "blanks": [
+        36
+      ]
+    },
+    {
+      "type": "para",
+      "text": "\\blanknum{37} He played skiing, tennis, soccer, and many more. Sam was a kid who loved to play, and his parents had no particular athletic ambitions for him. It was nearing his teens that he began to focus more on basketball. \\blanknum{38} In his mid-thirties, an age by which many professional basketball players are typically retired, Sam was still in the national basketball team.",
+      "blanks": [
+        37,
+        38
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Top athletes like Jack at the peak of their abilities do spend more time on focused, deliberate practice than their peers(同龄人). But scientists also find that potential champions typically devote less time to deliberate practice in childhood, but more to \"sampling\" various activities. \\blanknum{39}",
+      "blanks": [
+        39
+      ]
+    },
+    {
+      "type": "para",
+      "text": "In a world that demands people to specialize early, we face a challenge to keep the benefits of diverse experiences and delayed concentration. There's a need for those with Jack's early focus. \\blanknum{40} People who start with many different things and accept various experiences. People with range.",
+      "blanks": [
+        40
+      ]
+    },
+    {
+      "type": "choices",
+      "columns": 1,
+      "indent": "  ",
+      "items": [
+        "There was no time to waste.",
+        "And it was all going according to plan.",
+        "The growing complexity of the world also calls for more Sams.",
+        "But it didn't seem to hold back his development in the long run.",
+        "In reality, the Sam's path to success is far more common, yet less told.",
+        "In contrast to Jack, Sam didn't show significant sporting talent until later.",
+        "Unlike the swimming talent, Sam's early years were filled with a variety of sports."
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第三部分 语言知识运用（共两节，满分 30 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（共15小题；每小题1分，满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，从短文后各题所给的 A、B、C 和 D 四个选项中，选出可以填入空白处的最佳选项，",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Reggie couldn't hear. Although everyone in town was fond of him, he always \\blanknum{41} being treated differently. Children worried they would hurt Reggie, and that he wouldn't hear the ball being hit in his \\blanknum{42}. Adults acted like he was incapable of understanding them.",
+      "blanks": [
+        41,
+        42
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Reggie didn't like it, but his friend Michael hated it more and decided things had to be \\blanknum{43}. He proposed the Day of Silence: in honour of Reggie, they should set aside one day for \\blanknum{44} people, when everyone would have to wear earplugs (耳塞).",
+      "blanks": [
+        43,
+        44
+      ]
+    },
+    {
+      "type": "para",
+      "text": "People liked the \\blanknum{45} When the day arrived everyone stuck plugs in their ears, in a spirit of great \\blanknum{46}. That morning was filled with jokes and laughter. But, as the hours passed, people became aware of how \\blanknum{47} life was when one couldn't hear anything.",
+      "blanks": [
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "type": "para",
+      "text": "However, that was nothing compared to the greatest \\blanknum{48} of the day: Reggie was amazing! Just using his \\blanknum{49} body language, he was the best to communicate with everyone. People paid more attention to what Reggie was saying, and were \\blanknum{50} by his intelligence. They realized all Reggie needed was a little more \\blanknum{51} to enable communication. That was the only \\blanknum{52}.",
+      "blanks": [
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "type": "para",
+      "text": "So on the Day of Silence, Reggie's true \\blanknum{53} became known. And everyone realised you have to give people a chance to show how \\blanknum{54} they are. They also learn that you couldn't hear the slightest thing until you truly \\blanknum{55}.",
+      "blanks": [
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 41,
+      "options": [
+        "ended up",
+        "insisted on",
+        "felt sick of",
+        "put up with"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 42,
+      "options": [
+        "presence",
+        "turn",
+        "direction",
+        "power"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 43,
+      "options": [
+        "explained",
+        "balanced",
+        "assessed",
+        "changed"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 44,
+      "options": [
+        "special",
+        "deaf",
+        "silent",
+        "kind"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 45,
+      "options": [
+        "rule",
+        "game",
+        "idea",
+        "solution"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 46,
+      "options": [
+        "fun",
+        "support",
+        "respect",
+        "love"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 47,
+      "options": [
+        "dangerous",
+        "meaningless",
+        "boring",
+        "difficult"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 48,
+      "options": [
+        "understanding",
+        "discovery",
+        "challenge",
+        "entertainment"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 49,
+      "options": [
+        "usual",
+        "random",
+        "creative",
+        "attractive"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 50,
+      "options": [
+        "touched",
+        "surprised",
+        "confused",
+        "amused"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 51,
+      "options": [
+        "practice",
+        "help",
+        "patience",
+        "freedom"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 52,
+      "options": [
+        "wish",
+        "difference",
+        "promise",
+        "problem"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 53,
+      "options": [
+        "role",
+        "goal",
+        "nature",
+        "interest"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 54,
+      "options": [
+        "valuable",
+        "helpful",
+        "positive",
+        "humorous"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 55,
+      "options": [
+        "agree",
+        "believe",
+        "think",
+        "listen"
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共10小题；每小题1.5分，满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，在空白处填入 1 个适当的单词或括号内单词的正确形式。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "For centuries, Chinese poets have caught the amazing beauty of the Fuchun River in Hangzhou through simple but poetic words. This July, poets from the BRICS countries (金砖国家) followed the same path and engaged in \\blanknum{56} impromptu(即兴的) poetry event inspired by the river. Their creations were collected in Messengers from the Vernal Wood, which \\blanknum{57} (release) in Germany on October 18,2024.",
+      "blanks": [
+        56,
+        57
+      ]
+    },
+    {
+      "type": "para",
+      "text": "\\blanknum{58} (edit) Li Shaojun said poetry is a universal language expressing shared human emotions. \"The BRICS countries all have a splendid history, and through this common language, we can greatly improve communication and exchange, \\blanknum{59} (connect) more BRICS poets,\" he said.",
+      "blanks": [
+        58,
+        59
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Talking about his journey to the poetry festival, Brazilian poet Thiago Moraes said he was still excited to visit a country \\blanknum{60} (total) different from his own. To his surprise, Moraes found some similarities with the Chinese poet friends in their love for nature and a \\blanknum{61} (fond) for expressing their inner worlds \\blanknum{62} landscapes. He emphasized that poetry keeps people humble, open and diverse. \"We poets should gather our efforts to make a \\blanknum{63} (good) world,\" he added.",
+      "blanks": [
+        60,
+        61,
+        62,
+        63
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Ethiopian poet Seife Temam, impressed by Tang poet L Bai, \\blanknum{64} (pen) a romantic line:",
+      "blanks": [
+        64
+      ]
+    },
+    {
+      "type": "para",
+      "text": "I am a child of the Nile, \\blanknum{65} I am drawn to the Fuchun River:",
+      "blanks": [
+        65
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第四部分 写作（共两节，满分 40 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "假定你是李华，外教 Ryan 打算使用 AI 技术辅助英语作文批改，并向同学们征询意见。请你给外教写一封邮件，内容包括：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(1) 你的看法;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(2) 你的建议。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "注意：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(1) 写作词数应为 80 左右;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(2) 请按如下格式在答题卡的相应位置作答。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Dear Ryan, Yours, Li Hua",
+      "blanks": []
+    },
+    {
+      "type": "section",
+      "text": "第二节（满分25分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面材料，根据其内容和所给段落开头语续写两段，使之构成一篇完整的短文。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Susan had a secret: she loved robots. She had helped her dad in his workshop and knew a lot about motors, but her friends didn't know this.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "One day, she heard Alex and Jacob talking about their robot, Robbie. They were preparing for a big competition but Robbie wasn't working properly. Susan was surprised by their courage, as they always seemed unpopular among the boys. She felt bad for them and wanted to help.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "On the school bus home, Susan sat behind Alex and Jacob, who were still trying to fix their robot. \"This is impossible! The legs move before you press the switch and stop after you press the switch!\" Alex said, looking at Robbie's legs, which were not moving right. \"The competition is only eight days away!\" Jacob looked sad. He thought",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "they were going to lose.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "\"Umm, how did you connect the wires from the switch?\" Susan asked quietly over their shoulders. Alex turned and gave her a cautious look. Susan smiled and asked, \"Did you connect the NO wire or the NC wire to the motor?\" The boys stared at her as if she had just landed from Mars.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Susan gently took the robot and pointed out the wire connected to the motor. \"Here’s the problem!\" She explained that it was the NC wire. It means the circuit(电路) is Normally Closed. She then pulled a loose wire out of the robot and explained that it was the NO wire, which means Normally Open. \"If you connect this wire instead, Robbie will walk when you press the switch.\" Susan handed the robot back to Alex, who was staring at her with his mouth open.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "\"Change the wires and see,\" she said before getting off the bus. Ten minutes later, her phone rang. It was Jacob: \"Your idea worked, and we’re wondering if you could come over and help improve our Robbie.\" Susan smiled. She knew she had made the right choice. 注意：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "（1）续写词数应为 150 左右；",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(2) 请按如下格式在答题卡的相应位置作答。",
+      "blanks": []
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 1: After dinner, Susan walked cheerfully to Jacob's house."
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 2: Finally, the competition day came, and the new team was ready."
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    }
+  ]
+}

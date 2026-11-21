@@ -1,0 +1,110 @@
+% ============================================================================
+%  英语试卷.sty  ——  高中英语试卷题型排版（选择题用 tasks 宏包）
+% ----------------------------------------------------------------------------
+%  与 英语试卷.cls 配套；也可单独 \usepackage{英语试卷} 搭配 ctexart 使用。
+%  选项版式提取自 2501浙江首考/试题.docx：
+%    选项段首行缩进 105 twips（0.5 字 ≈ 5.25pt），A./B./C. 依次横排；
+%    听力 3 选项一行；阅读 4 选项两列（A、B 一行，C、D 一行）；
+%    完形 4 选项与题号同行；七选五 A–G 每项一行。
+% ----------------------------------------------------------------------------
+%  主要环境 / 命令：
+%    \begin{choices}(3) \item … \end{choices}   听力三选一（3 列）
+%    \begin{choices}(2) \item … \end{choices}   阅读四选一（2 列）
+%    \begin{choices}(1) \item … \end{choices}   七选五（每项一行）
+%    \begin{cloze} … \end{cloze}                 完形四选一（4 列）
+%    \cz{41}{reading}{traveling}{cooking}{teaching}   完形一行（题号 + 四选项）
+%    \writinglines{10}                           写作答题空行（14pt 字 / 28pt 行距）
+%    \writingpara{Paragraph 1: …}                续写段落首句行
+%    \answerline{1-5 BABCA}                      参考答案行
+%    \blankanswer{56}{a}                         语法填空答案 “56. a”
+%    \rubricitem{…}                              评分细则条目（自动编号（1）（2）…）
+% ============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{英语试卷}[2026/11/17 v1.0 高中英语题型排版（tasks 宏包）]
+
+\RequirePackage{tasks}
+
+% ------------------------------ 前后间距（试题模式默认值） ------------------------------
+% 参考答案模式（\documentclass[answers]{英语试卷}）会在类里用 \renewcommand 覆盖。
+\providecommand{\yy@partbefore}{1.23em}
+\providecommand{\yy@partafter}{0pt}
+\providecommand{\yy@secbefore}{1.1em}
+\providecommand{\yy@secafter}{0pt}
+\providecommand{\yy@ansbefore}{0.2em}
+\providecommand{\yy@ansafter}{0.15em}
+\providecommand{\yy@titleafter}{0pt}
+
+% ------------------------------ tasks 全局设置 ------------------------------
+% label = \Alph*.  —— tasks 把 * 换成计数器，得到 A. B. C. …
+% label 右对齐在 [0, 1.2em] 内，文字从 item-indent = 1.5em 起排，
+% 于是 “A.” 后留出 0.3em 空隙，字母左缘 ≈ 0.3em ≈ 3.2pt（Word 选项缩进 5.25pt）。
+\settasks{
+  label           = \Alph*. ,
+  label-width     = 1.2em ,
+  label-offset    = 0.3em ,
+  label-align     = right ,
+  item-indent     = 1.5em ,
+  column-sep      = 1.2em ,
+  after-item-skip = 0pt ,
+  before-skip     = 0pt ,
+  after-skip      = 0pt ,
+}
+
+% ------------------------------ 选择题环境 ------------------------------
+% 注意：tasks v1.4a 的 \NewTasksEnvironment 默认分隔符是未定义的 \task，
+% 这里显式改用 \item（即在环境里照常写 \item）。
+% choices：列数写在括号里，如 \begin{choices}(3)
+\NewTasksEnvironment{choices}[\item]
+
+% cloze：完形填空四选一，固定 4 列
+\NewTasksEnvironment{cloze}[\item](4)
+
+% \cz{题号}{A}{B}{C}{D} —— 完形一行：“41. A. reading   B. traveling   C. cooking   D. teaching”
+% 标签右对齐在 2.9em 内（“41. A.” 正好占满，“B.”等靠右），文字统一从 3.15em 起排，
+% 中间留 0.25em 空隙，故各列文字严格对齐。
+\NewDocumentCommand{\cz}{m m m m m}{%
+  \begin{cloze}[label-width=2.9em,label-offset=0.25em,item-indent=3.15em,label-align=right]%
+    \item[#1. A.] #2 \item[B.] #3 \item[C.] #4 \item[D.] #5%
+  \end{cloze}}
+
+% ------------------------------ 写作答题区 ------------------------------
+% 空白作答行：14pt 字、28pt 行距（Word 中 sz=28、行距 480 auto）
+\newcommand{\writinglines}[1]{%
+  \par\vspace{0.2em}%
+  \begingroup
+    \fontsize{14pt}{28pt}\selectfont
+    \setlength{\parindent}{0pt}%
+    \@tempcnta=#1\relax
+    \loop\ifnum\@tempcnta>0
+      \advance\@tempcnta\m@ne
+      \null\par
+    \repeat
+  \endgroup
+  \par}
+
+% 续写段落首句行（14pt 字、首行缩进 2 字、28pt 行距）
+\NewDocumentCommand{\writingpara}{m}{%
+  \par\vspace{0.2em}%
+  \begingroup
+    \fontsize{14pt}{28pt}\selectfont
+    \setlength{\parindent}{2em}%
+    #1\par
+  \endgroup}
+
+% ------------------------------ 参考答案 ------------------------------
+% 答案行：顶格起排（如 “1-5 BABCA \quad 6-10 CBABC”）
+\NewDocumentCommand{\answerline}{m}{%
+  \par\vspace{\yy@ansbefore}\noindent #1\par\vspace{\yy@ansafter}}
+
+% 语法填空答案：\blankanswer{56}{a} → “56. a”
+\NewDocumentCommand{\blankanswer}{m m}{#1.\ #2}
+
+% 评分细则：依次写 \rubricitem{…}，自动编号（1）（2）…（Word 答案中的评分细则）
+\newcounter{yy@rubric}
+\renewcommand{\theyy@rubric}{（\arabic{yy@rubric}）}
+\NewDocumentCommand{\rubricitem}{m}{%
+  \refstepcounter{yy@rubric}%
+  \par\vspace{0.15em}%
+  \noindent\textbf{\theyy@rubric}\hspace{0.5em}#1\par}
+
+\endinput

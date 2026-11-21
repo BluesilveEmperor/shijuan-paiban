@@ -1,0 +1,70 @@
+% ============================================================
+%  高考数学新高考I卷 LaTeX 模板（导言区）
+%  综合 2025 卷 (2506.tex) 与 2026 卷 (2606.tex) 排版风格
+%  用法：在正文中 \input{gaokao_preamble} 后直接写题目内容
+% ============================================================
+
+\documentclass[12pt, a4paper, oneside]{ctexart}
+
+% ── 1. 数学与链接 ──
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage[bookmarks=true, colorlinks, citecolor=blue, linkcolor=black]{hyperref}
+
+% ── 2. 字体方案（newtxmath Times 风格） ──
+\usepackage{newtxmath}
+
+% ── 3. 页面布局（2.5cm 边距） ──
+\usepackage[a4paper, margin=2.5cm, footskip=1cm]{geometry}
+
+% ── 4. 页眉页脚 ──
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{数学试题第\thepage 页（共\pageref{LastPage}页）}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ── 5. 表格与插图 ──
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{diagbox}
+\usepackage{makecell}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{tikz}
+
+% ── 6. 选择题选项（tasks 环境） ──
+\usepackage{tasks}
+\settasks{
+    label       = \Alph*.,
+    label-width = 1.8em,
+    item-indent = 2.4em,
+    label-offset = 0.5em,
+    column-sep  = 2em,
+    before-skip = 0pt,
+    after-skip  = 0pt
+}
+
+% ── 7. 大题编号（enumitem 体系） ──
+\usepackage[shortlabels]{enumitem}
+\newlist{examenum}{enumerate}{3}
+\setlist[examenum,1]{label=\arabic*., leftmargin=2em, itemsep=0.3em, parsep=0em}
+\setlist[examenum,2]{label=(\arabic*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+\setlist[examenum,3]{label=(\roman*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+
+% ── 8. 自定义命令 ──
+\newcommand{\mycircled}[1]{%
+  \tikz[baseline=0pt,outer sep=0pt]{%
+    \node[draw,circle,inner sep=0.5pt,minimum size=1.4em,
+          line width=0.4pt,font=\zihao{-5}] {#1};%
+  }%
+}
+\newcommand{\Parallel}{\raisebox{0.1ex}{\rotatebox[origin=c]{-20}{$\parallel$}}}
+\newcommand{\bigstarraised}{\raisebox{0.2ex}{$\bigstar$}}
+\newcommand{\blank}{\underline{\hspace{2cm}}}
+\newcommand{\subjecttitle}[1]{{\fontsize{24pt}{22pt}\selectfont\centering\textbf{#1}\par}}
+\newcommand{\subtitle}[1]{{\fontsize{16pt}{16pt}\selectfont\centering #1\par}}
+\renewcommand{\lim}{\limits}
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\me}{\mathrm{e}}

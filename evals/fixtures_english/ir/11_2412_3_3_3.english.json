@@ -1,0 +1,1226 @@
+{
+  "meta": {
+    "subject": "english",
+    "kind": "shiti",
+    "source": "11_2412_3_3_3.tex",
+    "preamble": "% !TEX program = xelatex\n\\documentclass{英语试卷}\n\\begin{document}\n",
+    "postamble": "\\end{document}\n",
+    "title": "云南师范大学附中 贵阳一中学 绵阳中学",
+    "exam_subject": "英语",
+    "variant": "full",
+    "question_count": 35,
+    "question_numbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35
+    ],
+    "example_count": 0,
+    "blank_numbers": [
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65
+    ],
+    "block_count": 175
+  },
+  "blocks": [
+    {
+      "type": "exam_title",
+      "mark": "",
+      "title": "云南师范大学附中 贵阳一中学 绵阳中学",
+      "subject": "英语"
+    },
+    {
+      "type": "para",
+      "text": "云南师范大学附中 贵阳一中学 绵阳中学",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "贵阳一中 2025 届高考备考诊断性联考（一） 绵阳中学",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "高三年级 英语试题",
+      "blanks": []
+    },
+    {
+      "type": "notice",
+      "lines": [
+        "\\par 1. 答卷前，考生务必将自己的姓名、准考证号填写在答题卡上。\\par",
+        "\\par 2. 回答选择题时，选出每小题答案后，用铅笔把答题卡上对应题目的答案标号涂黑。如需改动，用橡皮擦干净后，再选涂其他答案标号。回答非选择题时，将答案写在答题卡上，写在本试卷上无效。\\par",
+        "\\par 3. 考试结束后，将本试卷和答题卡一并交回。\\par"
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第一部分 听力（共两节，满分 30 分）"
+    },
+    {
+      "type": "para",
+      "text": "做题时，先将答案标在试卷上。录音内容结束后，你将有两分钟的时间将试卷上的答案转涂到答题卡上。",
+      "blanks": []
+    },
+    {
+      "type": "section",
+      "text": "第一节 (共 5 小题；每小题 1.5 分，满分 7.5 分)"
+    },
+    {
+      "type": "para",
+      "text": "听下面 5 段对话。每段对话后有一个小题，从题中所给的 A、B、C 三个选项中选出最佳选项，并标在试卷的相应位置。听完每段对话后，你都有 10 秒钟的时间来回答有关小题和阅读下一小题。每段对话仅读一遍。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "1. What do we know about Tom?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "He plays drums in a band.",
+        "He loves playing the guitar.",
+        "He's just finished a piano lesson."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "2. What is the main topic of the conversation?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "An outing.",
+        "A gym workout.",
+        "A nearby beach."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "3. How can the man's recipe be described?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "It's a reward.",
+        "It's a problem",
+        "It's a success."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "4. Why does the woman sound unhappy?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Her ice cream melted.",
+        "She doesn't like cold weather.",
+        "She couldn't enjoy her chocolate."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "5. What problem do the speakers have?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "The waiting line is too long.",
+        "They can't find the checkout.",
+        "The movie tickets are sold out."
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节 (共 15 小题；每小题 1.5 分，满分 22.5 分)"
+    },
+    {
+      "type": "para",
+      "text": "听下面 5 段对话或独白。每段对话或独白后有几个小题，从题中所给的 A、B、C 三个选项中选出最佳选项，并标在试卷的相应位置。听每段对话或独白前，你将有时间阅读各个小题，每小题 5 秒钟；听完后，各小题将给出 5 秒钟的作答时间。每段对话或独白读两遍。 听下面一段对话，回答第 6 和第 7 两个小题。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "6. Where are the speakers?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "At a train station.",
+        "At Tom's house.",
+        "In a meeting room."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "7. How does the woman probably feel in the end?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Worried.",
+        "Relieved.",
+        "Angry."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听下面一段对话，回答第 8 至第 10 三个小题。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "8. What is the woman doing?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Organizing an event.",
+        "Reporting some news.",
+        "Conducting an interview"
+      ]
+    },
+    {
+      "type": "question",
+      "text": "9. What is Charles Martin's family mainly worried about?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "That his health condition will become worse.",
+        "That his duties at home and school will be affected.",
+        "That his efforts in the community won't be recognized"
+      ]
+    },
+    {
+      "type": "question",
+      "text": "10. How does Charles Martin plan to remove his family's concerns?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "By talking to his teacher.",
+        "By quitting the community project",
+        "By involving his family in community work."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听下面一段对话，回答第 11 至第 13 三个小题。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "11. What is one reason for the woman to live with her parents?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "The financial benefits.",
+        "The emotional support",
+        "The home-cooked meals."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "12. What does the man say about contributing to household expenses?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "I's a step toward gaining independence.",
+        "It's a way to avoid answering Parental questions.",
+        "It's a more economical option compared to renting."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "13. What is the man's attitude to the woman's problem with her parent?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Ambiguous",
+        "Indifferent.",
+        "Understanding"
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听下面一段对话，回答第 14 至第 17 四个小题.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "14. What is the probable relationship between the speakers?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Mother and son.",
+        "Strangers.",
+        "Teacher and student."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "15. What month is it now?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "September.",
+        "October.",
+        "November."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "16. What sport was the man involved in?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Football.",
+        "Swimming",
+        "Basketball."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "17. What does the man probably want to be in the future?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "An artist.",
+        "An athlete",
+        "A doctor."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听下面一段独白，回答第 18 至第 20 三个小题.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "18. What is the speaker's profession most likely?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "An athlete.",
+        "A fitness coach.",
+        "A health care provider."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "19. How often should people make a change in their workout plans?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Every two months.",
+        "Once a month.",
+        "Every two weeks."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "20. How does the speaker suggest balancing workout intensity throughout the week?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "By only doing light activities.",
+        "By planning exercise and rest properly",
+        "By engaging in the same workout every day."
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第二部分 阅读理解（共两节，满分 50 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节 (共 15 小题；每小题 2.5 分，满分 37.5 分)"
+    },
+    {
+      "type": "para",
+      "text": "阅读下列短文，从每题所给的 A、B、C 和 D 四个选项中，选出最佳答案。",
+      "blanks": []
+    },
+    {
+      "type": "passage_label",
+      "text": "A"
+    },
+    {
+      "type": "para",
+      "text": "The Most Magical Christmas Cities in the USA",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Prescott, AZ",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Prescott has no shortage of Christmas festivities during the holiday season, making it a fun, memorable place to visit in the winter months. On the first Saturday of December, Prescott hosts an annual Christmas Parade and",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Courthouse Lighting. Once it gets dark, you can gather around the Courthouse to watch the magical lights turn on to kick off the holiday season.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Leavenworth, WA",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "One of the most magical places to celebrate the spirit of Christmas is in the Bavarian-themed town of Leavenworth, WA. With over half a million Christmas lights, you are sure to be impressed. See St. Nikolas and visit the Leavenworth Reindeer farm when the reindeer are taking a break from flying practice. Reserve an afternoon sleigh ride or go sledding right on the hills along the main street.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Chicago, IL",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Chicago is one of the most festive US cities during Christmas. You can find many holiday activities an events including an authentic Christmas market, holiday light displays, and more.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "One of the top things to do is to visit Christkindlmarket where you can purchase decorations and gifts. Other fun activities include skating at outdoor skating rinks and riding on a Christmas-themed train.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "New York City",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "New York City is one of the most iconic and magical Christmas cities in the USA. There are an endless number of Christmas festivities to partake in and sites to see. Some must-see attractions include the Rockefeller Center Christmas Tree and the light show across the street at Saks Fifth Avenue. Also located in midtown are the famous holiday window displays and building decorations.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "21. Which city is recommended for sledding lovers?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Prescott.",
+        "Leavenworth",
+        "Chicago",
+        "New York City"
+      ]
+    },
+    {
+      "type": "question",
+      "text": "22. What do the listed places have in common?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "They have light displays.",
+        "They host winter sports events.",
+        "They have Christmas markets.",
+        "They have holiday window displays."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "23. Which section of a newspaper is this text most likely from?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Business",
+        "Sports",
+        "Nature",
+        "Travel."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "B"
+    },
+    {
+      "type": "para",
+      "text": "Liao Zhilue, from Huazhou, Guangdong, returned to his hometown to boost it by developing Huajuhong, a popular Chinese herb. After graduating in 2015, he started to cultivate it. He worked hard for two years, studied planting techniques, and in 2017, founded a cooperative, revitalizing the declining Huajuhong industry and involving thousands of villagers.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Liao's road to success was not smooth. He grew up working in the fields and learned the traditional techniques of herbal processing. Upon returning to his village, Liao encountered distrust from farmers. Supported by local government, he made efforts to sell their produce, employing various methods to expand market reach. Through years of perseverance, by 2023, the cooperative had established deep partnerships with more than 1,000 local farmers, creating direct employment opportunities for over 3,000 people.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "To increase sales, he utilized live streaming to broaden the reach of his products and promote the industry forward. As the short videos spread, the e-commerce business of Liao's cooperative began to flourish. He then came to the realization that promoting the culture of Huajuhong was more urgent and crucial than simply promoting his own brand. \"In the era of e-commerce, the popular Huajuhong should not be exclusive to my business alone. Only when the entire Huajuhong brand gains prominence can it drive the development of the entire industry in Huazhou,\" Liao said.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Liao began promoting the concept of treating Huajuhong as both a medicine and a food ingredient, not just a traditional remedy (药品). Through extensive field research, Liao integrated grassroots voices to advocate for policy changes. His efforts bore fruit when the National Health Commission and the State Administration for Market Regulation included Huajuhong, in the dual-purpose food and medicinal material catalog in August this year. This decision, reflecting the ambitions of more than 350,000 industry practitioners, indicated a new era of growth in the Huajuhong industry.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "24. Why did Liao return to his hometown?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To found a cooperative",
+        "To cultivate a Chinese herb.",
+        "To study planting techniques",
+        "To develop Huazhou's economy."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "25. Which of the following statements is NOT true?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Liao relied totally upon himself in the road to his success.",
+        "Liao met with some hardships at the beginning of his road.",
+        "Liao contributed to the employment of many local farmers",
+        "Liao gained experience of herbal processing during his growth."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "26. What does the underlined word \"utilized\" in Paragraph 3 probably mean?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Made use of.",
+        "Spoke highly of.",
+        "Adapted himself to.",
+        "Helped himself to."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "27. What's the passage mainly about?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "The traditional techniques of herbal processing",
+        "The policy changes in supporting local industries.",
+        "The revival of the Huajuhong industry in Huazhou",
+        "The achievements of Liao Zhilue in promoting e-commerce."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "C"
+    },
+    {
+      "type": "para",
+      "text": "An AI early-warning system that predicts which patients are at risk of deteriorating (恶化) while in hospital was associated with a decrease in unanticipated deaths, a new study says. The study, published in the Canadian Medical Association Journal, found a 26 percent reduction in non-palliative (非姑息性的) deaths among patients in St. Michael's Hospital's general internal medicine unit when the AI tool was used",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "The technology called CHARTwatch continuously analyzed more than 100 different pieces of information about each patient in the unit. That includes information such as age and medical history, as well as measurements such as vital signs, blood pressure, heart rate and lab test results. \"It gathers all of that information to make a prediction about their risk of becoming more seriously ill going forward and then it updates its model predictions every hour based on how all of those things are changing over time,\" Verma said",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "When the AI tool predicted that a patient was deteriorating, it sent an alert to physicians and nurses, prompting them to quickly intervene. If the clinician agreed with the AI prediction after examining the patient, necessary action was taken. That included transferring the patient to the ICU, giving them antibiotics for serious infections or monitoring the patient more frequently. If a patient's death were inevitable, they would receive end-of-life care earlier than they might have otherwise, easing their suffering, Verma said.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Those early-warning signals are important in busy hospital settings where each nurse or doctor is caring for many patients who are getting multiple lab tests, medical imaging and other interventions that could change their prognosis(预后). Verma said, \"Humans cannot monitor20 to 30 patients simultaneously all the time, but they can act more promptly in response to deteriorating patients' conditions with the aid of these signals.\"",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Ross Mitchell, who is the Alberta Health Services chair in AI in health, said the research was \"very encouraging.\" \"This specific technology needs to be studied in a broader sense. It needs to be deployed in more hospitals across Canada so that we can get more than one hospital involved,\" said Mitchell",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "28. How does the AI tool CHARTwatch work?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It alerts staff to vital sign changes",
+        "It offers end-of-life care to patients.",
+        "It analyzes data to predict deterioration risk",
+        "It moves patients to the ICU based on predictions."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "29. Why are early-warning signals important in busy hospitals?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "They can enhance diagnosis accuracy greatly",
+        "They can reduce the staff's workload completely.",
+        "They can alert on condition worsening promptly.",
+        "They can ensure appropriate responses generally."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "30. What is Ross Mitchell's attitude towards CHARTwatch?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Skeptical.",
+        "Favorable.",
+        "Dismissive",
+        "Indifferent."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "31. What is a suitable title for the text?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "AI Technology Improves Hospital Care Services",
+        "AI Early-Warning System Reduces Hospital Deaths",
+        "The Future of Healthcare: AI and Machine Learning",
+        "CHARTwatch: A Tool for Predicting Patient Outcomes"
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "D"
+    },
+    {
+      "type": "para",
+      "text": "ASTRONAUTS, set your watches. Time on the surface of the moon has been calculated to tick at a rate of 57 millionths of a second a day faster than it does on Earth, a difference that could be crucial to lunar exploration",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Later this decade, NASA hopes to return humans to the moon for the first time in more than 50 years. \"We’re looking at a sustained presence on the moon,\" says Cheryl Granling at NASA. \"Infrastructure on Earth such as GPS provides time down to the nanosecond (十亿分之一秒) level. If you're trying to navigate or land on the moon, and avoid dangerous areas, then that precision matters.\" To tackle this issue, NASA was recently tasked by the White House to create a Coordinated Lunar Time for the moon by the end of 2026. Slava Turyshev at NASA's Jet Propulsion Laboratory in California and his colleagues were already working on the problem, and now have an answer. \"Somebody needed to sit down and work out the maths,\" he says.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Time ticks faster on the moon because its gravity is one-sixth that of Earth's, a result of time dilation Turyshev and his team have calculated the flow of time on Earth and the moon in reference to the centre of the solar system, known as its barycentre, which moves depending on the position of the planets relative to the sun. Their calculations show that time on the moon's surface ticks 57.5 microseconds per Earth day (0.0000575 seconds) faster than it does on Earth's surface, so over 50 years, an astronaut on the moon would be about a second older than if they had stayed on Earth.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Previous results for calculating lunar time have arrived at a similar number. In February, a study calculated that time on the moon's surface ticked 56 microseconds faster than on Earth, based on the orbits of the two bodies. Performing multiple calculations will help create an accurate time zone, says Gramling. Defining moon time will also require us to set a \"zero day\" date on which we begin tracking lunar seconds compared with Earth.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "32. What is the main purpose of Paragraph 1?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To make comparisons.",
+        "To provide an example",
+        "To introduce the topic.",
+        "To demonstrate a method."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "33. Why is the difference in time between the moon and Earth crucial for lunar exploration?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It influences the orbits of the moon around Earth.",
+        "It determines the length of astronauts' stays on the moon",
+        "It affects the accuracy of navigation and landing on the moon.",
+        "It changes the gravitational pull experienced on the moon's surface."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "34. What is the main reason for time ticking faster on the moon compared to Earth?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "The moon's closer distance to the sun.",
+        "The faster rotational speed of the moon",
+        "The lack of an atmospheric layer on the moon",
+        "The moon's gravity being smaller than Earth's."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "35. What can we infer from the last paragraph?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "NASA has created an accurate time zone on the moon.",
+        "NASA has had different results about the time on the moon.",
+        "NASA has set a starting point to define the time on the moon.",
+        "NASA has tried several times to calculate the time on the moon"
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节 (共 5 小题；每小题 2.5 分，满分 12.5 分)"
+    },
+    {
+      "type": "para",
+      "text": "根据短文内容，从短文后的选项中选出能填入空白处的最佳选项。选项中有两项为多余选项。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Transitioning to college can be tough for students as they navigate a new learning environment without the familiar guardrails of high school. But those who hone (训练) their study skills in high school are better prepared for their learning and time management in college. Here are some ways college-bound high school students can develop good study habits.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Ask for help",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "College is more self-directed than high school. Students must learn to advocate for themselves. They should seek help from a professor, classmate or campus tutor and find resources like academic advisers, mental health services and study groups. \\blanknum{36}.",
+      "blanks": [
+        36
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Meet deadlines",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "High school teachers may be tolerant with late work or make-up work policies, and some students make a habit of taking advantage of that grace (宽限期), \\blanknum{37}. So high school students should make a habit of meeting deadlines and assuming there won't be a chance to turn work in late or redo it.",
+      "blanks": [
+        37
+      ]
+    },
+    {
+      "type": "para",
+      "text": "\\blanknum{38}",
+      "blanks": [
+        38
+      ]
+    },
+    {
+      "type": "para",
+      "text": "High schools discipline students for unexcused absences and reward perfect attendance, but college attendance policies are usually different \\blanknum{39}. Experts say you should make a point of being in class every day through high school and carry that habit with you to college.",
+      "blanks": [
+        39
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Take care of your body",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Build and maintain a routine that includes regular physical activity in high school. It's usually easier to keep this momentum (势头) going once you get to college than it is to start. \\blanknum{40}. High school students can form good sleep habits by sticking to a consistent sleep schedule and limiting light exposure and technology use in the evenings.",
+      "blanks": [
+        40
+      ]
+    },
+    {
+      "type": "choices",
+      "columns": 1,
+      "indent": "  ",
+      "items": [
+        "Prioritize regular attendance",
+        "Take advantage of attendance policies",
+        "Rest is another important piece of the puzzle",
+        "They take that as a true make-up opportunity",
+        "College professors likely won't be as forgiving",
+        "Students should practice self-advocacy skills before college",
+        "Some professors take attendance, but it's up to you to attend or not"
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第三部分 语言知识运用（共两节，满分 30 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（共15小题；每小题1分，满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，从短文后各题所给的 A、B、C 和 D 四个选项中，选出可以填入空白处的最佳选项。My husband, Jerry, had an appointment at the dentist's office where I work. To my surprise, he showed up not alone but \\blanknum{41} by our 4-year-old English golden-doodle, Ollie. The dentist, who often has her own dog \\blanknum{42} at the desk, didn't mind at all.",
+      "blanks": [
+        41,
+        42
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Jerry, who is typically \\blanknum{43} during dental visits, found comfort in an unlikely source: Ollie. While Jerry was lying in the chair, Ollie \\blanknum{44} into his lap and promptly fell asleep. Ollie was totally \\blanknum{45} by the drills and lights, a feeling he seemed to \\blanknum{46} to my husband. I couldn't help but wonder if Ollie had the same \\blanknum{47} effect on other patients.",
+      "blanks": [
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "type": "para",
+      "text": "The dentist agreed to let me bring him in for a trial. It \\blanknum{48} to be a huge success. As soon as we reclined the chair, Ollie happily settled between the patient's legs, becoming a source of comfort and \\blanknum{49}. Clients would \\blanknum{50} his head and play with his ears, comparing him to a warm, \\blanknum{51} blanket. Some patients who usually \\blanknum{52} nitrous oxide (一氧化二氮) to relax found that Ollie's \\blanknum{53} was all they needed. Now, I bring him into the office three days a month to support patients who request his calming \\blanknum{54}. However, judging by the way he \\blanknum{55} runs to the door whenever I leave for work, I think Ollie believes he should be there every single day. It seems that Ollie is not only a pet dog but also a helper!",
+      "blanks": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 41,
+      "options": [
+        "guided",
+        "accompanied",
+        "defended",
+        "surrounded"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 42,
+      "options": [
+        "leaping",
+        "barking",
+        "resting",
+        "scratching"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 43,
+      "options": [
+        "anxious",
+        "curious",
+        "cautious",
+        "suspicious"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 44,
+      "options": [
+        "knocked",
+        "jumped",
+        "bumped",
+        "dropped"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 45,
+      "options": [
+        "disturbed",
+        "frightened",
+        "unbothered",
+        "unsettled"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 46,
+      "options": [
+        "express",
+        "introduce",
+        "transmit",
+        "transform"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 47,
+      "options": [
+        "inspiring",
+        "comforting",
+        "amusing",
+        "pleasing"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 48,
+      "options": [
+        "worked out",
+        "checked out",
+        "sorted out",
+        "turned out"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 49,
+      "options": [
+        "reflection",
+        "inspiration",
+        "concentration",
+        "distraction"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 50,
+      "options": [
+        "pet",
+        "twist",
+        "stretch",
+        "strike"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 51,
+      "options": [
+        "shiny",
+        "furry",
+        "painted",
+        "spotted"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 52,
+      "options": [
+        "avoided",
+        "purchased",
+        "required",
+        "rejected"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 53,
+      "options": [
+        "tolerance",
+        "presence",
+        "patience",
+        "innocence"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 54,
+      "options": [
+        "defence",
+        "reliance",
+        "determination",
+        "company"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 55,
+      "options": [
+        "reluctantly",
+        "respectfully",
+        "eagerly",
+        "loyally"
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节 (共 10 小题；每小题 1.5 分，满分 15 分)"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，在空白处填入 1 个适当的单词或括号内单词的正确形式。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Kunshan is the birthplace of Kunqu, \\blanknum{56} blends poetry, music, intricate costumes and graceful performances. In Kunshan City, the melodies of Kunqu Opera are not confined to the stages of grand theaters, but ring out in \\blanknum{57} (expected) scenes — school bells, fitness routines and even bus stop illustrations. In the streets of Kunshan, this ancient art form continues to find new life, \\blanknum{58} (delicate) balancing preserving its timeless beauty and embracing the demands of modernity.",
+      "blanks": [
+        56,
+        57,
+        58
+      ]
+    },
+    {
+      "type": "para",
+      "text": "For performers like You Tengteng, \\blanknum{59} actress at the Kunshan Contemporary Kunqu Theater, the act is both a challenge and a passion. You and her colleagues often discuss their latest performance \\blanknum{60} (strategy), not in a traditional theater but on Douyin. In partnership with the platform, You and other performers livestream their Kunqu shows for 20 hours each month. Their goal is simple yet ambitious: \\blanknum{61} (reach) a new generation of audiences who might hesitate to sit through a two or three-hour-long performance in an opera house.",
+      "blanks": [
+        59,
+        60,
+        61
+      ]
+    },
+    {
+      "type": "para",
+      "text": "To draw audiences in the digital age, the performers have condensed the intricate art form into digestible one-hour segments, \\blanknum{62} (invite) viewers to experience Kunqu in more relaxed settings, whether at a café \\blanknum{63} in a museum.",
+      "blanks": [
+        62,
+        63
+      ]
+    },
+    {
+      "type": "para",
+      "text": "The strategy \\blanknum{64} (seem) to be working, particularly among Chinese youth. After performances, it is not uncommon to see young fans eagerly lining up for selfies and autographs with the performers. Their newfound passion \\blanknum{65} this ancient art is a testament to its evolving relevance.",
+      "blanks": [
+        64,
+        65
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第四部分 写作（共两节，满分 40 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节 (满分 15 分)"
+    },
+    {
+      "type": "para",
+      "text": "假定你是李华，你校英语社将与爱心社联合举办主题为“关爱残疾人”的活动。请你用英语写一封倡议书发表在英语社刊上。内容包括：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(1) 关爱残疾人的意义;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(2) 如何关爱残疾人;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(3) 呼吁大家参与此次活动。注意：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "1) 词数 80 左右;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "2) 可适当增加细节，以使行文连贯；",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "3）开头已写好，不计入词数。",
+      "blanks": []
+    },
+    {
+      "type": "section",
+      "text": "第二节 (满分 25 分)"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面材料，根据其内容和所给段落开头语续写两段，使之构成一篇完整的短文。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "When we arrived in Tournus, Gabriel and I parked our bikes near the wharf and walked to the town square, starving after a 33-kilometer ride. We made it within one and a half hours, which is really something! We planned to get lunch and then bike back to Macon, a city on the Saone River where I was staying with Gabriel's family for the summer.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "It was market day, bustling with locals buying groceries and tourists hunting for souvenirs. We bought a long, thin loaf of bread called a baguette and some Brie, a soft cheese I'm obsessed with. It tastes awesome with the crispy crust of the baguette. While eating, I noticed a girl in a USA Basketball T-shirt smiling at us. Basketball is popular in France too. You can even watch NBA games on TV. The girl stopped to buy cookies with someone that I guessed was her mom because they looked so much alike. We later saw her and her mom by the river, enjoying pastries(糕点) on a bench near a riverboat named Voyageur, which had docked earlier.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Then they boarded the boat. As it was preparing to leave, I spotted a colorful shopping bag on the bench. The girl had left it! Gabriel and I called out to her in French and English, waving the bag. When the girl noticed us, she was surprised but disappointed as the boat began to leave. Gabriel suggested throwing it to her, but I feared it would fall into the river. We had to find another way!",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Running alongside the boat, Gabriel learned from a sailor that the next stop was Macon — our destination as well. It would take the boat just under two hours at a speed of 12 knots. Gabriel searched on the phone about the speed. \"That’s 22 kilometers — or 14 miles— per hour,\" he said. \"Do you think we can keep up?\" I asked. With a laugh, he replied, \"We’re about to find out!\" 注意:",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(1) 续写词数应为 150 左右;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(2) 请按如下格式在答题卡的相应位置作答.",
+      "blanks": []
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 1: I threw the bag over my shoulder, and we set off."
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 2: The girl's eyes lit up with astonishment while her mom clapped in delight."
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    }
+  ]
+}

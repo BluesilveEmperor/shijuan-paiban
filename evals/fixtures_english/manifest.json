@@ -1,0 +1,486 @@
+{
+  "subject": "english",
+  "version": "1.0",
+  "analysis": "corpus_analysis.json",
+  "ir_dir": "ir/",
+  "description": "52 份高中英语试题：MinerU vlm OCR 的 markdown + 人工校准后的 LaTeX 成品，用作英语排版流水线的训练/回归样本。",
+  "corpus_root": "D:\\Documents\\01_Study_Research\\高中英语",
+  "corpus_root_env": "SHIJUAN_ENGLISH_CORPUS",
+  "source_note": "原卷 PDF 体积约 1.4 GB，不入库；按 corpus_root / source_dir / source_pdf 定位，可用环境变量覆盖根目录。",
+  "template_dir": "templates/english",
+  "counts": {
+    "papers": 52,
+    "md": 52,
+    "tex": 52
+  },
+  "papers": [
+    {
+      "index": 1,
+      "exam": "2402武汉二调",
+      "md": "md/01_2402武汉二调.md",
+      "tex": "tex/01_2402武汉二调.tex",
+      "source_dir": "2402武汉二调",
+      "source_pdf": "202402武汉二调.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 2,
+      "exam": "2409南京九调",
+      "md": "md/02_2409南京九调.md",
+      "tex": "tex/02_2409南京九调.tex",
+      "source_dir": "2409南京九调",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 3,
+      "exam": "2409山东潍坊开学考",
+      "md": "md/03_2409山东潍坊开学考.md",
+      "tex": "tex/03_2409山东潍坊开学考.tex",
+      "source_dir": "2409山东潍坊开学考",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 4,
+      "exam": "2410惠州二调",
+      "md": "md/04_2410惠州二调.md",
+      "tex": "tex/04_2410惠州二调.tex",
+      "source_dir": "2410惠州二调",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 5,
+      "exam": "2410湖北新八省联考协作体",
+      "md": "md/05_2410湖北新八省联考协作体.md",
+      "tex": "tex/05_2410湖北新八省联考协作体.tex",
+      "source_dir": "2410湖北新八省联考协作体",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 6,
+      "exam": "2411南开三模",
+      "md": "md/06_2411南开三模.md",
+      "tex": "tex/06_2411南开三模.tex",
+      "source_dir": "2411南开三模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 7,
+      "exam": "2411宁波一模",
+      "md": "md/07_2411宁波一模.md",
+      "tex": "tex/07_2411宁波一模.tex",
+      "source_dir": "2411宁波一模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 8,
+      "exam": "2411浙江9+1高二期中考",
+      "md": "md/08_2411浙江9+1高二期中考.md",
+      "tex": "tex/08_2411浙江9_1高二期中考.tex",
+      "source_dir": "2411浙江9+1高二期中考",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 9,
+      "exam": "2411湖丽衢一模",
+      "md": "md/09_2411湖丽衢一模.md",
+      "tex": "tex/09_2411湖丽衢一模.tex",
+      "source_dir": "2411湖丽衢一模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 10,
+      "exam": "2411稽阳联考",
+      "md": "md/10_2411稽阳联考.md",
+      "tex": "tex/10_2411稽阳联考.tex",
+      "source_dir": "2411稽阳联考",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 11,
+      "exam": "2412  3+3+3",
+      "md": "md/11_2412  3+3+3.md",
+      "tex": "tex/11_2412_3_3_3.tex",
+      "source_dir": "2412  3+3+3",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 12,
+      "exam": "2412Z20",
+      "md": "md/12_2412Z20.md",
+      "tex": "tex/12_2412Z20.tex",
+      "source_dir": "2412Z20",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 13,
+      "exam": "2412北斗星盟",
+      "md": "md/13_2412北斗星盟.md",
+      "tex": "tex/13_2412北斗星盟.tex",
+      "source_dir": "2412北斗星盟",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 14,
+      "exam": "2412四川巴蜀",
+      "md": "md/14_2412四川巴蜀.md",
+      "tex": "tex/14_2412四川巴蜀.tex",
+      "source_dir": "2412四川巴蜀",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 15,
+      "exam": "2412广州零调",
+      "md": "md/15_2412广州零调.md",
+      "tex": "tex/15_2412广州零调.tex",
+      "source_dir": "2412广州零调",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 16,
+      "exam": "2412浙江省县域教研联盟",
+      "md": "md/16_2412浙江省县域教研联盟.md",
+      "tex": "tex/16_2412浙江省县域教研联盟.tex",
+      "source_dir": "2412浙江省县域教研联盟",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 17,
+      "exam": "2412皖南八校",
+      "md": "md/17_2412皖南八校.md",
+      "tex": "tex/17_2412皖南八校.tex",
+      "source_dir": "2412皖南八校",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 18,
+      "exam": "2412诸暨一模",
+      "md": "md/18_2412诸暨一模.md",
+      "tex": "tex/18_2412诸暨一模.tex",
+      "source_dir": "2412诸暨一模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 19,
+      "exam": "2501南京盐城期末",
+      "md": "md/19_2501南京盐城期末.md",
+      "tex": "tex/19_2501南京盐城期末.tex",
+      "source_dir": "2501南京盐城期末",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 20,
+      "exam": "2501合肥期末",
+      "md": "md/20_2501合肥期末.md",
+      "tex": "tex/20_2501合肥期末.tex",
+      "source_dir": "2501合肥期末",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 21,
+      "exam": "2501武汉武昌期末",
+      "md": "md/21_2501武汉武昌期末.md",
+      "tex": "tex/21_2501武汉武昌期末.tex",
+      "source_dir": "2501武汉武昌期末",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 22,
+      "exam": "2501河北唐山期末",
+      "md": "md/22_2501河北唐山期末.md",
+      "tex": "tex/22_2501河北唐山期末.tex",
+      "source_dir": "2501河北唐山期末",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 23,
+      "exam": "2501淄博期末",
+      "md": "md/23_2501淄博期末.md",
+      "tex": "tex/23_2501淄博期末.tex",
+      "source_dir": "2501淄博期末",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 24,
+      "exam": "2501烟台期末",
+      "md": "md/24_2501烟台期末.md",
+      "tex": "tex/24_2501烟台期末.tex",
+      "source_dir": "2501烟台期末",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 25,
+      "exam": "2502南昌一模",
+      "md": "md/25_2502南昌一模.md",
+      "tex": "tex/25_2502南昌一模.tex",
+      "source_dir": "2502南昌一模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 26,
+      "exam": "2503南京盐城一模",
+      "md": "md/26_2503南京盐城一模.md",
+      "tex": "tex/26_2503南京盐城一模.tex",
+      "source_dir": "2503南京盐城一模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 27,
+      "exam": "2503合肥二模",
+      "md": "md/27_2503合肥二模.md",
+      "tex": "tex/27_2503合肥二模.tex",
+      "source_dir": "2503合肥二模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 28,
+      "exam": "2503太原一模",
+      "md": "md/28_2503太原一模.md",
+      "tex": "tex/28_2503太原一模.tex",
+      "source_dir": "2503太原一模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 29,
+      "exam": "2503广东一模",
+      "md": "md/29_2503广东一模.md",
+      "tex": "tex/29_2503广东一模.tex",
+      "source_dir": "2503广东一模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 30,
+      "exam": "2503济南一模",
+      "md": "md/30_2503济南一模.md",
+      "tex": "tex/30_2503济南一模.tex",
+      "source_dir": "2503济南一模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 31,
+      "exam": "2503湖北十一校",
+      "md": "md/31_2503湖北十一校.md",
+      "tex": "tex/31_2503湖北十一校.tex",
+      "source_dir": "2503湖北十一校",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 32,
+      "exam": "2503福建一模",
+      "md": "md/32_2503福建一模.md",
+      "tex": "tex/32_2503福建一模.tex",
+      "source_dir": "2503福建一模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 33,
+      "exam": "2503重庆八中",
+      "md": "md/33_2503重庆八中.md",
+      "tex": "tex/33_2503重庆八中.tex",
+      "source_dir": "2503重庆八中",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 34,
+      "exam": "2504佛山二模",
+      "md": "md/34_2504佛山二模.md",
+      "tex": "tex/34_2504佛山二模.tex",
+      "source_dir": "2504佛山二模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 35,
+      "exam": "2504南师附中+杭州二中+长郡中学三校",
+      "md": "md/35_2504南师附中+杭州二中+长郡中学三校.md",
+      "tex": "tex/35_2504南师附中_杭州二中_长郡中学三校.tex",
+      "source_dir": "2504南师附中+杭州二中+长郡中学三校",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 36,
+      "exam": "2504宁波二模",
+      "md": "md/36_2504宁波二模.md",
+      "tex": "tex/36_2504宁波二模.tex",
+      "source_dir": "2504宁波二模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 37,
+      "exam": "2504日照二模",
+      "md": "md/37_2504日照二模.md",
+      "tex": "tex/37_2504日照二模.tex",
+      "source_dir": "2504日照二模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": null
+    },
+    {
+      "index": 38,
+      "exam": "2504武汉四调",
+      "md": "md/38_2504武汉四调.md",
+      "tex": "tex/38_2504武汉四调.tex",
+      "source_dir": "2504武汉四调",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 39,
+      "exam": "2504泉州四检",
+      "md": "md/39_2504泉州四检.md",
+      "tex": "tex/39_2504泉州四检.tex",
+      "source_dir": "2504泉州四检",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 40,
+      "exam": "2504济宁枣庄二模",
+      "md": "md/40_2504济宁枣庄二模.md",
+      "tex": "tex/40_2504济宁枣庄二模.tex",
+      "source_dir": "2504济宁枣庄二模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 41,
+      "exam": "2504湖丽衢二模",
+      "md": "md/41_2504湖丽衢二模.md",
+      "tex": "tex/41_2504湖丽衢二模.tex",
+      "source_dir": "2504湖丽衢二模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 42,
+      "exam": "2504湖北四调",
+      "md": "md/42_2504湖北四调.md",
+      "tex": "tex/42_2504湖北四调.tex",
+      "source_dir": "2504湖北四调",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 43,
+      "exam": "2504福州四调",
+      "md": "md/43_2504福州四调.md",
+      "tex": "tex/43_2504福州四调.tex",
+      "source_dir": "2504福州四调",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 44,
+      "exam": "2504稽阳联谊",
+      "md": "md/44_2504稽阳联谊.md",
+      "tex": "tex/44_2504稽阳联谊.tex",
+      "source_dir": "2504稽阳联谊",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 45,
+      "exam": "2504金华十校",
+      "md": "md/45_2504金华十校.md",
+      "tex": "tex/45_2504金华十校.tex",
+      "source_dir": "2504金华十校",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 46,
+      "exam": "2505义乌二模",
+      "md": "md/46_2505义乌二模.md",
+      "tex": "tex/46_2505义乌二模.tex",
+      "source_dir": "2505义乌二模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 47,
+      "exam": "2505县域教研联盟二次",
+      "md": "md/47_2505县域教研联盟二次.md",
+      "tex": "tex/47_2505县域教研联盟二次.tex",
+      "source_dir": "2505县域教研联盟二次",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 48,
+      "exam": "2505强基联盟",
+      "md": "md/48_2505强基联盟.md",
+      "tex": "tex/48_2505强基联盟.tex",
+      "source_dir": "2505强基联盟",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 49,
+      "exam": "2505温州三模",
+      "md": "md/49_2505温州三模.md",
+      "tex": "tex/49_2505温州三模.tex",
+      "source_dir": "2505温州三模",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 50,
+      "exam": "2505精诚联盟",
+      "md": "md/50_2505精诚联盟.md",
+      "tex": "tex/50_2505精诚联盟.tex",
+      "source_dir": "2505精诚联盟",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 51,
+      "exam": "2505镇海中学",
+      "md": "md/51_2505镇海中学.md",
+      "tex": "tex/51_2505镇海中学.tex",
+      "source_dir": "2505镇海中学",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    },
+    {
+      "index": 52,
+      "exam": "2508湖南雅礼",
+      "md": "md/52_2508湖南雅礼.md",
+      "tex": "tex/52_2508湖南雅礼.tex",
+      "source_dir": "2508湖南雅礼",
+      "source_pdf": "试题.pdf",
+      "source_answer_pdf": "答案.pdf"
+    }
+  ]
+}

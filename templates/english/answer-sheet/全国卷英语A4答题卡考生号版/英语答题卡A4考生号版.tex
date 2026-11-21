@@ -1,0 +1,51 @@
+% !TEX program = xelatex
+% ============================================================================
+%  全国卷英语 A4 答题卡（考生号版 · 2 页）
+%  编译：xelatex 英语答题卡A4考生号版.tex   （连编两次，末页“共 2 页”才正确）
+%  模板本体在同级上一层的 英语答题卡.sty，此处只写卷型数据。
+% ----------------------------------------------------------------------------
+%  换卷型只改 \engSetup：
+%    id        考生号 | 条形码      页眉形式
+%    listening true|false           是否含听力（false 时第 1 组留白禁答）
+%    gA/gB/gC   {起始题号/题数/常规选项数/末列选项数}
+%    blanks     {起始题号/题数/每行题数}
+%    wa/wb      {标题/横线行数}      写作两节
+%    letter     true|false           应用文是否印书信套语
+% ----------------------------------------------------------------------------
+%  注意：页脚用 lastpage，必须连编两次；改版后位置异常先删 .aux
+% ============================================================================
+\documentclass[UTF8,11pt,a4paper,oneside]{ctexart}
+\usepackage[left=0.6cm, right=0.6cm, top=0.6cm, bottom=0.6cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\linespread{1.625}
+
+% 模板 .sty 放在上一层目录，这里把它加入搜索路径
+\makeatletter
+\IfFileExists{../英语答题卡.sty}{\def\input@path{{../}}}{}
+\makeatother
+\usepackage{英语答题卡}
+
+\engSetup{
+  id        = 考生号,
+  title     = 2025年普通高等学校招生全国统一考试,
+  subject   = 英语,
+  color     = {255,50,165},% 常用：粉{255,50,165} 红{255,0,0} 蓝{0,150,250} 绿{49,185,16}
+  bw        = false,
+  listening = true,
+  gA        = {1/20/3/0},%  听力 1-20，A-C
+  gB        = {21/20/4/7},%  阅读 21-40，A-D；36-40 七选五 A-G
+  gC        = {41/15/4/0},%  完形 41-55，A-D
+  blanks    = {56/10/4},%   语法填空 56-65，每行 4 题
+  wa        = {三、写作\quad 第一节/10},
+  wb        = {四、写作\quad 第二节/18},
+  letter    = true,
+  dear      = {Dear Ben,},
+  yours     = Yours,
+  sign      = Li Hua,
+  cont      = {When the storm finally passed, we looked over our achievements.}
+}
+
+\begin{document}
+\engMake
+\end{document}

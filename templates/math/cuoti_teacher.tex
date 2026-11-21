@@ -1,0 +1,90 @@
+% !TEX program = xelatex
+% cuoti_teacher.tex - 错题卷教师版（显示完整错题分析：错题+错误解法+错因+正确解法+变式）
+% 编译命令：xelatex cuoti_teacher.tex
+% 配套：cuoti_content.tex（错题内容，被 \input 调用）、cuoti_student.tex（学生版）
+\documentclass[12pt,UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{ulem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{tasks}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{environ}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{diagbox}
+\usepackage{makecell}
+\usepackage{adjustbox}
+\usepackage{wrapfig}
+\usepackage{setspace}
+\usepackage{ifthen}
+
+\geometry{a4paper, margin=1.5cm}
+
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+    \lhead{\cuotiGrade\ /\ \cuotiDate}
+    \chead{\cuotiTitle}
+    \rhead{\cuotiClass\quad\cuotiStudent}
+\fancyfoot[C]{第\thepage 页\quad 共\pageref{LastPage}页}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\raggedbottom
+\allowdisplaybreaks
+
+\let\oldlim\lim
+\renewcommand{\lim}{\oldlim\limits}
+
+\setlist{left=0pt, nosep, itemsep=0.3ex, topsep=0.5ex}
+
+\settasks{
+    label=\Alph*.,
+    label-width=1.8em,
+    item-indent=2.4em,
+    label-offset=0.5em,
+    column-sep=2em,
+    before-skip=0pt,
+    after-skip=0pt
+}
+
+\newlist{examenum}{enumerate}{3}
+\setlist[examenum,1]{label=\arabic*., leftmargin=2em, itemsep=0.3em, parsep=0em}
+\setlist[examenum,2]{label=(\arabic*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+\setlist[examenum,3]{label=(\roman*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+
+% 圈号数字
+\newcommand{\mycircled}[1]{%
+  \tikz[baseline=0pt,outer sep=0pt]{%
+    \node[draw,circle,inner sep=0.5pt,minimum size=1.4em,
+          line width=0.4pt,font=\zihao{-5}] {#1};%
+  }%
+}
+\newcommand{\Parallel}{\raisebox{0.1ex}{\rotatebox[origin=c]{-20}{$\parallel$}}}
+\newcommand{\bigstarraised}{\raisebox{0.2ex}{$\bigstar$}}
+\newcommand{\blank}{\underline{\hspace{2cm}}}
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\me}{\mathrm{e}}
+
+% ===== 教师版：显示完整错题分析 =====
+\newenvironment{solution}{}{}
+
+% 例题解答：教师版同样显示
+\NewEnviron{exsolution}{\par\noindent\textbf{解：}\BODY\par\vspace{0.5ex}}
+
+% ===== 教师版：不预定义变量，由 content 中的 \providecommand 提供 =====
+
+\begin{document}
+\pagenumbering{arabic}
+
+\input{cuoti_content}
+
+\end{document}

@@ -1,0 +1,1218 @@
+{
+  "meta": {
+    "subject": "english",
+    "kind": "shiti",
+    "source": "13_2412北斗星盟.tex",
+    "preamble": "% !TEX program = xelatex\n\\documentclass{英语试卷}\n\\begin{document}\n",
+    "postamble": "\\end{document}\n",
+    "title": "2024 学年第一学期浙江北斗星盟阶段性考试",
+    "exam_subject": "英语",
+    "variant": "full",
+    "question_count": 35,
+    "question_numbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35
+    ],
+    "example_count": 0,
+    "blank_numbers": [
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65
+    ],
+    "block_count": 173
+  },
+  "blocks": [
+    {
+      "type": "exam_title",
+      "mark": "",
+      "title": "2024 学年第一学期浙江北斗星盟阶段性考试",
+      "subject": "英语"
+    },
+    {
+      "type": "para",
+      "text": "高三英语学科 试题",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "命题学校：浦江中学 丽水中学 磨题学校：天台中学 终审学校：淳安中学",
+      "blanks": []
+    },
+    {
+      "type": "notice",
+      "lines": [
+        "\\par 1. 答卷前，考生务必将自己的姓名、准考证号填写在答题卡上，\\par",
+        "\\par 2. 回答选择题时，选出每小题答案后，用铅笔把答题卡上对应题目的答案标号涂黑。如需改动，用橡皮擦干净后，再选涂其他答案标号。回答非选择题时，将答案写在答题卡上，写在本试卷上无效。\\par",
+        "\\par 3. 考试结束后，将本试卷和答题卡一并交回。\\par"
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第一部分 听力（共两节，满分 30 分）"
+    },
+    {
+      "type": "para",
+      "text": "做题时，先将答案标在试卷上。录音内容结束后，你将有两分钟的时间将试卷上的答案转涂到答题卡上。",
+      "blanks": []
+    },
+    {
+      "type": "section",
+      "text": "第一节（共5小题；每小题1.5分，满分7.5分）"
+    },
+    {
+      "type": "para",
+      "text": "听下面 5 段对话。每段对话后有一个小题，从题中所给的 A、B、C 三个选项中选出最佳选项，并标在试卷的相应位置。听完每段对话后，你都有 10 秒钟的时间来回答有关小题和阅读下一小题。每段对话仅读一遍。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "1. What does the woman mean?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "She refuses to buy new curtains.",
+        "She accepts Susie's suggestion.",
+        "She objects to moving the bed."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "2. What did the woman and her sister often do during summer vacations?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "They flew kites.",
+        "They watched TV.",
+        "They camped in the field."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "3. How does the man sound?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Grateful.",
+        "Caring.",
+        "Scared."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "4. Where does the man intend to go this evening?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "To a bar.",
+        "To the woman's house.",
+        "To a supermarket."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "5. Who might Barbara be?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "A reporter.",
+        "A travel blogger.",
+        "A web designer."
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共15小题；每小题1.5分，满分22.5分）"
+    },
+    {
+      "type": "para",
+      "text": "听下面 5 段对话或独白。每段对话或独白后有几个小题，从题中所给的 A、B、C 三个选项中选出最佳选项，并标在试卷的相应位置。听每段对话或独白前，你将有时间阅读各个小题，每小题 5 秒钟；听完后，各小题将给出 5 秒钟的作答时间。每段对话或独白读两遍。 听第 6 段材料，回答第 6 至 7 题。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "6. How many rooms does the woman book?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "One.",
+        "Two.",
+        "Three."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "7. Which of the following does the woman need?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "A pick-up service.",
+        "Parking coupons.",
+        "A wake-up call."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "8. What does the woman say about Alisa?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "She is responsible.",
+        "She is reserved.",
+        "She is sociable."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "9. What are the speakers mainly talking about?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Who is the best candidate for promotion.",
+        "Who will be transferred to the branch office.",
+        "Who can chair the meeting in the afternoon."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听第 8 段材料，回答第 10 至 13 题。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "10. What does the woman think makes her different today?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "The lipstick.",
+        "The glasses.",
+        "The haircut."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "11. Who will go to Hawaii next month?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Emily.",
+        "Emma.",
+        "Alex."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "12. What did the man plan to do tonight?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Do some shopping.",
+        "Take exercise.",
+        "Eat out."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "13. How will the woman go home?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "By car.",
+        "By bus.",
+        "By subway."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "听第 9 段材料，回答第 14 至 17 题。",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "14. Why is Shakespeare-style writing mentioned in the conversation?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "To show the difference between AI and the human brain.",
+        "To state writers' worry caused by ChatGPT.",
+        "To indicate the charm of ChatGPT."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "15. What is Bard?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "A game.",
+        "A chatbot.",
+        "A tech company."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "16. What is Satya Nadella's attitude towards ChatGPT?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Ambiguous.",
+        "Approving.",
+        "Critical."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "17. What does the man suggest doing in the era of AI?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Being adaptive and using AI fully.",
+        "Developing one's own creativity.",
+        "Avoiding heavy reliance on AI. 听第 10 段材料，回答第 18 至 20 题。"
+      ]
+    },
+    {
+      "type": "question",
+      "text": "18. What is Nadine Hamdy in charge of?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "Mapping out marketing strategies.",
+        "Teaching dogs to swim.",
+        "Giving a show to pet owners."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "19. What do we know about Adam Kilani?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "He has a three-year-old pet dog.",
+        "He is from Matrouh Governorate.",
+        "He found pleasure in learning pet care."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "20. What did Lina Kamal attach importance to?"
+    },
+    {
+      "type": "choices",
+      "columns": 3,
+      "indent": "  ",
+      "items": [
+        "The benefits of hosting various events in tourist resorts.",
+        "The promotion of the culture of pet ownership.",
+        "The protection of homeless animals."
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第二部分 阅读理解（共两节，满分 50 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（共15小题；每小题2.5分，满分37.5分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下列短文，从每题所给的 A、B、C 和 D 四个选项中，选出最佳答案。 A Williamsburg Flight Center Airplane Tours",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Available Now until 12/31/2024",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "★★★★☆ (4.1) Based on 197 reviews (More Details Click Here)",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "To see Williamsburg, VA in a new and astonishing way, be sure to embark upon one of the Williamsburg Flight Center Tours which offer a wondrous plane tour, enjoying some of the most popular landmarks from a bird's eye view.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Busch Gardens",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Experience the thrill of Busch Gardens, a captivating amusement park which boasts world-class roller coasters, exciting live entertainment, and a variety of exotic animals. Step back in time to the heart of Europe or embrace the spirit of adventure as you explore this globally-themed, 383-ac re wonderland. Perfect for families and thrill-seekers alike, there's no limit to the fun at Busch Gardens!",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Yorktown",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Discover rich history and timeless beauty in Yorktown. Step into the past where Revolutionary-era tales come alive across breathtaking battlefields and historical sites. Enjoy the quaint charm of Riverwalk Landing, make friends with nature at York River State Park, or indulge in local delicacies at the town's thriving food scene. Experience a vivid slice of American heritage in Yorktown.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Bacon's Castle",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Discover the timeless beauty of Bacon's Castle. This 17th-century plantation boasts America's oldest dated brick dwelling, surrounded by lush English gardens. Immerse yourself in enchanting history through guided tours revealing stories of 17th-century life. Bacon's Castle offers an enriching journey back in time, proving to be the ideal destination for history lovers and explorers alike.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Colonial Williamsburg",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Immerse yourself in living history at Colonial Williamsburg, Virginia. This meticulously preserved 18th-century city awakens your senses with enchanting relics of America's past. With a cast of costumed interpreters bringing history to life, vibrant gardens, and a wealth of quaint shops, you'll step directly into the heart of the American colonial era. Remember, history isn't just a story here; it's an experience.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "21. If you seek excitement and fun, which is your best choice?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Bacon's Castle.",
+        "Yorktown.",
+        "Busch Gardens.",
+        "Colonial Williamsburg"
+      ]
+    },
+    {
+      "type": "question",
+      "text": "22. What is special about Bacon's Castle?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It brings America's past to life.",
+        "It has American's most ancient brick building.",
+        "It boasts a beautiful garden.",
+        "It has the most fantastic battlefields."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "23. Where is the text most probably taken from?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "A guide book.",
+        "A local newspaper.",
+        "A science magazine.",
+        "A travel website."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "B"
+    },
+    {
+      "type": "para",
+      "text": "In a rough inner-city area in the eastern U. S., a small place was a lawless jungle. Broken glass, rubbish, and mindless drawings turned the space into a \"no-go\" zone for most of the residents. But one day, a small group of people living nearby decided that was enough. Seeking a resolution, they planned a project to turn the area into a community space, a space of healing, hope, and growth, not destruction and despair.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Moving in, the group realized that those who were using the space inappropriately early on must have a say. Then the group arranged a meeting, but no one came. Thinking outside the box, they started with one simple idea, building a white wall where anyone could leave their thoughts about the future of the site.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Not all of the suggestions were useful. But slowly, the group itself and others using the site began to see some progress. Those who would not usually have a voice in such discussions began to weigh in. They wrote things like \"a place to meet up\", \"a creative space\" and so on. Someone else said, \"Clean up first.\"",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "The group began to clear the site, reusing materials that could be saved and removing the rest. One day, a couple of young men showed up and just started helping. Some other people passing by also took an interest and joined in. There were concerns that this would not last long, but over the weeks it remained. And, remarkably, someone even",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "added a small side table. Colorful artwork was created.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "The group added four small raised beds, planting crops in one of them. Gradually, as the greenery flourished, so did the bonds between the group and nearby residents. People who had never gardened before slowly got involved. The once-neglected corner blossomed into a bustling hub, a testament to the transformative power of collective hope and action.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "24. What's the aim of the project?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To make the land a community wonderland.",
+        "To get local residents involved in art creation.",
+        "To restore the \"no go\" area to its original beauty.",
+        "To turn the deserted jungle into a meeting place."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "25. What was the challenge of the project at first?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "People had to build a wall to voice their opinion.",
+        "People seemed indifferent to the project.",
+        "People continued using the space inappropriately.",
+        "People couldn't surpass the obstacles of the ordinary thought."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "26. What does the underlined phrase \"weigh in\" in paragraph 3 mean?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Give assistance.",
+        "Take notes.",
+        "Make contributions.",
+        "Offer opinions."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "27. What's the author's purpose in writing the text?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To clarify the importance of greenery.",
+        "To advocate establishing a harmonious ecosystem.",
+        "To sing high praise for neighboring collaboration.",
+        "To shed light on the community's future plans."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "C"
+    },
+    {
+      "type": "para",
+      "text": "Human beings' curiosity about outer space hasn't declined in the past decade, and with Jeff Bezos' historic commercial flight to the edge of space this past summer, dreamers are that much closer to experiencing the Galaxy(银河系) for themselves.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "It's reported that one company is aiming to make space a reality for people, and is pioneering a new age of space tourism. In 2019, the California-based company Gateway Foundation first explored the idea. Its dream was to make visiting space, in excellent accommodation, a future vacation choice. The project, now called Voyager Station, is run by Orbital Assembly Corporation, a construction company led by head of the Gateway Foundation and former pilot, John Blincow.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Space tourism draws closer as Orbital Assembly Corporation has announced plans to build the world's first to space hotel named \"Voyager Station\", which is expected to open in 2027. With a date in close sight, the hotel's architects and engineers are hard at work, aiming to design an out-of-this-world experience. They plan to decorate the suites with elegant bars and restaurants with a touch of space, as well as Earth-viewing lounges and unique space food treats. The team is also taking advantage of the reduced gravity that will be felt in the station to plan to let their guests weightlessly carry heavy objects, jump higher or run faster in ways people can't normally do on Earth.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Gravity will remain in the rooms and bars though because Voyager Station's scientific design makes it possible by creating artificial gravity within the hotel. The hotel is designed as a wheel that will steadily move and create simulated(模拟的) gravitational force, much like when a glass of water is spun around, the water doesn't pour out. The hotel's guests won't feel much different than being on a huge ship steadily moving.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "28. What do we know about Gateway Foundation?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It aimed to build a space hotel.",
+        "It made space a reality for people.",
+        "It promoted space tourism greatly.",
+        "It planned a historic commercial flight."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "29. What will the Voyager Station team use the reduced gravity to do?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Provide unique space food.",
+        "Let guests do space sports.",
+        "Offer recreational activities.",
+        "Decorate suites more easily."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "30. Why does gravity exist in the rooms and bars?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To prevent liquid from pouring.",
+        "To make guests feel comfortable.",
+        "To avoid guests' travel sickness.",
+        "To keep things in normal positions."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "31. What is the best title for the text?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Time for Space Travel",
+        "Space Tourism Gaining Popularity",
+        "First-ever Commercial Flight to Space",
+        "First Space Hotel Set to Open"
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "D"
+    },
+    {
+      "type": "para",
+      "text": "The debate about spanking(打屁股) children has been ongoing for many years, but a crucial question often gets overlooked: does it actually work? In the immediate moment, a swift slap on the buttocks or hand can correct misbehavior. However, what about its long-term effects? Could spanking leave invisible, lasting scars on children?",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "At a recent conference, sociologist Murray Straus from the University of New Hampshire presented research suggesting that physical punishment lowers IQ. He has been studying this topic since 1969 and found that children who were physically punished scored up to five points lower on IQ tests compared to those who weren't. The more they were spanked, the lower their IQ. This effect was observed not only in individual children but across entire countries. Among 32 countries Straus studied, in those where spanking was accepted, the average IQ of the survey population was lower than in nations where spanking was rare, the researcher says.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "In the United States, Straus and his colleague Mallie Paschall studied 1,510 children and found that three-quarters had experienced some form of physical punishment in the past two weeks. Researchers measured the children's IQ initially and again four years later. Those who hadn't been spanked scored significantly better on intelligence and achievement tests. Among the 2-to-4-year-olds, the difference in IQ was five points; among the older kids, there was a 2.8-point gap. This association remained even after considering factors like parental education and occupation.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Still, it's not clear if spanking causes lower cognitive ability or if lower cognitive ability might somehow lead to more spanking. \"It could be that lower IQ causes parents to get annoyed and hit more,\" Straus says, although he notes that a recent Duke University study of low-income families found that toddlers' low mental ability did not predict an increase in spanking. The study did find, however, that kids who were spanked at age 1 displayed more aggressive behavior by age 2, and scored lower on cognitive development tests by age 3. \"Yes, there's still something to be done.\" says Straus, \"The problem is, when the parent does that, it seems to have harmful results to cognitive ability in the long term.\"",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "While spanking may seem like the only way to discipline some children in the short term, the long-term cost could be more trouble. The harmful effects of spanking on cognitive ability are concerning. \"Yes, there's still something to be done,\" says Straus. \"The problem is, when parents do it, it seems to have disastrous effects on cognitive ability over time.\"",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "32. What are the findings of Straus' study?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "The countries with rare spanking have higher average IQ.",
+        "Children's IQ is closely related to parental education and occupation.",
+        "Older children have a lot higher scores in intelligence tests",
+        "The more physical punishment the children get, the higher IQ they have."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "33. What can learn from Duke University's study?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Cognitive ability has a direct relationship with the times of spanking.",
+        "Spanked kids are likely to be aggressive and have lower cognitive ability.",
+        "Low-income families tend to spank children more frequently.",
+        "Parents like spanking children with lower IQ and cognitive ability."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "34. Which of the following can best describe the writer's attitude to spanking?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Disapproving.",
+        "Unclear.",
+        "Objective",
+        "Favorable."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "35. What is the passage mainly about?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "A research on whether spanking has a good effect.",
+        "A debate over spanking's long-term impact.",
+        "A relationship between children's IQ and spanking.",
+        "A fact that spanking works in the short run."
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共5小题；每小题2.5分，满分12.5分）"
+    },
+    {
+      "type": "para",
+      "text": "根据短文内容，从短文后的选项中选出能填入空白处的最佳选项。选项中有两项为多余选项。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Nearly every cell in the human body operates on a circadian clock (昼夜节律), an internally driven24-hour rhythm. Long-distance travel upsets those routines. \\blanknum{36}. While some degree of jet lag may be impossible to avoid, three sleep experts gave several suggestions for how to minimize the effects.",
+      "blanks": [
+        36
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Shift your bedtime",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Travelers facing a time change can prepare their bodies before takeoff by adjusting their sleep schedules, said Dr. Sairam Parthasarathy, director of the Center for Sleep. \"Starting about three days before traveling east, move up your bedtime by 30 minutes each night,\" he explained. \\blanknum{37}. \"Go to bed progressively later over the days before your flight, and once you land, try to get some light exposure to delay sleep.\"",
+      "blanks": [
+        37
+      ]
+    },
+    {
+      "type": "para",
+      "text": "\\blanknum{38}",
+      "blanks": [
+        38
+      ]
+    },
+    {
+      "type": "para",
+      "text": "What you do when you land may matter more than prep before your flight. Dr. Alon Avidan, director of the University of California Los Angeles Sleep Disorders Center, says that light exposure is the key regulator of circadian rhythms. He advises travelers who land in the morning to wear sunglasses to avoid seeing direct sunlight until early afternoon. As your trip progresses, it becomes more OK to see morning light.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Avoid naps",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "A midday nap is a serious no-go for travelers hoping to remove symptoms of jet lag. Avidan explains that an afternoon snooze \"only prolongs the mismatch between your internal time and the external time. If you absolutely need some shut-eye to get through the day, take a strategic power nap of no longer than 20 minutes.\" \\blanknum{39}.",
+      "blanks": [
+        39
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Get moving",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Emily Schmitt says that travelers should resist the call of the hotel bed and a room-service breakfast on their first morning in a new time zone. \\blanknum{40}. \"It could simply be wandering down to your local coffee shop.\" Schmitt said. Exercise, even low-key movement, supports healthy digestion and the battle against jet lag by keeping you alert until it's time for sleep.",
+      "blanks": [
+        40
+      ]
+    },
+    {
+      "type": "choices",
+      "columns": 1,
+      "indent": "  ",
+      "items": [
+        "Make the most of your first day",
+        "Minimize your sunlight exposure",
+        "Instead, have it after a 20-min workout",
+        "The same applies to consuming caffeine",
+        "Thus the body get confused, making us jet-lagged",
+        "Sleeping longer risks sacrificing your night's sleep",
+        "Those traveling west should reverse the instructions"
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第三部分 语言知识运用（共两节，满分 30 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（共15小题；每小题1分，满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，从短文后各题所给的 A、B、C 和 D 四个选项中，选出可以填入空白处的最佳选项，",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "When Marion Sheppard was unable to see in her 40s, she cried. Wasn't it enough that she'd been partly deaf since childhood? That \\blanknum{41} and the prejudice that usually came with it didn't defeat her, but made her \\blanknum{42}.",
+      "blanks": [
+        41,
+        42
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Sheppard had always been an enthusiastic \\blanknum{43} since childhood, but now she was so scared that she \\blanknum{44} left her apartment. She worried about the way she would \\blanknum{45} to the world. Hard as it was, Sheppard later \\blanknum{46} herself to go out. She attended a social event for people like her, and was astonished to find that those people barely moved. They all just sat, stil and withdrawn.",
+      "blanks": [
+        43,
+        44,
+        45,
+        46
+      ]
+    },
+    {
+      "type": "para",
+      "text": "At 61, Sheppard attended a camp organized by Visions for \\blanknum{47} people, where she taught her first dancing class. She \\blanknum{48} to teach her class there after that. But she was \\blanknum{49}. She soon convinced Visions to let her teach on a \\blanknum{50} basis. About four years later, her classes won so much popularity that Visions hired her to be on staff. Sheppard's students were mostly seniors whose eyesight had \\blanknum{51} as adults. With confidence-building praise, Sheppard also \\blanknum{52} dignity and independence into them. Students got to be themselves without feeling controlled by \\blanknum{53} in her classes, taking turns to perform in the center of the group as the others cheered them on.",
+      "blanks": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "type": "para",
+      "text": "As a way to combine movements with her faith, Sheppard \\blanknum{54} a group called The Blind Sisterhood. What's her \\blanknum{55} for maintaining both physical and mental health despite barriers life throws at her? \"Keep it moving!\"",
+      "blanks": [
+        54,
+        55
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 41,
+      "options": [
+        "comment",
+        "separation",
+        "struggle",
+        "sympathy"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 42,
+      "options": [
+        "different",
+        "tough",
+        "tolerant",
+        "sensitive"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 43,
+      "options": [
+        "volunteer",
+        "camper",
+        "actor",
+        "dancer"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 44,
+      "options": [
+        "simply",
+        "rarely",
+        "randomly",
+        "occasionally"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 45,
+      "options": [
+        "sound",
+        "relate",
+        "appear",
+        "reply"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 46,
+      "options": [
+        "forced",
+        "reminded",
+        "prohibited",
+        "expected"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 47,
+      "options": [
+        "deaf",
+        "blind",
+        "young",
+        "sick"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 48,
+      "options": [
+        "guaranteed",
+        "prepared",
+        "plotted",
+        "applied"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 49,
+      "options": [
+        "interrupted",
+        "evaluated",
+        "declined",
+        "abandoned"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 50,
+      "options": [
+        "temporary",
+        "regular",
+        "weekly",
+        "voluntary"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 51,
+      "options": [
+        "recovered",
+        "worsened",
+        "improved",
+        "returned"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 52,
+      "options": [
+        "drilled",
+        "changed",
+        "integrated",
+        "divided"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 53,
+      "options": [
+        "difficulty",
+        "depression",
+        "disability",
+        "judgement"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 54,
+      "options": [
+        "set up",
+        "opened up",
+        "took on",
+        "put on"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 55,
+      "options": [
+        "initiative",
+        "wish",
+        "push",
+        "recipe"
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共10小题；每小题1.5分，满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，在空白处填入 1 个适当的单词或括号内单词的正确形式。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "\"It is an outstanding conclusion to a great Beethoven cycle. Frank Peter Zimmermann and Martin Helmchen finish their project in fine style,\" says Julian Haylock.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "We are \\blanknum{56} (current) experiencing one of the most exciting periods in recording. We have been especially lucky over the last decade or so, \\blanknum{57} charming recordings of Beethoven's violin sonatas that make some older ones sound ordinary.",
+      "blanks": [
+        56,
+        57
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Frank Peter Zimmermann and Martin Helmchen are an outstanding team, \\blanknum{58} latest release brings their three-disc survey to \\blanknum{59} uplifting conclusion. The \"little\" No. 8 is kept light-as-air, with some music jokes occasionally thrown off from magical hands. One of the trickiest movements in the cycle \\blanknum{60} (be) the central Minuetto(小步舞曲), yet here it is kept flowing and dancing, gently \\blanknum{61} (mix) with delicate precision.",
+      "blanks": [
+        58,
+        59,
+        60,
+        61
+      ]
+    },
+    {
+      "type": "para",
+      "text": "These are the readings that also have their great arms firmly on the music. The \\blanknum{62} (distinguish) players create a sense of anticipation in the introduction to Kreutzer Sonata's opening movement, which \\blanknum{63} (play) completely with Zimmermann over the wonderful music pauses.",
+      "blanks": [
+        62,
+        63
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Finest of all is a reading of the Op.96 Sonata that allows listeners \\blanknum{64} (dream) a little and feel the \\blanknum{65} (composer) undervalued silence in all its charm.",
+      "blanks": [
+        64,
+        65
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第四部分 写作（共两节，满分 40 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "假定你是李华，上周你体验了学校新开设的智能化图书馆(smart library)，请你给你的新西兰笔友 Michael 写一封邮件分享此次经历，内容包括：(1) 智能图书馆的设施；(2) 你的体验和感受。 注意：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(1) 词数 80 左右;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(2) 可适当增加细节，以使行文连贯，",
+      "blanks": []
+    },
+    {
+      "type": "section",
+      "text": "第二节（满分25分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面材料，根据其内容和所给段落开头语续写两段，使之构成一篇完整的短文，",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "I sat at the breakfast table with my four-year-old son, Matthew, trying to ignore the ache in my stomach. \"Mama, want to play?\" \"Not today, baby.\" I shook my head. These days I could barely get out of bed. I was still recovering from an operation. I hoped for strength and happiness, but the future seemed so hopeless.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Suddenly, Matthew jumped up from his spot on the kitchen floor. \"Bird!\" he shouted, rushing to our courtyard. Sure enough, there was a white dove (鸽子) seated in a rubber tree. It sat there for a few moments, and then flew away. Strange, I'd never seen one in our neighborhood before.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "When I dragged myself to the kitchen the next morning, the dove was back. This time it was with a mate carrying sticks. \"Look, Matthew,\" I said, pointing to the tree. \"They're going to make a nest.\" The doves flew in and out of the courtyard all week, building on top of the rubber tree.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Matthew could hardly contain his excitement. Every morning, he'd run into the kitchen and take his spot by the sliding glass door, talking to the birds while they worked. His happiness was influential. As much as I was sad, I couldn't help but look forward to the doves' visits too.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Then it all went wrong. The courtyard was a safe enough spot for a nest, but the rubber tree's broad, thin leaves were far from stable. One night, a strong wind blew, throwing the doves' nest to the ground. I heard the twigs break apart.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "I surveyed the damage. Nothing good ever lasted. I wouldn't blame the doves if they never came back. But they returned. And they paid no attention to the pile of sticks that had once been their nest. They started again from the beginning. Again, though, the wind destroyed all their hard work. The next day, and the next, they started again, as if nothing had happened.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "注意：(1) 续写词数应为 150 左右；(2) 请按如下格式在答题卡的相应位置作答。",
+      "blanks": []
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 1: I knew I had to do something."
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 2: \"It works! The birds are back!\" Matthew announced."
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    }
+  ]
+}

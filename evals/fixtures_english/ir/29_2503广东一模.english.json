@@ -1,0 +1,911 @@
+{
+  "meta": {
+    "subject": "english",
+    "kind": "shiti",
+    "source": "29_2503广东一模.tex",
+    "preamble": "% !TEX program = xelatex\n\\documentclass{英语试卷}\n\\begin{document}\n",
+    "postamble": "\\end{document}\n",
+    "title": "广东省 2025 届高中毕业班适应性练习卷(一)",
+    "exam_subject": "英语",
+    "variant": "no_listening",
+    "question_count": 15,
+    "question_numbers": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35
+    ],
+    "example_count": 0,
+    "blank_numbers": [
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65
+    ],
+    "block_count": 131
+  },
+  "blocks": [
+    {
+      "type": "exam_title",
+      "mark": "",
+      "title": "广东省 2025 届高中毕业班适应性练习卷(一)",
+      "subject": "英语"
+    },
+    {
+      "type": "para",
+      "text": "广东省 2025 届高中毕业班适应性练习卷(一)",
+      "blanks": []
+    },
+    {
+      "type": "notice",
+      "lines": [
+        "\\par 1. 答卷前，考生务必用黑色字迹的钢笔或签字笔将自己的姓名、考生号、试室号和座位号填写在答题卡上。用2B铅笔将试卷类型（A）填涂在答题卡相应位置上，并在答题卡相应位置上填涂考生号。因笔试不考听力，试卷从第二部分开始，试题序号从“21\"开始。\\par",
+        "\\par 2. 作答选择题时，选出每小题答案后，用 2B 铅笔把答题卡对应题目选项的答案信息点除黑；如需改动，用橡皮擦干净后，再选涂其他答案。答案不能答在试卷上。\\par",
+        "\\par 3. 非选择题必须用黑色字迹的钢笔或签字笔作答，答案必须写在答题卡各题目指定区域内相应位置上，如需改动，先划掉原来的答案，然后再写上新答案；不准使用铅笔和涂改液。不按以上要求作答无效。\\par",
+        "\\par 4. 考生必须保持答题卡的整洁。考试结束后，将试卷和答题卡一并交回。\\par"
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第二部分 阅读理解（共两节，满分50分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（共15小题；每小题2.5分，满分37.5分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下列短文，从每题所给的 A、B、C 和 D 四个选项中，选出最佳答案，",
+      "blanks": []
+    },
+    {
+      "type": "passage_label",
+      "text": "A"
+    },
+    {
+      "type": "para",
+      "text": "Turtle Rescue Mission: Volunteering in Sri Lanka",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Join a meaningful mission to protect endangered sea turtles on the beaches of Ambalangoda, Sri Lanka. This project focuses on caring for injured turtles and giving baby turtles a safe start in the ocean. Volunteers work closely with about 30 turtles currently housed at the center. These turtles were injured by fishing nets, ocean trash, or other human activities. The center also plays a key role in hatching (孵化) and releasing hundreds of turtle eggs every season to restore the turtle population.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Details:",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Start Date: Every Saturday or Sunday",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Duration: Minimum 2 weeks",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Age Requirement: 16+",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Accommodation: Shared rooms in the volunteer house",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Orientation: All volunteers must complete a protection training week in Kandy before joining the project. This week introduces key knowledge about turtle conservation and prepares volunteers for their tasks. Volunteer Tasks:",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Care for the turtles: Clean their tanks, prepare food, and feed the turtles.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Monitor nests and populations: Keep track of turtle nests, collect data on turtle numbers, and learn how to identify different species.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Release baby turtles: Assist in releasing newly hatched turtles safely into the ocean.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Raise community awareness: Work with local fishermen and residents to promote the importance of turtle conservation.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Important Note:",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Volunteers should avoid risky social situations, such as visiting bars or pubs on the beach. The organization will not be responsible for any incidents that happen during interactions with locals or tourists in these places.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "21. What is the main goal of the project?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "To promote local tourism along the beach.",
+        "To explore ocean environments in Sri Lanka.",
+        "To ensure sea turtles recover and stay healthy.",
+        "To stop human activities from polluting the ocean."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "22. What is a requirement for new volunteers?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Guided shifts during the first week.",
+        "A minimum stay of one month.",
+        "Basic conservation training in Kandy.",
+        "A safety briefing at the volunteer house."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "23. Which behavior is discouraged during the project?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Staying out late in social settings.",
+        "Eating food beside the turtle tanks.",
+        "Taking photos of the injured turtles.",
+        "Talking to fishermen about their work."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "B"
+    },
+    {
+      "type": "para",
+      "text": "Steve Bagmanyan found his calling in a workshop filled with broken instruments. But every year, the shop brings both joy and heartbreak. Due to budget cuts, the number of technicians has dropped from 60 to just 11, leaving them to repair instruments for more than half a million students in Los Angeles public schools.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "\"The work we do is important and needs to be preserved, but it's becoming a dying craft,\" said Bagmanyan, 60, who runs the shop and handles piano repairs. \"Children are our future, yet music programs are being cut across the country.\"",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "However, there is hope for the shop. The Last Repair Shop, a short documentary featuring Bagmanyan and three other technicians, recently won an Oscar for best documentary short film. The film combines their personal stories with reflections from students who have found comfort and joy in music.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Few people even knew the shop existed before the documentary's release. This workshop, in operation since 1959, is believed to be the last of its kind in the country. Bagmanyan and his team provide free instruments and repairs across the school district, often serving children from low-income families. For many of these children, public schools are their only source of musical instruments, which wealthier families can more easily afford.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Since the release of the film, public support has soared. Donations have been made to fund more repairs and strengthen school music programs in Los Angeles. \"People are inspired by what we do and want to support a dying art form,\" said Ben Proudfoot, who co-directed the documentary.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Bagmanyan knows that a poorly maintained instrument can discourage a child from learning. \"If an instrument doesn't work properly, a child might give up on music,\" he said. \"But when you know the instrument is going to a student who loves it, it's impossible not to smile.\"",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "After 21 years of service, 3agmanyan says his cup is full, knowing that children may carry a love of music with them for a lifetime. \"I was planning to retire,\" he admitted. \"But now I'll rebuild the shop to what it once was and keep going a little longer.\"",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "24. What is the challenge faced by Bagmanyan?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Old instruments.",
+        "Declining number of students.",
+        "Low profitability.",
+        "Shortage of skilled technicians."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "25. What is paragraph 4 mainly about?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "The career achievements of Bagmanyan.",
+        "The popularity of the documentary.",
+        "The unique history of the school district.",
+        "The importance of the repair shop."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "26. How does the documentary impact the shop?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It enhances the shop's public image.",
+        "It attracts new business opportunities.",
+        "It helps sustain the shop's operation.",
+        "It provides education to the community."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "27. What do the underlined words \"his cup is full\" in the last paragraph mean?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "He is ready to retire.",
+        "He feels deeply satisfied.",
+        "He is tired of the spotlight.",
+        "He has become very wealthy."
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "C"
+    },
+    {
+      "type": "para",
+      "text": "When I was 14, I found myself in trouble for not doing my homework, which led me to Room E for school punishment. My teacher, Mr. McDonald, placed a stick on my desk and told me, \"Think of as many ways to use this stick as you can.\" When I looked puzzled, he smiled and gave me a tip: \"Imagine you are someone or something else — a baby, a dog, or a bird — and look at the stick again.\"",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "That moment stuck with me. To this day, I consider it the best punishment I ever received. Mr. McDonald's advice — \"Look at the stick with different eyes\" — is a great introduction to the concept of Umwelt, developed by German biologist Jakob von Uexküll.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Uexküll's Umwelt refers to the idea that every living creature perceives the world differently, based on its biological makeup and how it interacts with its environment. There is no \"one\" objective world; instead, every creature experiences its own version of reality. Take bees, for example. To a human, a flower is just a beautiful object with pleasant colors and fragrances. However, for a bee, flowers are much more than that. Bees can see ultraviolet (UV) light, which humans cannot. In a bee’s world, flowers reveal intricate UV patterns that act as road signs, leading them to nectar (花蜜). This UV-rich environment helps bees find food and pollinate (授粉) flowers, ensuring both their survival and that of plants.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Similarly, humans also experience the world through their own perspectives (视角), shaped by what they care about and find meaningful. Imagine sitting through a dull presentation, barely paying attention. Suddenly, the speaker mentions a topic that directly interests you, and you become fully engaged. Uexküll's idea teaches us that people, like bees, connect with the world in unique ways. The key takeaway for presenters is to craft their messages to appeal to different interests. By doing so, they have a better chance of reaching and engaging a diverse audience.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "28. What advice did Mr. McDonald give to the author for using the stick?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Think from new angles.",
+        "Discuss ideas with others.",
+        "Write down quick thoughts",
+        "Observe the stick closely."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "29. What mainly shapes the way bees perceive flowers?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "The patterns on the flowers.",
+        "Their ability to detect UV light.",
+        "The environment where they live.",
+        "Their experience of finding nectar."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "30. What should presenters do to engage their audience?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Keep presentations short.",
+        "Focus on just one topic.",
+        "Use fewer technical terms.",
+        "Adapt to different interests."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "31. Which of the following is the best title for the text?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Shifting Perspectives: The Power of Seeing Differently",
+        "Uexküll's Umwelt: How Reality Defines Living Beings",
+        "UV Vision and Beyond: How Bees Experience the World",
+        "Learning from McDonald: A Lesson of Boosting Creativity"
+      ]
+    },
+    {
+      "type": "passage_label",
+      "text": "D"
+    },
+    {
+      "type": "para",
+      "text": "At top universities, there's a phenomenon known as \"Stanford Duck Syndrome (综合征)\". Like ducks, students appear to move gracefully (优雅地). However, beneath the surface, they're kicking desperately to keep up.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Experts from Stanford's Health Services uncovered this troubling trend: during the day, many Stanford students are seen socializing in cafés, seemingly without any stress or the need to study. However, at night, they start studying, sometimes for the entire night, trying to maintain the image of effortless success. This comes at a high price: tiredness and anxiety are widespread. Furthermore, it leads to a common misconception: true geniuses achieve success with ease, while those working hard are less capable.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "In an effort to challenge this misconception, researchers designed an experiment. Participants were asked to observe a series of colors carefully while scientists tracked their brain activity throughout the process. The experiment was divided into two parts: one with easily distinguishable colors and the other with colors that were quite similar, requiring more effort to differentiate. As the difficulty of the task increased, there was a noticeable increase in brain activity, particularly in areas linked to memory and abstract reasoning.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "The study reveals that as tasks require more effort, more areas of the brain become engaged. Growth doesn't come from talent alone but from the consistent application of effort. Our brain functions like a muscle. Without effort, even our inborn talents will fade over time.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "This pushes us to reconsider the underlying culture that might lead to this phenomenon. Instead of focusing too much on outcomes or singing high praise for inborn talents, we should emphasize the learning process and continuous improvement. By encouraging a culture that values effort, we can help students realize that intelligence is not fixed but grows through hard work. Such a shift would not only reduce the pressures associated with the \"Stanford Duck Syndrome\", but also have a profound impact on personal development and the future of education.",
+      "blanks": []
+    },
+    {
+      "type": "question",
+      "text": "32. What phenomenon does the \"Stanford Duck Syndrome\" probably describe?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Prioritizing effort over well-being.",
+        "Relieving stress through social activities.",
+        "Displaying graceful images to attract others.",
+        "Hiding hard work to appear naturally gifted."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "33. How does the experiment in paragraph 3 challenge the misconception?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "By showing effort fuels the brain activity.",
+        "By proving focus enhances brain function.",
+        "By linking color recognition to intelligence.",
+        "By associating careful observation with talent."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "34. What is the author's main concern about \"Stanford Duck Syndrome\"?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "It values the learning process over outcomes.",
+        "It causes stress and false ideas about success.",
+        "It prevents students from recognizing their talents.",
+        "It makes students prioritize socializing over studying."
+      ]
+    },
+    {
+      "type": "question",
+      "text": "35. Which of the following might the author agree with?"
+    },
+    {
+      "type": "choices",
+      "columns": 2,
+      "indent": "  ",
+      "items": [
+        "Fortune favors those with a clear vision.",
+        "Sweat is the ink that writes a masterpiece.",
+        "Work in silence and let success make the noise.",
+        "Keep moving forward even when no one sees it."
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共5小题；每小题2.5分，满分12.5分）"
+    },
+    {
+      "type": "para",
+      "text": "根据短文内容，从短文后的选项中选出能填入空白处的最佳选项。选项中有两项为多余选项，",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "During puberty (青春期), your body goes through many changes, and you start forming a body image — how you see, think, and feel about your body's size, shape, and weight, or specific features like your nose. \\blanknum{36} For instance, you may believe your nose is too big or too small, even though it looks perfectly normal.",
+      "blanks": [
+        36
+      ]
+    },
+    {
+      "type": "para",
+      "text": "\\blanknum{37} One major influence is peer(同龄人) pressure. Your friends might make casual jokes about your appearance, or you might compare yourself to them and feel they look better. Such experiences can harm the way you view yourself. Another powerful influence is the media, which often promotes a narrow, ideal body type. For example, if fair skin is portrayed as beautiful, you may feel insecure if you don't match that ideal.",
+      "blanks": [
+        37
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Developing a negative body image can lead to unhealthy behaviors, such as extreme dieting, overexercising, or even risky plastic surgeries. \\blanknum{38} When you focus too much on appearance, you may forget to appreciate other great things about yourself, such as your talents and personality.",
+      "blanks": [
+        38
+      ]
+    },
+    {
+      "type": "para",
+      "text": "To build a positive body image, it's essential to remember that no perfect body exists, as beauty standards are always changing. Models and celebrities may appear flawless in the media, but much of their appearance is due to",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "nakeup, angles, lighting, and editing. \\blanknum{39}",
+      "blanks": [
+        39
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Rather than focusing on appearances, value people for their true selves. By surrounding yourself with positive influences and avoiding comments on looks, you can redirect your attention from self-criticism. \\blanknum{40} Over time, you'll build inner confidence and develop a healthier, more accepting relationship with your body.",
+      "blanks": [
+        40
+      ]
+    },
+    {
+      "type": "choices",
+      "columns": 1,
+      "indent": "  ",
+      "items": [
+        "Many factors shape your body image.",
+        "It also lowers your overall life satisfaction.",
+        "However, your true beauty lies within your heart.",
+        "External judgement can be a double-edged sword.",
+        "Without these tricks, they are just as \"imperfect\" as everyone else.",
+        "Surprisingly, body image is shaped more by your thoughts than by reality.",
+        "This shift enables you to recognize and celebrate your talents and strengths."
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第三部分 语言知识运用（共两节，满分 30 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（共15小题；每小题1分，满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，从短文后各题所给的 A、B、C 和 D 四个选项中，选出可以填入空白处的最佳选项。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Growing up in a large family, I wasn't a particularly materialistic person. I was \\blanknum{41} with the few toys I had and wore hand-me-downs without \\blanknum{42}. However, upon reaching adolescence, I began to \\blanknum{43} myself to peers with the latest trends and felt \\blanknum{44} of what they owned. As an adult, my shopping addiction for temporary pleasure led to an accumulation (堆积) of \\blanknum{45} stuff and stressed me out.",
+      "blanks": [
+        41,
+        42,
+        43,
+        44,
+        45
+      ]
+    },
+    {
+      "type": "para",
+      "text": "It wasn't until I faced a serious illness that I began to \\blanknum{46} my relationship with material possessions. When reading about the benefits of living with less, I realized that the very things I'd tirelessly pursued were the source of my \\blanknum{47} in my life. This was a turning point for me; I needed to \\blanknum{48}.",
+      "blanks": [
+        46,
+        47,
+        48
+      ]
+    },
+    {
+      "type": "para",
+      "text": "I started my journey to \\blanknum{49} by decluttering (清理) my wardrobes. It was slow going \\blanknum{50}, but I soon got into the swing of things. I went through my wardrobes, only \\blanknum{51} the items that I loved and had worn recently and donating the rest to the local charity shop. And it felt so \\blanknum{52}'",
+      "blanks": [
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "type": "para",
+      "text": "From then on, I \\blanknum{53} to shift my mindset towards shopping and buy essentials only. And I started spending my money on the things I would \\blanknum{54} for years to come. I travelled to new places and went to concerts with friends, finding these \\blanknum{55} more rewarding than buying stuff.",
+      "blanks": [
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 41,
+      "options": [
+        "upset",
+        "blessed",
+        "content",
+        "bored"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 42,
+      "options": [
+        "complaint",
+        "reservation",
+        "restriction",
+        "approval"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 43,
+      "options": [
+        "introduce",
+        "compare",
+        "explain",
+        "prove"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 44,
+      "options": [
+        "confident",
+        "proud",
+        "envious",
+        "suspicious"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 45,
+      "options": [
+        "specific",
+        "simple",
+        "unusual",
+        "unnecessary"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 46,
+      "options": [
+        "reflect on",
+        "benefit from",
+        "continue with",
+        "build up"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 47,
+      "options": [
+        "shame",
+        "happiness",
+        "optimism",
+        "anxiety"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 48,
+      "options": [
+        "forget",
+        "accept",
+        "repeat",
+        "change."
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 49,
+      "options": [
+        "materialism",
+        "minimalism",
+        "formalism",
+        "realism"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 50,
+      "options": [
+        "initially",
+        "suddenly",
+        "secretly",
+        "previously"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 51,
+      "options": [
+        "purchasing",
+        "keeping",
+        "replacing",
+        "cleaning"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 52,
+      "options": [
+        "interesting",
+        "liberating",
+        "convincing",
+        "inviting"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 53,
+      "options": [
+        "pretended",
+        "agreed",
+        "resolved",
+        "failed"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 54,
+      "options": [
+        "remember",
+        "predict",
+        "comprehend",
+        "ignore"
+      ]
+    },
+    {
+      "type": "cloze",
+      "number": 55,
+      "options": [
+        "capabilities",
+        "reflections",
+        "experiences",
+        "opportunities"
+      ]
+    },
+    {
+      "type": "section",
+      "text": "第二节（共10小题；每小题1.5分，满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面短文，在空白处填入 1 个适当的单词或括号内单词的正确形式。",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Since the Paris Olympics, interest in rock climbing has grown across China. Climbing gyms nationwide have reported \\blanknum{56} significant rise in bookings, especially during weekends and after work on weekdays. \\blanknum{57} (meet) the increased demand, more climbing gyms are being established.",
+      "blanks": [
+        56,
+        57
+      ]
+    },
+    {
+      "type": "para",
+      "text": "The appeal of rock climbing lies in the sense of freedom it represents, as well as the \\blanknum{58} (combine) of physical strength, flexibility, mental focus, and problem-solving skills it requires. Bouldering, a popular form of indoor climbing, illustrates this well. The same route can \\blanknum{59} (complete) in multiple ways, varying in movements, speed, and energy use. Solving these challenges feels like completing a puzzle and \\blanknum{60} (bring) a strong sense of achievement. As Leo, a climbing enthusiast, puts it, \"Figuring out how to deal with new challenges is part of \\blanknum{61} I enjoy. I'm not into repetitive exercises, and climbing keeps things fresh with every new route.\"",
+      "blanks": [
+        58,
+        59,
+        60,
+        61
+      ]
+    },
+    {
+      "type": "para",
+      "text": "The \\blanknum{62} (welcome) and supportive atmosphere at climbing gyms adds to the positive experience. While climbers usually focus on their own routes, they often receive encouragement \\blanknum{63} (enthusiastic) offered by those in the rest area when facing challenging moments. \"Climbing can be an individual pursuit or a shared activity,\" said Chen, manager of a gym in Shanghai. \"It can accommodate different social \\blanknum{64} (preference).\"",
+      "blanks": [
+        62,
+        63,
+        64
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Experts believe that \\blanknum{65} a trendy and youthful activity, climbing's popularity will continue to grow.",
+      "blanks": [
+        65
+      ]
+    },
+    {
+      "type": "part",
+      "text": "第四部分 写作（共两节，满分 40 分）"
+    },
+    {
+      "type": "section",
+      "text": "第一节（满分15分）"
+    },
+    {
+      "type": "para",
+      "text": "学校委托校英文报开展“校运会班服最佳创意设计”评比活动。请你写一篇短文，介绍你们班的班服，内容包括：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(1) 作品特点;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(2) 灵感来源;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "（3）设计目的。注意：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(1) 写作词数应为 80 左右;",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(2) 可以增加适当细节，以使行文连贯，",
+      "blanks": []
+    },
+    {
+      "type": "section",
+      "text": "第二节（满分25分）"
+    },
+    {
+      "type": "para",
+      "text": "阅读下面材料，根据其内容和所给段落开头语续写两段，使之构成一篇完整的短文，",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "The Right Thing to Do",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Fauna had always dreamed of keeping a pet. Time and again, she asked her parents, promising to walk, feed, and look after it. Each time, though, they gave the same gentle response: \"We'll see.\"",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "One afternoon, on her way home from school, Fauna saw a little dog wandering near the park. Its fur was messy, and it looked lost, sniffing the ground as if searching for something. Feeling curious and hopeful, Fauna bent down and called to it. The dog quickly ran over, wagging (摇) its tail and gently pressing its nose into her hand, like they had known each other forever.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "She looked around, but no one seemed to be searching for the dog. Feeling pity for the lost dog, Fauna decided to take it home. As they walked side by side, her heart swelled with joy. It felt as though this was the pet she had always dreamed of — a friend she had been waiting for.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "At the front door, Fauna's mother greeted her with a warm smile. Although she found the dog adorable, she gently reminded Fauna that they needed to try and find its owner. If the dog was lost, someone must be missing it. Fauna reluctantly (不情愿地) agreed, though part of her wished no one would come forward to claim the little dog.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Over the next few days, Fauna and the dog — whom she named Buddy — grew inseparable. She fed him, played with him, and let him sleep curled up at the foot of her bed. Every day, it became harder to imagine life without him. Buddy seemed happy too, wagging his tail whenever she came home from school. But Fauna knew deep down that she had to do the right thing. She and her parents posted flyers around town, hoping to find Buddy's owner.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "Just a few days later, the phone rang. Fauna's heart sank as her father answered. From the conversation, it was clear that the caller was Buddy's owner. He described Buddy perfectly — the friendly eyes and playful personality. Fauna knew Buddy would soon be leaving her. Her father arranged for the owner to come by and pick Buddy up.",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "注意：",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "（1）续写词数应为 150 左右；",
+      "blanks": []
+    },
+    {
+      "type": "para",
+      "text": "(2) 请按如下格式在答题卡的相应位置作答，",
+      "blanks": []
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 1: When the man arrived, the little dog ran straight into his arms, barking with joy. \\blanknum{}"
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    },
+    {
+      "type": "writing_para",
+      "text": "Paragraph 2: That evening, Fauna sat quietly in her room, feeling the emptiness that Buddy's absence had left behind."
+    },
+    {
+      "type": "writing_lines",
+      "count": 8
+    }
+  ]
+}

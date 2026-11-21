@@ -1,0 +1,397 @@
+% ============================================================================
+%  英语答题卡.sty —— 全国卷英语 A4 答题卡模板（v1.0）
+% ----------------------------------------------------------------------------
+%  固定两页结构：
+%    第 1 面：页眉（考生信息 + 注意事项）→ 三组选择题 → 语法填空
+%    第 2 面：写作第一节（应用文）→ 写作第二节（读后续写）
+%  换卷型只改 \engSetup 里的数据，不必再找坐标。
+%    · title / subject              卷名、科目
+%    · color={R,G,B}  bw=true|false 主色（粉/红/蓝/绿/黑白…）
+%    · id = 考生号 | 条形码          页眉用「考生号填涂表」还是「条形码粘贴区」
+%    · listening = true|false       是否含听力（false 时第 1 组位置留白禁答）
+%    · gA = {起始题号/题数/常规选项数/末列选项数}
+%          听力 1–20  → {1/20/3/0}
+%          阅读 21–40  → {21/20/4/7}   （36–40 七选五，末列 A–G）
+%          完形 41–55  → {41/15/4/0}
+%    · blanks = {起始题号/题数/每行题数}      语法填空 56–65 → {56/10/4}
+%    · wa = {标题/行数}  wb = {标题/行数}     写作两节的标题与横线行数
+%    · letter = true|false          应用文是否印「Dear …/Yours, …」书信套语
+%    · cont = {读后续写首句}         两段共用同一句，可按需改写
+% ----------------------------------------------------------------------------
+%  注意：页脚用 lastpage，需连编两次；改版后位置若异常，先删 .aux 再编。
+% ============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{英语答题卡}[2026/10/30 v1.0 English answer sheet (national paper)]
+
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+\RequirePackage{eso-pic}
+\RequirePackage{lastpage}
+
+% --------------------------- 颜色 ---------------------------
+\definecolor{mycolor}{RGB}{255,50,165}      % 主色
+\definecolor{mycolor1}{RGB}{255,190,215}    % 禁答区底色
+
+% --------------------------- 参数接口 ---------------------------
+\makeatletter
+\newif\if@engBW      \@engBWfalse
+\newif\if@engBarcode \@engBarcodetrue
+\newif\if@engListen  \@engListentrue
+\newif\if@engLetter  \@engLettertrue
+\pgfkeys{/eng/.is family}
+\newcommand*\engSetup[1]{\pgfkeys{/eng/.cd,#1}}
+\pgfkeys{
+  /eng/title/.estore in      = \eng@title,
+  /eng/subject/.estore in    = \eng@subject,
+  /eng/color/.code           = {\definecolor{mycolor}{RGB}{#1}\colorlet{mycolor1}{mycolor!18}},
+  /eng/bw/.is if             = @engBW,
+  /eng/id/.code              = {\def\eng@idv{#1}\def\eng@idone{考生号}%
+                                \ifx\eng@idv\eng@idone\@engBarcodefalse\else\@engBarcodetrue\fi},
+  /eng/listening/.is if      = @engListen,
+  /eng/letter/.is if         = @engLetter,
+  /eng/gA/.estore in         = \eng@gA,
+  /eng/gB/.estore in         = \eng@gB,
+  /eng/gC/.estore in         = \eng@gC,
+  /eng/blanks/.estore in     = \eng@blanks,
+  /eng/wa/.estore in         = \eng@wa,
+  /eng/wb/.estore in         = \eng@wb,
+  /eng/dear/.estore in       = \eng@dear,
+  /eng/yours/.estore in      = \eng@yours,
+  /eng/sign/.estore in       = \eng@sign,
+  /eng/cont/.estore in       = \eng@cont,
+}
+\engSetup{
+  title   = 2025年普通高等学校招生全国统一考试,
+  subject = 英语,
+  color   = {255,50,165},
+  bw      = false,
+  id      = 考生号,
+  listening = true,
+  letter  = true,
+  gA      = {1/20/3/0},
+  gB      = {21/20/4/7},
+  gC      = {41/15/4/0},
+  blanks  = {56/10/4},
+  wa      = {三、写作\quad 第一节/10},
+  wb      = {四、写作\quad 第二节/18},
+  dear    = {Dear Ben,},
+  yours   = Yours,
+  sign    = Li Hua,
+  cont    = {When the storm finally passed, we looked over our achievements.},
+}
+
+% --------------------------- 版面尺寸（cm） ---------------------------
+\def\eng@pw{19.7}         % 画布宽
+\def\eng@ph{28.25}        % 画布高
+\def\eng@selectw{0.5}     % 填涂框宽
+\def\eng@selecth{0.25}    % 填涂框高
+\def\eng@percol{5}        % 每列题数
+\def\eng@rowSep{0.6}      % 同一列上下题距
+\def\eng@colPitch{3.7}    % 相邻两列题号的水平距离
+\def\eng@numd{0.75}       % 题号到第一个选项字母的距离
+\def\eng@letPitch{0.67}   % 相邻选项字母的水平距离
+\def\eng@numx{1.9}        % 第一列题号横坐标
+\def\eng@boxmode{0}       % 0=中括号码 1=矩形码
+
+% --------------------------- 两种页眉的版面锚点 ---------------------------
+\newcommand*\eng@profile{%
+  \if@engBarcode
+    \def\eng@bigTop{19.1}   \def\eng@bigH{18.5}%
+    \def\eng@choiceTop{18.4}\def\eng@choiceH{11}%
+    \def\eng@blankTop{6.7}  \def\eng@blankH{5.5}%
+    \def\eng@blankNumY{5.7}\def\eng@blankRow{1.5}%
+    \def\eng@boxTop{21.5}   \def\eng@boxXa{10.8}\def\eng@boxXb{13.5}\def\eng@boxXc{16.8}%
+    \def\eng@labelGap{0.73}\def\eng@groupGap{0.4}%
+    \def\eng@noticeW{9.3}   \def\eng@noticeH{4.5}%
+  \else
+    \def\eng@bigTop{16.93}  \def\eng@bigH{16.33}%
+    \def\eng@choiceTop{16.23}\def\eng@choiceH{10.23}%
+    \def\eng@blankTop{5.2}  \def\eng@blankH{4}%
+    \def\eng@blankNumY{4.3}\def\eng@blankRow{1.2}%
+    \def\eng@boxTop{19.1}   \def\eng@boxXa{1.2}\def\eng@boxXb{3.9}\def\eng@boxXc{7.2}%
+    \def\eng@labelGap{0.63}\def\eng@groupGap{0.3}%
+    \def\eng@noticeW{7.7}   \def\eng@noticeH{4.8}%
+  \fi}
+
+% --------------------------- 基本图元 ---------------------------
+% 实心定位块（左上角 #1,#2）
+\newcommand*\eng@mark[2]{%
+  \fill[black] (#1,#2+0.5*\eng@selecth) rectangle ++(\eng@selectw,-\eng@selecth);}
+% 空心填涂框（中心 #1,#2）
+\newcommand*\eng@box[2]{%
+  \draw[mycolor] (#1-0.5*\eng@selectw,#2+0.5*\eng@selecth)
+    rectangle ++(\eng@selectw,-\eng@selecth);}
+% 中括号填涂框（中心 #1,#2）：左括号竖笔在最左、右括号竖笔在最右
+\newcommand*\eng@brk[2]{%
+  \draw[mycolor] (#1-0.25*\eng@selectw,#2+0.5*\eng@selecth) -- ++(-0.25*\eng@selectw,0)
+    -- ++(0,-1*\eng@selecth) -- ++(0.25*\eng@selectw,0);%
+  \draw[mycolor] (#1+0.25*\eng@selectw,#2+0.5*\eng@selecth) -- ++(0.25*\eng@selectw,0)
+    -- ++(0,-1*\eng@selecth) -- ++(-0.25*\eng@selectw,0);}
+% 选项填涂码
+\newcommand*\eng@choicebox[2]{%
+  \ifnum\eng@boxmode=1 \eng@box{#1}{#2}\else \eng@brk{#1}{#2}\fi}
+
+% --------------------------- 页眉（两种） ---------------------------
+\newcommand*\eng@Header{%
+  \node[font=\fontsize{16pt}{16pt}\selectfont] at (9.85,27.3)
+    {\textcolor{mycolor}{\textbf{\eng@title}}};
+  \node[font=\fontsize{22pt}{22pt}\selectfont] at (9.85,26.3) {\textbf{\eng@subject 答题卡}};
+  \if@engBarcode \eng@HeaderBarcode \else \eng@HeaderGrid \fi
+  \eng@Notice
+  \eng@InfoBoxes}
+
+% —— 考生号版：信息行 + 10×10 考生号填涂表
+\newcommand*\eng@HeaderGrid{%
+  \node at (9.85,25) {%
+    试室号：\textcolor{mycolor}{\underline{\hspace{2cm}}}\hspace{0.6em}%
+    座位号：\textcolor{mycolor}{\underline{\hspace{2cm}}}\hspace{0.6em}%
+    姓名：\textcolor{mycolor}{\underline{\hspace{3.2cm}}}\hspace{0.6em}%
+    班级：\textcolor{mycolor}{\underline{\hspace{3.2cm}}}};
+  \eng@IDGrid}
+
+% 考生号填涂表：#1 位数（默认 10 位）
+% 数字印在格子中央，外面用一对中括号包住，考生填哪个括号即选哪个数字
+\newcommand*\eng@IDGrid[1][10]{%
+  \def\cols{#1}\def\rows{10}%
+  \def\cellw{0.9}\def\cellh{0.5}%
+  \def\gx{9.5}\def\gy{24.2}\def\headh{0.6}\def\pad{0.2}%
+  \pgfmathsetmacro{\gbot}{\gy-\headh-\cellw-2*\pad-\rows*\cellh}%
+  \foreach \c in {0,...,\cols}{\draw[mycolor] (\gx+\c*\cellw,\gy-\headh) -- (\gx+\c*\cellw,\gbot);}%
+  \draw[mycolor] (\gx,\gy) rectangle (\gx+\cols*\cellw,\gy-\headh);
+  \draw[mycolor] (\gx,\gy-\headh) -- (\gx+\cols*\cellw,\gy-\headh);
+  \draw[mycolor] (\gx,\gy-\headh-\cellw) -- (\gx+\cols*\cellw,\gy-\headh-\cellw);
+  \draw[mycolor] (\gx,\gbot) -- (\gx+\cols*\cellw,\gbot);
+  \node[font=\small\bfseries] at (\gx+0.5*\cols*\cellw,\gy-0.5*\headh) {考\hspace{1em}生\hspace{1em}号};
+  \foreach \r in {1,...,\rows}{%
+    \pgfmathsetmacro{\cy}{\gy-\headh-\cellw-\pad-\r*\cellh+0.5*\cellh}%
+    \begingroup
+      \def\eng@selectw{0.55}\def\eng@selecth{0.26}%
+      \foreach \c in {1,...,\cols}{%
+        \pgfmathsetmacro{\cx}{\gx+\c*\cellw-0.5*\cellw}%
+        \node[font=\footnotesize, text=mycolor] at (\cx,\cy) {\the\numexpr\r-1\relax};%
+        \eng@brk{\cx}{\cy}}%
+    \endgroup
+    \eng@mark{18.9}{\cy}}}
+
+% —— 条形码版：姓名 + 考生号方框 + 条形码粘贴区
+\newcommand*\eng@HeaderBarcode{%
+  \node[right] at (1.2,25) {姓名：\textcolor{mycolor}{\underline{\hspace{5cm}}}};
+  \def\numberx{9.8}\def\numbery{25}\def\size{0.7}%
+  \node[anchor=west] at (\numberx,\numbery) {考生号};
+  \def\total{10}\def\numberD{1.5}\def\Distance{0.7}%
+  \foreach \c in {1,...,\total}{%
+    \draw[mycolor] (\numberx+\numberD+\c*\Distance-\Distance,\numbery+0.5*\size)
+      rectangle ++(\size,-\size);}%
+  \draw[mycolor,dashed,thick] (10.8,24.2) rectangle ++(7.7,-2.3);
+  \node[mycolor] at (14.65,23.05) {\textbf{条形码粘贴区}};}
+
+% 注意事项（文字随页眉模式变化）
+\newcommand*\eng@Notice{%
+  \draw[mycolor] (1.2,24.2) rectangle ++(\eng@noticeW,-\eng@noticeH);
+  \if@engBarcode
+    \node[text width=8.9cm, align=left, anchor=north west,
+          font=\linespread{1}\fontsize{8pt}{9.6pt}\selectfont] at (1.3,24.1)
+      {\textbf{注意事项}：\\
+        \hangindent=1.5em1．答题前，考生务必用黑色字迹的钢笔或签字笔将姓名和考生号填写在答题卡上，并将条形码贴在指定区域内。\\
+        \hangindent=1.5em2．回答选择题时，选出每小题答案以后，用\hspace{0.1em}2B\hspace{0.1em}铅笔把答题卡上对应题目的答案标号涂黑。如需改动，用橡皮擦擦干净后，再选其它答案标号涂黑。回答非选择题时，将答案写在答题卡上指定区域内，超出答题区域的答案无效。\\
+        \hangindent=1.5em3．正确填涂试卷类型，否则答案无效。\\
+        \hangindent=1.5em4．答题卡保持卡面整洁，不要折叠和弄破。};
+  \else
+    \node[text width=7.3cm, align=left, anchor=north west,
+          font=\linespread{1}\fontsize{8pt}{9.6pt}\selectfont] at (1.3,24.1)
+      {\textbf{注意事项}：\\
+        \hangindent=1.5em1．答题前，考生务必用黑色字迹的钢笔或签字笔将试室号、座位号、姓名和考生号填写在答题卡上，并用\hspace{0.1em}2B\hspace{0.1em}铅笔将考生号对应的数字涂黑。\\
+        \hangindent=1.5em2．回答选择题时，选出每小题答案以后，用\hspace{0.1em}2B\hspace{0.1em}铅笔把答题卡上对应题目的答案标号涂黑。如需改动，用橡皮擦擦干净后，再选其它答案标号涂黑。回答非选择题时，将答案写在答题卡上指定区域内，超出答题区域的答案无效。\\
+        \hangindent=1.5em3．正确填涂试卷类型，否则答案无效。\\
+        \hangindent=1.5em4．答题卡保持卡面整洁，不要折叠和弄破。};
+  \fi}
+
+% 试卷类型 / 填涂样例 / 缺考标记
+\newcommand*\eng@InfoBoxes{%
+  % 试卷类型
+  \draw[mycolor] (\eng@boxXa,\eng@boxTop) rectangle ++(2.5,-1.8);
+  \node[anchor=north west, align=left, font=\fontsize{9pt}{9pt}\selectfont]
+    at (\eng@boxXa+0.1,\eng@boxTop-0.1) {\textbf{试卷类型}：\\试卷A\\试卷B\\};
+  \draw[mycolor] (\eng@boxXa+1.5,\eng@boxTop-0.8) rectangle ++(\eng@selectw,-\eng@selecth);
+  \draw[mycolor] (\eng@boxXa+1.5,\eng@boxTop-1.3) rectangle ++(\eng@selectw,-\eng@selecth);
+  \eng@mark{0.25}{\eng@boxTop-0.8}\eng@mark{0.25}{\eng@boxTop-1.3}
+  % 填涂样例
+  \draw[mycolor] (\eng@boxXb,\eng@boxTop) rectangle ++(3.1,-1.8);
+  \node[anchor=north west, align=left, font=\fontsize{9pt}{9pt}\selectfont]
+    at (\eng@boxXb+0.1,\eng@boxTop-0.1) {\textbf{填涂样例}：\\正确填涂：\\错误填涂：\\};
+  \fill[black] (\eng@boxXb+1.7,\eng@boxTop-0.8) rectangle ++(\eng@selectw,-\eng@selecth);
+  \draw[mycolor] (\eng@boxXb+1.7,\eng@boxTop-1.3) rectangle ++(\eng@selectw,-\eng@selecth);
+  \draw[mycolor] (\eng@boxXb+2.4,\eng@boxTop-1.3) rectangle ++(\eng@selectw,-\eng@selecth);
+  \fill[black] (\eng@boxXb+1.73,\eng@boxTop-1.4)
+    -- (\eng@boxXb+1.45+\eng@selectw,\eng@boxTop-1.3-\eng@selecth)
+    -- (\eng@boxXb+1.65+\eng@selectw,\eng@boxTop-1.05-\eng@selecth)
+    -- (\eng@boxXb+1.6+\eng@selectw,\eng@boxTop-1-\eng@selecth)
+    -- (\eng@boxXb+1.43+\eng@selectw,\eng@boxTop-1.2-\eng@selecth)
+    -- (\eng@boxXb+1.27+\eng@selectw,\eng@boxTop-1.1-\eng@selecth) -- cycle;
+  \fill[black] (\eng@boxXb+2.35,\eng@boxTop-1.35) rectangle ++(0.6,-0.1);
+  % 缺考标记
+  \draw[mycolor] (\eng@boxXc,\eng@boxTop) rectangle ++(1.7,-1.8);
+  \node[anchor=north west, align=left, font=\fontsize{9pt}{9pt}\selectfont]
+    at (\eng@boxXc+0.1,\eng@boxTop-0.1) {\textbf{缺考标记}\\};
+  \draw[mycolor] (\eng@boxXc+0.6,\eng@boxTop-1) rectangle ++(\eng@selectw,-\eng@selecth);
+  \if@engBarcode \eng@mark{18.9}{\eng@boxTop-1}\fi}
+
+% --------------------------- 选择题组 ---------------------------
+% #1 起始题号  #2 题数  #3 常规选项数  #4 末列选项数（0 = 同常规）  #5 本组首行纵坐标
+\newcommand*\eng@group[5]{%
+  \pgfmathtruncatemacro{\eng@ncol}{ceil(#2/\eng@percol)}%
+  \pgfmathtruncatemacro{\eng@lasti}{\eng@ncol-1}%
+  \foreach \i in {0,...,\numexpr#2-1\relax}{%
+    \pgfmathtruncatemacro{\cc}{floor(\i/\eng@percol)}%
+    \pgfmathtruncatemacro{\rr}{mod(\i,\eng@percol)}%
+    \pgfmathsetmacro{\qx}{\eng@numx+\cc*\eng@colPitch}%
+    \pgfmathsetmacro{\qy}{#5-\rr*\eng@rowSep}%
+    \node at (\qx,\qy) {\the\numexpr\i+#1\relax};%
+    \ifnum\cc=\eng@lasti
+      \ifnum#4>0 \pgfmathtruncatemacro{\nl}{#4}\else \pgfmathtruncatemacro{\nl}{#3}\fi
+    \else \pgfmathtruncatemacro{\nl}{#3}\fi
+    \foreach \l in {0,...,\numexpr\nl-1\relax}{%
+      \pgfmathsetmacro{\lx}{\qx+\eng@numd+\eng@letPitch*\l}%
+      \pgfmathsetmacro{\ch}{{"A","B","C","D","E","F","G"}[\l]}%
+      \node[font=\footnotesize, text=mycolor] at (\lx,\qy) {\ch};%
+      \eng@choicebox{\lx}{\qy}}%
+  }%
+  % 左右两侧的定位黑块
+  \pgfmathtruncatemacro{\eng@rows}{min(#2,\eng@percol)}%
+  \foreach \r in {0,...,\numexpr\eng@rows-1\relax}{%
+    \pgfmathsetmacro{\qy}{#5-\r*\eng@rowSep}%
+    \eng@mark{0.25}{\qy}\eng@mark{18.9}{\qy}}}
+
+% 把「起始/题数/常规选项数/末列选项数」字符串展开后交给 \eng@group
+\newcommand*\eng@runGroup[2]{%
+  \foreach \a/\b/\c/\d in {#1}{\eng@group{\a}{\b}{\c}{\d}{#2}}}
+
+% 第 1 组位置留白禁答（不考听力时）
+\newcommand*\eng@forbid{%
+  \pgfmathsetmacro{\eng@fbTop}{\eng@topA+0.4}%
+  \pgfmathsetmacro{\eng@fbBot}{\eng@topA-(\eng@percol-1)*\eng@rowSep-0.15}%
+  \fill[mycolor1] (1.2,\eng@fbTop) rectangle (18.5,\eng@fbBot);
+  \node[mycolor, scale=2] at (9.85,{0.5*(\eng@fbTop+\eng@fbBot)})
+    {\textbf{请勿在此处作任何标记或作答}};}
+
+% --------------------------- 语法填空 ---------------------------
+% #1 起始题号  #2 题数  #3 每行题数
+\newcommand*\eng@blankarea[3]{%
+  \pgfmathtruncatemacro{\eng@bnrow}{ceil(#2/#3)}%
+  \def\distancew{4}%
+  \foreach \i in {0,...,\numexpr#2-1\relax}{%
+    \pgfmathtruncatemacro{\cc}{floor(\i/#3)}%
+    \pgfmathtruncatemacro{\rr}{mod(\i,#3)}%
+    \node at (\eng@numx+\rr*\distancew+0.1, \eng@blankNumY-\cc*\eng@blankRow)
+      {\the\numexpr\i+#1\relax.};%
+    \draw[mycolor] (\eng@numx+\rr*\distancew+0.4,\eng@blankNumY-0.2-\cc*\eng@blankRow)
+      -- ++(\distancew-0.8,0);}}
+
+% 把「起始题号/题数/每行题数」字符串展开后交给 \eng@blankarea
+\newcommand*\eng@runBlanks[1]{%
+  \foreach \a/\b/\c in {#1}{\eng@blankarea{\a}{\b}{\c}}}
+
+% --------------------------- 第 1 面 ---------------------------
+\newcommand*\eng@PageOne{%
+  \eng@Header
+  \draw[rounded corners=10pt,mycolor] (1.2,\eng@bigTop) rectangle ++(17.3,-\eng@bigH);
+  % 选择题/填空题框
+  \draw[black] (1.4,\eng@choiceTop) rectangle (18.3,{\eng@choiceTop-\eng@choiceH});
+  \node[anchor=north west, align=left, font=\fontsize{10pt}{9pt}\selectfont]
+    at (1.5,\eng@choiceTop+0.6) {\textbf{一、选择题}};
+  \draw[black] (1.4,\eng@blankTop) rectangle ++(16.9,-\eng@blankH);
+  \node[anchor=north west, align=left, font=\fontsize{10pt}{9pt}\selectfont]
+    at (1.5,\eng@blankTop+0.6) {\textbf{二、语法填空}};
+  % 三组选项
+  \pgfmathsetmacro{\eng@topA}{\eng@choiceTop-\eng@labelGap}%
+  \pgfmathsetmacro{\eng@topB}{\eng@topA-\eng@percol*\eng@rowSep-\eng@groupGap}%
+  \pgfmathsetmacro{\eng@topC}{\eng@topB-\eng@percol*\eng@rowSep-\eng@groupGap}%
+  \if@engListen
+    \expandafter\eng@runGroup\expandafter{\eng@gA}{\eng@topA}%
+  \else \eng@forbid \fi
+  \expandafter\eng@runGroup\expandafter{\eng@gB}{\eng@topB}%
+  \expandafter\eng@runGroup\expandafter{\eng@gC}{\eng@topC}%
+  % 语法填空
+  \expandafter\eng@runBlanks\expandafter{\eng@blanks}%
+  % 页面底部提示
+  \node[text=mycolor] at (9.85,0.9) {\small 请在各题目的答题区域内作答，超出黑色矩形边框限定区域的答案无效};
+  % 上方定位带
+  \foreach \row/\qu in {{0/3},{1/3},{2/3},{3/6}}{%
+    \foreach \col in {0,...,\qu}{%
+      \fill[black] (\eng@numx+\eng@numd-0.5*\eng@selectw+\eng@letPitch*\col+\row*\eng@colPitch,28.1)
+        rectangle ++(\eng@selectw,-\eng@selecth);};}%
+  \foreach \x in {1.65,5.25,9,12.65}{%
+    \fill[black] (\x,28.1) rectangle ++(\eng@selectw,-\eng@selecth);}}
+
+% --------------------------- 第 2 面 ---------------------------
+% #1 标题  #2 行数：写作第一节（应用文）
+\newcommand*\eng@writA[2]{%
+  \pgfmathsetmacro{\eng@hA}{#2*0.83+1.2}%
+  \draw[black] (1.4,26.8) rectangle ++(16.9,-\eng@hA);
+  \node[anchor=north west, align=left, font=\fontsize{10pt}{9pt}\selectfont]
+    at (1.5,27.4) {\textbf{#1}};
+  \def\linelong{16}\def\linex{9.85-16*0.5}%
+  \foreach \r in {0,...,\numexpr#2-1\relax}{%
+    \draw[mycolor] (\linex,26.8-1.3-\r*0.83) -- ++(\linelong,0);}%
+  \if@engLetter
+    \node[right] at (\linex-0.1,26.3) {\eng@dear};
+    \node[left] at (\linex+\linelong+0.1,{26.8-1.5-(#2-1)*0.83+0.5}) {\eng@yours};
+    \node[left] at (\linex+\linelong+0.1,{26.8-1.5-#2*0.83+0.7}) {\eng@sign};
+    \draw[white,ultra thick] (\linex,{26.8-1.3-(#2-1)*0.83}) -- ++(\linelong,0);
+  \fi}
+% #1 标题  #2 行数：写作第二节（读后续写）
+\newcommand*\eng@writB[2]{%
+  \pgfmathsetmacro{\eng@hB}{#2*0.83+0.5}%
+  \draw[black] (1.4,16.6) rectangle ++(16.9,-\eng@hB);
+  \node[anchor=north west, align=left, font=\fontsize{10pt}{9pt}\selectfont]
+    at (1.5,17.2) {\textbf{#1}};
+  \def\linelong{16}\def\linex{9.85-16*0.5}%
+  \foreach \r in {0,...,\numexpr#2-1\relax}{%
+    \draw[mycolor] (\linex,16.6-0.85-\r*0.83) -- ++(\linelong,0);}%
+  \node[below right, text width=15.8cm, align=left,
+        font=\linespread{1.75}\selectfont, fill=white] at (\linex,16.6-0.43)
+    {\hspace{1em} \eng@cont\hspace{0.1em}%
+     \textcolor{mycolor}{\leaders\hrule height 0.4pt \hfill\kern0pt}};
+  \node[below right, text width=15.8cm, align=left,
+        font=\linespread{1.75}\selectfont, fill=white]
+    at (\linex,{16.6-0.43-#2*0.5*0.83})
+    {\hspace{1em} \eng@cont\hspace{0.1em}%
+     \textcolor{mycolor}{\leaders\hrule height 0.4pt \hfill\kern0pt}};}
+\newcommand*\eng@runWA[1]{\foreach \h/\n in {#1}{\eng@writA{\h}{\n}}}
+\newcommand*\eng@runWB[1]{\foreach \h/\n in {#1}{\eng@writB{\h}{\n}}}
+
+\newcommand*\eng@PageTwo{%
+  \draw[rounded corners=10pt,mycolor] (1.2,27.5) rectangle ++(17.3,-26.9);
+  \expandafter\eng@runWA\expandafter{\eng@wa}%
+  \node[text=mycolor] at (9.85,0.9) {\small 请在各题目的答题区域内作答，超出黑色矩形边框限定区域的答案无效};
+  \expandafter\eng@runWB\expandafter{\eng@wb}}
+
+% --------------------------- 页脚与四角定位块 ---------------------------
+\newcommand*\eng@footer{\eng@subject 答题卡\quad 第 \thepage\ 页（共 \pageref{LastPage}\ 页）}
+\newcommand*\eng@hook{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[black] ([xshift=0.6cm,  yshift=0.6cm] current page.south west) rectangle ++(10mm,6mm);
+    \fill[black] ([xshift=-0.6cm, yshift=0.6cm] current page.south east) rectangle ++(-10mm,6mm);
+    \fill[black] ([xshift=-0.6cm, yshift=-0.6cm] current page.north east) rectangle ++(-10mm,-6mm);
+    \fill[black] ([xshift=0.6cm,  yshift=-0.6cm] current page.north west) rectangle ++(10mm,-6mm);
+    \node at (current page.south) [anchor=south, yshift=0.6cm]
+      {\color{mycolor}\textbf{\eng@footer}};
+  \end{tikzpicture}}
+
+% --------------------------- 主入口 ---------------------------
+\newcommand*\engMake{%
+  \if@engBW \colorlet{mycolor}{black}\colorlet{mycolor1}{black!15}\fi
+  \eng@profile
+  \AddToShipoutPictureFG{\eng@hook}%
+  \centering
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\eng@pw,\eng@ph);
+    \eng@PageOne
+  \end{tikzpicture}\par
+  \newpage
+  \centering
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\eng@pw,\eng@ph);
+    \eng@PageTwo
+  \end{tikzpicture}}
+\makeatother
