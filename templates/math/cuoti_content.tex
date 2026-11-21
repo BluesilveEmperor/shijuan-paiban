@@ -1,0 +1,187 @@
+% cuoti_content.tex - 错题卷题目内容（由程序自动生成，勿手动修改）
+% 此文件被 student / teacher 两个 wrapper 共享 \input
+% ============================================================
+% 可配置变量（调用时由外部替换 {{{var}}}} 占位符）
+% 使用 \providecommand 允许 wrapper 先定义再覆盖
+% ============================================================
+\providecommand{\cuotiTitle}{错题订正专练}
+\providecommand{\cuotiGrade}{}
+\providecommand{\cuotiDate}{}
+\providecommand{\cuotiClass}{}
+\providecommand{\cuotiStudent}{}
+\providecommand{\cuotiSource}{错题来源}
+% 错题数量
+\providecommand{\cuotiCount}{3}
+% ============================================================
+
+% ===== 题型分类命令 =====
+% 题型标签颜色
+\newcommand{\typeChoice}{\tikz[baseline=-0.5ex]\node[fill=blue!15,rounded corners=2pt,inner sep=2pt,font=\small\bfseries]{\textcolor{blue!70!black}{选择}};}
+\newcommand{\typeJudge}{\tikz[baseline=-0.5ex]\node[fill=orange!15,rounded corners=2pt,inner sep=2pt,font=\small\bfseries]{\textcolor{orange!70!black}{判断}};}
+\newcommand{\typeFill}{\tikz[baseline=-0.5ex]\node[fill=green!15,rounded corners=2pt,inner sep=2pt,font=\small\bfseries]{\textcolor{green!70!black}{填空}};}
+\newcommand{\typeSolve}{\tikz[baseline=-0.5ex]\node[fill=purple!15,rounded corners=2pt,inner sep=2pt,font=\small\bfseries]{\textcolor{purple!70!black}{解答}};}
+
+% ===== 难度标签命令（1-5 星） =====
+\newcommand{\difficulty}[1]{%
+  \tikz[baseline=-0.5ex]{%
+    \foreach \i in {1,...,5}{%
+      \ifnum\i>#1
+        \node[fill=gray!10,rounded corners=1pt,inner sep=1pt,font=\tiny] at (\i*0.55em,0) {$\star$};
+      \else
+        \node[fill=yellow!30,rounded corners=1pt,inner sep=1pt,font=\tiny] at (\i*0.55em,0) {$\star$};
+      \fi
+    }%
+  }%
+}
+
+%===== 题目内容开始 =====%
+
+% ── 错题卷信息栏 ──
+\begin{center}
+    \LARGE\textbf{\cuotiTitle}
+\end{center}
+\vspace{0.5em}
+
+\noindent\begin{tabular}{@{}p{0.24\textwidth}@{\hspace{0.4em}}p{0.24\textwidth}@{\hspace{0.4em}}p{0.24\textwidth}@{\hspace{0.4em}}p{0.24\textwidth}@{}}
+    \textbf{年级：}\cuotiGrade & \textbf{日期：}\cuotiDate & \textbf{班级：}\cuotiClass & \textbf{姓名：}\cuotiStudent \\
+\end{tabular}
+
+\vspace{0.5em}
+\noindent\textbf{错题来源：}\cuotiSource
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+% ============================================================
+% 错题列表（按难度从低到高排序）
+% 每道错题：题型标签 + 难度标签 + 题目 + solution 环境
+% solution 环境包含：错误解法 + 错因分析 + 正确解法 + 同类变式
+% ============================================================
+
+\begin{enumerate}[itemsep=1.2em, left=0pt, label={}]
+
+% ── 错题 1（难度 1 ★）──
+\item \typeFill\quad\difficulty{1}
+
+\medskip
+\noindent 已知函数 $f(x)=x^3-3x^2+2$，求 $f(x)$ 的极值。
+
+\medskip
+\noindent\textit{\color{gray!70!black}（以下是某同学的错误解法）}
+\begin{quote}
+    \color{gray!50!black}
+    $f'(x)=3x^2-6x$，令 $f'(x)=0$，得 $x=0$ 或 $x=2$。\\
+    所以 $f(x)$ 的极大值为 $f(0)=2$，极小值为 $f(2)=-2$。
+\end{quote}
+
+\begin{solution}
+    \par\noindent{\color{red!70!black}\textbf{【错因分析】}}%
+    该同学只求出了极值点的函数值，但未验证导数符号变化，无法确认是极大还是极小。此外，$x=0$ 处 $f'(x)$ 由正变负（极大），$x=2$ 处由负变正（极小），结论虽然正确，但过程不完整。
+
+    \par\noindent{\color{green!50!black}\textbf{【正确解法】}}%
+    完整过程：
+    \begin{enumerate}[label=(\arabic*), leftmargin=2em]
+        \item 求导：$f'(x)=3x^2-6x=3x(x-2)$
+        \item 令 $f'(x)=0$，得 $x=0$ 或 $x=2$
+        \item 列表分析符号变化：
+        \begin{center}
+        \begin{tabular}{c|ccccc}
+            $x$ & $(-\infty,0)$ & $0$ & $(0,2)$ & $2$ & $(2,+\infty)$ \\
+            \hline
+            $f'(x)$ & $+$ & $0$ & $-$ & $0$ & $+$ \\
+            $f(x)$ & $\nearrow$ & 极大 & $\searrow$ & 极小 & $\nearrow$
+        \end{tabular}
+        \end{center}
+        \item 结论：极大值 $f(0)=2$，极小值 $f(2)=-2$
+    \end{enumerate}
+
+    \par\noindent{\color{brown!70!black}\textbf{【方法总结】}}%
+    求极值必须包含三步：求导 → 找驻点 → 验证符号变化。不能只算函数值就下结论。
+
+    \par\noindent{\color{teal!70!black}\textbf{【同类变式】}}%
+    变式：已知 $f(x)=x^3-3ax+2$ 在 $x=1$ 处取得极值，求 $a$ 的值及另一个极值点。
+\end{solution}
+
+\vspace{0.5cm}
+
+% ── 错题 2（难度 2 ★★）──
+\item \typeChoice\quad\difficulty{2}
+
+\medskip
+\noindent 已知集合 $A=\{x \mid x^2-5x+6 \leqslant 0\}$，$B=\{x \mid x > 2\}$，则 $A \cap B=$
+
+\begin{tasks}(4)
+    \task $\{x \mid 2 \leqslant x \leqslant 3\}$
+    \task $\{x \mid 2 < x \leqslant 3\}$
+    \task $\{x \mid x > 2\}$
+    \task $\{x \mid x \geqslant 2\}$
+\end{tasks}
+
+\medskip
+\noindent\textit{\color{gray!70!black}（以下是某同学的错误解法）}
+\begin{quote}
+    \color{gray!50!black}
+    由 $x^2-5x+6 \leqslant 0$ 得 $(x-2)(x-3) \leqslant 0$，所以 $2 \leqslant x \leqslant 3$。\\
+    又 $x > 2$，所以 $A \cap B = \{x \mid 2 < x \leqslant 3\}$。选 B。
+\end{quote}
+
+\begin{solution}
+    \par\noindent{\color{red!70!black}\textbf{【错因分析】}}%
+    该同学答案正确，但书写格式有问题：解题过程中没有先明确写出集合 $A$ 和 $B$ 的区间表示，直接写不等式，容易在复杂题目中出错。另外，边界点 $x=2$ 是否属于交集需要单独验证（$x=2$ 属于 $A$ 但不属于 $B$，所以不属于交集）。
+
+    \par\noindent{\color{green!50!black}\textbf{【正确解法】}}%
+    \begin{enumerate}[label=(\arabic*), leftmargin=2em]
+        \item 解不等式 $x^2-5x+6 \leqslant 0$：$(x-2)(x-3) \leqslant 0 \Rightarrow x \in [2,3]$，即 $A=[2,3]$
+        \item $B=(2,+\infty)$
+        \item $A \cap B = [2,3] \cap (2,+\infty) = (2,3]$，答案 B
+    \end{enumerate}
+
+    \par\noindent{\color{brown!70!black}\textbf{【方法总结】}}%
+    集合运算要先标准化集合表示（区间或明确列举），再运算。边界点要单独验证。
+
+    \par\noindent{\color{teal!70!black}\textbf{【同类变式】}}%
+    变式：若条件改为 $x^2-5x+6 < 0$（严格不等式），求 $A \cap B$。
+\end{solution}
+
+\vspace{0.5cm}
+
+% ── 错题 3（难度 4 ★★★★）──
+\item \typeSolve\quad\difficulty{4}
+
+\medskip
+\noindent 设函数 $f(x)$ 在 $[0,1]$ 上连续，在 $(0,1)$ 内可导，且 $f(0)=0$，$f(1)=1$。证明：存在 $\xi \in (0,1)$，使得 $f'(\xi) = 2\xi$。
+
+\medskip
+\noindent\textit{\color{gray!70!black}（以下是某同学的错误解法）}
+\begin{quote}
+    \color{gray!50!black}
+    由拉格朗日中值定理，存在 $\xi \in (0,1)$，使得 $f'(\xi) = \dfrac{f(1)-f(0)}{1-0} = 1$。\\
+    令 $1 = 2\xi$，得 $\xi = \frac{1}{2}$。
+\end{quote}
+
+\begin{solution}
+    \par\noindent{\color{red!70!black}\textbf{【错因分析】}}%
+    该同学错误地使用了拉格朗日中值定理。题目要求证明 $f'(\xi) = 2\xi$，而不是 $f'(\xi) = 1$。直接令 $1 = 2\xi$ 是循环论证——题目要求证明存在这样的 $\xi$，而不是先假设它存在。正确做法是构造辅助函数，用罗尔定理证明。
+
+    \par\noindent{\color{green!50!black}\textbf{【正确解法】}}%
+    要证 $f'(\xi) = 2\xi$，即 $f'(\xi) - 2\xi = 0$。\\
+    构造辅助函数 $F(x) = f(x) - x^2$。
+    \begin{enumerate}[label=(\arabic*), leftmargin=2em]
+        \item 验证：$F(x)$ 在 $[0,1]$ 上连续，在 $(0,1)$ 内可导
+        \item $F(0) = f(0) - 0 = 0$，$F(1) = f(1) - 1 = 0$
+        \item $F(0) = F(1) = 0$，满足罗尔定理条件
+        \item 由罗尔定理，$\exists\,\xi\in(0,1)$，使 $F'(\xi)=0$
+        \item $F'(x) = f'(x) - 2x$，故 $F'(\xi)=0 \Rightarrow f'(\xi) = 2\xi$
+    \end{enumerate}
+
+    \par\noindent{\color{brown!70!black}\textbf{【方法总结】}}%
+    证明含 $f'(\xi)$ = 表达式的等式，通常需要构造辅助函数。关键是找到 $F(x)$ 使得 $F'(x) = f'(x) - g(x)$，其中 $g(x)$ 是等式右边的表达式。这里 $F(x) = f(x) - x^2$ 的导数恰好是 $f'(x) - 2x$。
+
+    \par\noindent{\color{teal!70!black}\textbf{【同类变式】}}%
+    变式：设 $f(x)$ 在 $[a,b]$ 上连续，在 $(a,b)$ 内可导，且 $f(a)=f(b)=0$。证明：存在 $\xi \in (a,b)$，使得 $f'(\xi) + f(\xi) = 0$。（提示：构造 $F(x) = f(x)e^x$）
+\end{solution}
+
+\end{enumerate}
+
+%===== 题目内容结束 =====%

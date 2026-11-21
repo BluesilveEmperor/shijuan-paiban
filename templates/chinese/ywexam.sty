@@ -1,0 +1,252 @@
+%%
+%% ywexam.sty
+%% 高考语文试卷 / 参考答案 标准模板（XeLaTeX）
+%%
+%% 编译：xelatex chinese-shiti.tex   /   xelatex chinese-daan.tex
+%% 依赖：ctex、ulem、xeCJKfntef、geometry、fancyhdr、lastpage、array、booktabs、
+%%       xparse、enumitem、setspace、amsmath、xcolor、tasks（可选，横排短选项）
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ywexam}[2026/11/15 v1.0 高考语文试卷模板]
+
+\RequirePackage{ctex}
+\RequirePackage[normalem]{ulem}
+% xeCJKfntef：可换行的中文下划线/波浪线/着重号（ulem 的 \uline 等不能在
+% 汉字间断行，长句会撑破行距；这里把 \uline/\uwave/\dotuline 转发过去）
+\RequirePackage{xeCJKfntef}
+\let\uline\CJKunderline
+\let\uwave\CJKunderwave
+\let\dotuline\CJKunderdot
+\RequirePackage{xcolor}
+\RequirePackage{geometry}
+\RequirePackage{fancyhdr}
+\RequirePackage{lastpage}
+\RequirePackage{array}
+\RequirePackage{booktabs}
+\RequirePackage{xparse}
+\RequirePackage{enumitem}
+\RequirePackage{setspace}
+\RequirePackage{amsmath}
+
+%% ----------------------------------------------------------------------
+%% 字体：跨平台自动回退（Windows → macOS → 开源）
+%%
+%% 不要退回硬编码单一字体名。SimSun / SimHei / KaiTi / STKaiti 只在 Windows
+%% 存在；在 Linux（apt 装的 TeX Live + texlive-lang-chinese）上硬写
+%% \setCJKmainfont{SimSun} 会直接 "Font \zf@basefont=SimSun ... not found"
+%% 编译失败。这里按候选链探测，取第一个已安装的；全都没有时保留
+%% ctex 默认（Fandol 系列），至少能出 PDF。
+%%
+%% 生僻字缺字形（日志 "Missing character: There is no 郤"）时：
+%%   1) 把 Noto Serif CJK SC 提前到楷体候选链首位，或
+%%   2) 对单个字用 \fullglyph{郤} 临时切到覆盖率最高的 CJK 衬线字体。
+%% ----------------------------------------------------------------------
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{%
+  \IfFontExistsTF{Liberation Serif}{\setmainfont{Liberation Serif}}{%
+    \IfFontExistsTF{TeX Gyre Termes}{\setmainfont{TeX Gyre Termes}}{%
+      \IfFontExistsTF{Libertinus Serif}{\setmainfont{Libertinus Serif}}{}}}}
+
+\IfFontExistsTF{SimSun}{\setCJKmainfont{SimSun}[AutoFakeBold=2.5]}{%
+  \PackageWarningNoLine{ywexam}{未找到 SimSun，正文回退 Noto Serif CJK SC / 思源宋体}%
+  \IfFontExistsTF{Noto Serif CJK SC}{\setCJKmainfont{Noto Serif CJK SC}[AutoFakeBold=2.5]}{%
+    \IfFontExistsTF{Source Han Serif SC}{\setCJKmainfont{Source Han Serif SC}[AutoFakeBold=2.5]}{%
+      \IfFontExistsTF{Songti SC}{\setCJKmainfont{Songti SC}[AutoFakeBold=2.5]}{}}}}
+
+\IfFontExistsTF{SimHei}{\setCJKsansfont{SimHei}[AutoFakeBold=2.5]}{%
+  \IfFontExistsTF{Noto Sans CJK SC}{\setCJKsansfont{Noto Sans CJK SC}[AutoFakeBold=2.5]}{%
+    \IfFontExistsTF{Source Han Sans SC}{\setCJKsansfont{Source Han Sans SC}[AutoFakeBold=2.5]}{%
+      \IfFontExistsTF{Heiti SC}{\setCJKsansfont{Heiti SC}[AutoFakeBold=2.5]}{}}}}
+
+\IfFontExistsTF{SimSun}{\setCJKmonofont{SimSun}}{%
+  \IfFontExistsTF{Noto Serif CJK SC}{\setCJKmonofont{Noto Serif CJK SC}}{}}
+
+\IfFontExistsTF{SimHei}{\newCJKfontfamily{\ywhei}{SimHei}[AutoFakeBold=2.5]}{%
+  \IfFontExistsTF{Noto Sans CJK SC}{\newCJKfontfamily{\ywhei}{Noto Sans CJK SC}[AutoFakeBold=2.5]}{%
+    \IfFontExistsTF{Source Han Sans SC}{\newCJKfontfamily{\ywhei}{Source Han Sans SC}[AutoFakeBold=2.5]}{%
+      \IfFontExistsTF{Heiti SC}{\newCJKfontfamily{\ywhei}{Heiti SC}[AutoFakeBold=2.5]}{%
+        \PackageWarningNoLine{ywexam}{无黑体可用，\string\ywhei 回退正文}%
+        \providecommand{\ywhei}{}}}}}
+
+%% 楷体链：KaiTi → STKaiti → LXGW WenKai → AR PL UKai CN → 宋体兜底
+%% （AR PL UKai / AR PL KaitiM GB 字形覆盖不全，生僻字仍需 Noto 兜底）
+\IfFontExistsTF{KaiTi}{\newCJKfontfamily{\ywkai}{KaiTi}[AutoFakeBold=2.5]}{%
+  \IfFontExistsTF{STKaiti}{\newCJKfontfamily{\ywkai}{STKaiti}[AutoFakeBold=2.5]}{%
+    \IfFontExistsTF{LXGW WenKai}{\newCJKfontfamily{\ywkai}{LXGW WenKai}[AutoFakeBold=2.5]}{%
+      \IfFontExistsTF{AR PL UKai CN}{\newCJKfontfamily{\ywkai}{AR PL UKai CN}[AutoFakeBold=2.5]}{%
+        \IfFontExistsTF{Noto Serif CJK SC}{%
+          \PackageWarningNoLine{ywexam}{无楷体可用，\string\ywkai 用 Noto Serif CJK SC 顶替}%
+          \newCJKfontfamily{\ywkai}{Noto Serif CJK SC}[AutoFakeBold=2.5]}{%
+          \providecommand{\ywkai}{}}}}}}
+
+%% 材料正文楷体（\ywstkaiti）：与 \ywkai 同链，仅顺序不同（优先 STKaiti）
+\IfFontExistsTF{STKaiti}{\newCJKfontfamily{\ywstkaiti}{STKaiti}[AutoFakeBold=2.5]}{%
+  \IfFontExistsTF{KaiTi}{\newCJKfontfamily{\ywstkaiti}{KaiTi}[AutoFakeBold=2.5]}{%
+    \IfFontExistsTF{LXGW WenKai}{\newCJKfontfamily{\ywstkaiti}{LXGW WenKai}[AutoFakeBold=2.5]}{%
+      \IfFontExistsTF{AR PL UKai CN}{\newCJKfontfamily{\ywstkaiti}{AR PL UKai CN}[AutoFakeBold=2.5]}{%
+        \IfFontExistsTF{Noto Serif CJK SC}{%
+          \newCJKfontfamily{\ywstkaiti}{Noto Serif CJK SC}[AutoFakeBold=2.5]}{%
+          \providecommand{\ywstkaiti}{}}}}}}
+
+%% 生僻字兜底字体：覆盖最全的 CJK 衬线字体
+\providecommand{\ywfull}{}
+\IfFontExistsTF{Noto Serif CJK SC}{\renewcommand{\ywfull}{\CJKfontspec{Noto Serif CJK SC}}}{%
+  \IfFontExistsTF{Source Han Serif SC}{\renewcommand{\ywfull}{\CJKfontspec{Source Han Serif SC}}}{%
+    \IfFontExistsTF{SimSun}{\renewcommand{\ywfull}{\CJKfontspec{SimSun}}}{}}}
+%% 用法：\fullglyph{郤} —— 仅对缺字形的单字/短词临时换字体
+\NewDocumentCommand{\fullglyph}{m}{{\ywfull #1}}
+
+%% ----------------------------------------------------------------------
+%% 页面与页码
+%% ----------------------------------------------------------------------
+\geometry{
+  a4paper,
+  left=1.905cm, right=1.905cm,
+  top=2.54cm, bottom=2.54cm,
+  headheight=14pt, headsep=0.4cm, footskip=1.1cm,
+}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\NewDocumentCommand{\examfooter}{m}{%
+  \fancyfoot[C]{#1\quad 第~\thepage~页\quad 共~\pageref{LastPage}~页}}
+\examfooter{语文试题}
+
+\linespread{1.5}\selectfont
+%% 答案里常见「(‘申’ ‘卒’ ‘居’ 各1分, 句子大意1分)」这类混排长句，
+%% 断不开会在右边界外溢出 0.5~1cm（Overfull \hbox）。给一点弹性量兜底：
+%% 只在无法正常断行时才启用，正常段落的分行不受影响。
+\setlength{\emergencystretch}{3em}
+%% 行距。默认 1.5 与原卷疏朗版式一致；页数超标时按 1.35 → 1.30 逐档压，
+%% 实测 1.5→1.35 常见「9 页压到 8 页」，答案卷往往不受影响。
+%% 优先用这个命令或 IR 的 meta.linespread，不要去改 margin（会与原卷版心错位）。
+\NewDocumentCommand{\ywlinespread}{m}{\linespread{#1}\selectfont}
+
+%% ----------------------------------------------------------------------
+%% 卷首
+%% ----------------------------------------------------------------------
+\NewDocumentCommand{\examtitle}{m+m}{%
+  \begin{center}
+    \vspace*{0.4cm}
+    {\ywkai\bfseries\fontsize{18}{24}\selectfont #1}\par
+    \vspace{0.15cm}
+    {\ywhei\bfseries\fontsize{18}{24}\selectfont #2}\par
+    \vspace{0.35cm}
+  \end{center}}
+
+%% 参考答案卷首（两行均为宋体加粗）
+%% 第二参数为空时**只输出一行**：答案卷常见「标题 + 副标题」重复，
+%% 想留单行大标题时渲染器传 subtitle: ""，不要靠手工删 tex。
+\NewDocumentCommand{\answertitle}{m+m}{%
+  \begin{center}
+    \vspace*{0.4cm}
+    {\fontsize{18}{24}\selectfont\bfseries #1}\par
+    \if\relax\detokenize{#2}\relax\else
+      \vspace{0.15cm}
+      {\fontsize{18}{24}\selectfont\bfseries #2}\par
+    \fi
+    \vspace{0.35cm}
+  \end{center}}
+
+\NewDocumentCommand{\examnote}{m}{%
+  \noindent{\ywkai #1}\par\vspace{0.25cm}}
+
+%% ----------------------------------------------------------------------
+%% 大题 / 小题标题
+%% ----------------------------------------------------------------------
+\NewDocumentCommand{\sechead}{m}{%
+  \par\vspace{0.25em}\noindent{\ywhei\bfseries #1}\par}
+\NewDocumentCommand{\subsechead}{m}{%
+  \par\vspace{0.15em}\noindent{\ywhei\bfseries #1}\par}
+
+%% ----------------------------------------------------------------------
+%% 阅读材料
+%% ----------------------------------------------------------------------
+\NewDocumentCommand{\material}{m}{%
+  \par\noindent{\ywhei #1}\par}
+\NewDocumentEnvironment{materialtext}{+b}{%
+  \par\vspace{1pt}\ywstkaiti #1\par}{}
+
+%% ----------------------------------------------------------------------
+%% 断句题行（整行居中）
+%% ----------------------------------------------------------------------
+\NewDocumentCommand{\duanju}{+m}{%
+  \par\vspace{0.2em}\noindent{\centering #1\par}}
+
+%% ----------------------------------------------------------------------
+%% 诗歌（每句居中，行数与源卷一致）
+%% 用法：\begin{poem} 句1\\ 句2 \\ ... \end{poem}
+%% ----------------------------------------------------------------------
+\NewDocumentEnvironment{poem}{+b}{%
+  \par\vspace{1pt}\begin{center}\ywstkaiti #1\end{center}\par}{}
+
+%% ----------------------------------------------------------------------
+%% 题目与选项
+%% ----------------------------------------------------------------------
+\NewDocumentCommand{\question}{m+m}{%
+  \par\vspace{0.15em}\noindent #1.~#2\par}
+
+\newlist{choices}{enumerate}{1}
+\setlist[choices]{label=\Alph*.,labelsep=0.5em,leftmargin=2.2em,
+  itemsep=1pt,topsep=1pt,parsep=0pt}
+
+%% ----------------------------------------------------------------------
+%% 横排短选项（tasks）
+%% 原卷里 1~3 字的选项（如「A.究竟 B.判官 C.郑重 D.忧郁」）是一行四列，
+%% 用 choices 纵排会白占 4 行、整卷多出 1 页。渲染器按 choices_layout
+%% 决定用哪个环境（TASKS-COL-001：简短选项横排，长句仍纵排）。
+%%
+%% 用法：\begin{choicesinline}[4] \task 究竟 \task 判官 … \end{choicesinline}
+%% 可选参数是列数（默认 4）；`tasks` 环境内条目命令是 \task 不是 \item。
+%% ----------------------------------------------------------------------
+%% 注意：条件分支里不能出现参数符 #1（\IfFileExists 会把分支体塞进无参宏
+%% \reserved@a，报 "Illegal parameter number"），所以降级实现只做「把 tasks
+%% 别名成 choices」，环境主体里不写任何条件。
+\def\yw@gobbleparen(#1){}
+\def\yw@eattasksarg{\@ifnextchar({\yw@gobbleparen}{\relax}}
+\IfFileExists{tasks.sty}{%
+  \RequirePackage{tasks}%
+}{%
+  \PackageWarningNoLine{ywexam}{tasks.sty 缺失，choicesinline 降级为纵排}%
+  \providecommand{\settasks}[1]{}%
+  \let\task\item
+  \newenvironment{tasks}{\begin{choices}\yw@eattasksarg}{\end{choices}}%
+}
+\NewDocumentEnvironment{choicesinline}{O{4}}{%
+  \par\vspace{1pt}%
+  \settasks{label=\Alph*., label-width=1.6em, label-offset=0.35em,
+            item-indent=2em, after-item-skip=1pt, before-skip=1pt,
+            after-skip=1pt}%
+  \begin{tasks}(#1)%
+}{\end{tasks}}
+
+%% ----------------------------------------------------------------------
+%% 填空 / 加点 / 波浪线
+%% ----------------------------------------------------------------------
+% 下划线空格，默认 3em；可用于默写、补写等
+\NewDocumentCommand{\blank}{O{3em}}{\underline{\hspace{#1}}}
+% 带圈数字：Latin 字体（Times New Roman / Latin Modern）常缺 ①-⑩ 字形，
+% 故用 \textcircled 绘制，避免 Missing character。
+\NewDocumentCommand{\xq}{m}{\textcircled{#1}}
+% 着重号（加点）
+\NewDocumentCommand{\zd}{m}{\dotuline{#1}}
+% 波浪线
+\NewDocumentCommand{\wave}{m}{\uwave{#1}}
+
+%% ----------------------------------------------------------------------
+%% 参考答案
+%% ----------------------------------------------------------------------
+% 题号.答案
+\NewDocumentCommand{\ans}{m+m}{%
+  \par\noindent #1.~#2\par}
+% 子项答案（如 A：…… / B：……）
+\NewDocumentCommand{\subans}{m+m}{%
+  \par\noindent #1#2\par}
+% 评分说明（小字、浅灰）
+\NewDocumentCommand{\scorenote}{+m}{%
+  \par\noindent{\small\color{black!55}#1}\par}
+% 译文材料标签
+\NewDocumentCommand{\translabel}{m}{%
+  \par\noindent{\ywhei #1}\par}
+% 文言文参考译文（楷体）
+\NewDocumentEnvironment{translation}{+b}{%
+  \par\vspace{1pt}\ywkai #1\par}{}

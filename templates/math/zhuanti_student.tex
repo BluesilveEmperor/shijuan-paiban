@@ -1,0 +1,108 @@
+% !TEX program = xelatex
+% zhuanti_student.tex - 专题卷学生版（隐藏解答，留做题空间）
+\documentclass[12pt,UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{ulem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{tasks}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{environ}
+\usepackage{pgffor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{diagbox}
+\usepackage{makecell}
+\usepackage{adjustbox}
+\usepackage{wrapfig}
+\usepackage{setspace}
+
+\geometry{a4paper, margin=2.5cm, footskip=1cm}
+
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+    \lhead{\zhuantiGrade\ /\ \zhuantiDate}
+    \chead{\zhuantiName}
+    \rhead{\zhuantiClass\quad\zhuantiStudent}
+\fancyfoot[C]{数学试题第\thepage 页 共\pageref{LastPage}页}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\raggedbottom
+\allowdisplaybreaks
+
+\let\oldlim\lim
+\renewcommand{\lim}{\oldlim\limits}
+
+% 间距变量（在 content \providecommand 之前定义，允许覆盖）
+\newcommand{\mcqItemSep}{0.3em}
+\newcommand{\msqItemSep}{0.5em}
+\newcommand{\blankItemSep}{0.8em}
+\newcommand{\saqItemSep}{2.5cm}
+\newcommand{\mcqTasksCols}{4}
+\newcommand{\msqTasksCols}{2}
+
+\setlist{left=0pt, nosep, itemsep=0.3ex, topsep=0.5ex}
+
+\settasks{
+    label=\Alph*.,
+    label-width=1.8em,
+    item-indent=2.4em,
+    label-offset=0.5em,
+    column-sep=2em,
+    before-skip=0pt,
+    after-skip=0pt
+}
+
+\newlist{examenum}{enumerate}{3}
+\setlist[examenum,1]{label=\arabic*., leftmargin=2em, itemsep=0.3em, parsep=0em}
+\setlist[examenum,2]{label=(\arabic*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+\setlist[examenum,3]{label=(\roman*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+
+% 圈号数字
+\newcommand{\mycircled}[1]{%
+  \tikz[baseline=(char.base),outer sep=0pt]{%
+    \node[draw,circle,inner sep=0.5pt,minimum size=1.4em,
+          line width=0.4pt,font=\zihao{-5}] (char) {#1};%
+  }%
+}
+% 旋转平行符号
+\newcommand{\Parallel}{\raisebox{0.1ex}{\rotatebox[origin=c]{-20}{$\parallel$}}}
+% 密级星号
+\newcommand{\bigstarraised}{\raisebox{0.2ex}{$\bigstar$}}
+% 下划线填空
+\newcommand{\blank}{\underline{\hspace{2cm}}}
+% 虚数单位和自然底数
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\me}{\mathrm{e}}
+
+% ===== 学生版：隐藏解答，留做题空间 =====
+\NewEnviron{solution}{\vspace*{5cm}}
+
+% 核心考点环境（学生版显示，不隐藏）
+\NewEnviron{keypoints}{\BODY}
+
+% 教师版专用命令在学生版中定义为空
+\newcommand{\cuowu}[1]{}
+\newcommand{\jufa}[1]{}
+\newcommand{\daan}[1]{}
+\newcommand{\jieti}{}
+\newcommand{\xijie}{}
+\newcommand{\xiaoI}{}
+\newcommand{\xiaoII}{}
+\newcommand{\eqimg}[2][0.5]{}
+
+\begin{document}
+\pagenumbering{arabic}
+
+\input{zhuanti_content}
+
+\end{document}
