@@ -1,0 +1,17 @@
+{
+  "skill_name": "shijuan-paiban",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我把 2024年高考新课标Ⅰ卷数学真题.docx 用 gaokao-template.tex 模板重新排版成 LaTeX，图片放到对应位置。DOCX路径：D:\\Desktop\\高考数学22-26\\新课标一卷\\2024.6\\2024年高考新课标Ⅰ卷数学真题.docx，模板路径：D:\\Desktop\\高考数学22-26\\新课标一卷\\2024.6\\gaokao-template.tex",
+      "expected_output": "生成一个可编译的 .tex 文件，包含所有试题、正确数学公式、嵌入图片，编译通过生成 PDF",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "请把这个 Word 试卷转成 LaTeX 格式，用我指定的模板排版。docx 在：D:\\Desktop\\高考数学22-26\\新课标一卷\\2024.6\\2024年高考新课标Ⅰ卷数学真题.docx，模板：D:\\Desktop\\高考数学22-26\\新课标一卷\\2024.6\\gaokao-template.tex。只需要试题，不需要参考答案。",
+      "expected_output": "生成 .tex 文件并编译为 PDF，排版风格与模板一致，选择题使用 tasks 环境，大题使用 examenum 环境",
+      "files": []
+    }
+  ]
+}

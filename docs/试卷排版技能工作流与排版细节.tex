@@ -1,0 +1,568 @@
+% !TeX program = xelatex
+% ============================================================
+%  shijuan-paiban 试卷排版技能：工作流与排版细节全解
+%  编译：XeLaTeX × 2
+% ============================================================
+\documentclass[11pt,a4paper]{ctexart}
+
+% ── 小清新配色 ──
+\usepackage[dvipsnames]{xcolor}
+\xdefinecolor{paper}{HTML}{FBFBF8}      % 暖白页面底
+\xdefinecolor{accent}{HTML}{6BA292}     % 主色 鼠尾草绿
+\xdefinecolor{secondary}{HTML}{7FA8C9}  % 副色 雾蓝
+\xdefinecolor{codebg}{HTML}{F2F7F4}     % 代码块底 浅薄荷
+\xdefinecolor{ink}{HTML}{46524E}        % 正文 墨绿灰
+\xdefinecolor{link}{HTML}{78A0C8}       % 链接 淡蓝
+\usepackage{pagecolor}
+\pagecolor{paper}
+
+% ── 页面布局（留白舒展） ──
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amssymb}   % \bigstar 等数学符号
+
+% ── 章节标题：绿色 + 下方 45% 细线 ──
+\usepackage{titlesec}
+\titleformat{\section}
+  {\color{accent}\Large\bfseries}{\thesection}{1em}{}
+  [{\color{accent!40}\rule{0.45\linewidth}{0.6pt}}]
+\titleformat{\subsection}
+  {\color{secondary}\large\bfseries}{\thesubsection}{1em}{}
+
+% ── 列表：绿色圆点 ──
+\usepackage{enumitem}
+\renewcommand\labelitemi{\textcolor{accent}{$\bullet$}}
+\setlist[itemize]{itemsep=3pt,leftmargin=1.6em}
+\setlist[enumerate]{itemsep=2pt,leftmargin=2em}
+
+% ── 表格 ──
+\usepackage{booktabs,array}
+
+% ── 代码块（tcolorbox + listings，圆角 5pt，只放英文命令） ──
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{listings}
+\newtcblisting{codeblock}{
+  listing only, breakable,
+  colback=codebg, colframe=accent,
+  arc=5pt, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  listing options={
+    basicstyle=\small\ttfamily\color{ink},
+    breaklines=true, columns=fullflexible, keepspaces=true
+  }
+}
+
+% ── 链接 ──
+\usepackage[colorlinks,linkcolor=link,urlcolor=link]{hyperref}
+
+\setlength{\parskip}{4pt}
+
+\begin{document}
+
+% ══════════════════ 标题区 ══════════════════
+\begin{center}
+  {\color{accent}\LARGE\bfseries shijuan-paiban 试卷排版技能}\\[4pt]
+  {\color{secondary}\large 工作流与排版细节全解}\\[6pt]
+  {\small\color{ink!70} 技能完整说明 —— 7 步工作流 + 双模板排版细节}\\[4pt]
+  {\color{accent!40}\rule{0.6\linewidth}{0.8pt}}
+\end{center}
+
+\section{技能定位}
+
+\textbf{一句话原则}：用户只提供试卷文件路径（DOCX 或 PDF）+ 模板路径，agent 全自动完成
+提取 → 转换 → 编译 → 验证，用户全程不需要知道任何脚本路径。
+
+\textbf{输入格式自动识别（入口分流）}：
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+输入类型 & 提取方案 & 依赖 \\
+\midrule
+\texttt{.docx} & pandoc 提取文本 + 解包取图片（原方案） & pandoc、docx skill、Pillow \\
+\texttt{.pdf}  & MinerU SDK 提取 Markdown + 图片 & mineru-open-sdk、MinerU Token、math-reference-read \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{标准工作流（7 步）}
+
+\subsection{第 1 步：读取文件 → 看结构}
+
+\textbf{DOCX 通道}：
+
+\begin{codeblock}
+pandoc "<file.docx>" -t markdown --wrap=none --track-changes=all
+\end{codeblock}
+
+快速浏览输出，识别：标题、题型（单选/多选/填空/解答）、题目编号、选项、
+图片标记（\texttt{![...](media/imageN.png)} 或 \texttt{.wmf}）。
+
+\textbf{PDF 通道}：
+
+\begin{enumerate}
+  \item 先检查 \texttt{\textbackslash string~/.mineru/config.yaml} 是否有有效 token——没有则
+        友好引导用户配置（\texttt{pip install mineru-open-sdk} → 创建配置文件写入 token
+        → 到 mineru.net 注册获取），不直接报错退出。
+  \item 用 math-reference-read 的配套脚本提取：
+\end{enumerate}
+
+\begin{codeblock}
+python "$MATH_SKILL_DIR/scripts/math_pdf_extract.py" "<file.pdf>" \
+  --output-dir ./math-output --language en
+\end{codeblock}
+
+\begin{enumerate}
+  \setcounter{enumi}{2}
+  \item 读取输出目录的 \texttt{.md} 确认提取质量（MinerU 默认开启公式识别，公式已是 LaTeX 格式）。
+\end{enumerate}
+
+\subsection{第 2 步：提取图片}
+
+\begin{itemize}
+  \item \textbf{DOCX 通道}：解包取图片（docx skill 的 unpack 脚本）；WMF 公式图批量转 PNG（600 DPI）。
+  \item \textbf{PDF 通道}：MinerU 自动提取图片到输出目录；检查图片在 \texttt{math-output/} 直接下
+        还是 \texttt{math-output/<文件名>/} 子目录里，必要时移动到 docx 所在目录。
+\end{itemize}
+
+\textbf{图片目录命名规则（用户可覆盖）}：
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+文档类型 & 图片目录 \\
+\midrule
+答案文档（文件名含"答案"） & \texttt{Images-<文件名>}（如 \texttt{Images-答案}） \\
+试题文档 & 固定 \texttt{media} \\
+PDF 输入 & \texttt{Images-<PDF文件名>}（MinerU 自动保存到输出目录） \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+后续 LaTeX 的 \texttt{\textbackslash graphicspath} 统一指向这个图片目录。
+
+\subsection{第 3 步：读模板 → 知能力}
+
+两个模板内嵌在 SKILL.md 末尾的「嵌入式模板库」，无需外部文件：
+\texttt{gaokao-template.tex}（试题模板，学生版/教师版）与
+\texttt{gaokao-answer-template.tex}（答案模板）。
+
+\textbf{自动选择规则}：
+
+\begin{itemize}
+  \item 文件名含"答案" → 答案模板
+  \item 用户指定 gaokao-template 或明显是高考数学试卷 → 试题模板
+  \item 答案文件路径无"答案"但用户点名 → 答案模板
+\end{itemize}
+
+\textbf{答案文档的"三段式试题匹配"}（找同目录对应试题 \texttt{.tex}，保证答案卷题干与试题卷完全一致）：
+
+\begin{enumerate}
+  \item \textbf{精确剥离}：依次去掉 \texttt{-答案} / \texttt{\_答案} / \texttt{答案} /
+        \texttt{答案-} / \texttt{答案\_} 后缀拼 \texttt{.tex}
+  \item \textbf{公共前缀匹配}：扫描同目录 \texttt{.tex}（排除 \texttt{*教师版*}、
+        \texttt{gaokao*}、\texttt{*template*}），取最长公共前缀 $\geq$ 3 字符的文件
+  \item \textbf{回退}：都没找到 → 直接用输入文件的题目文本
+\end{enumerate}
+
+\textbf{读模板时重点确认}：选择题环境（tasks?）、大题编号（examenum?）、是否已加载
+graphicx/wrapfig（没有则补 \texttt{\textbackslash usepackage\{wrapfig\}}）、自定义命令
+（\texttt{\textbackslash blank}、\texttt{\textbackslash mycircled}、\texttt{\textbackslash Parallel}）、
+当前 linespread 设置。
+
+\subsection{第 4 步：写 LaTeX → 逐题转换}
+
+\textbf{铁律}：保留模板完整导言区（\texttt{\textbackslash documentclass} 到
+\texttt{\textbackslash begin\{document\}}），只替换 \texttt{\textbackslash begin\{document\}}
+到 \texttt{\textbackslash end\{document\}} 之间的正文。
+
+\textbf{数学公式规范}：
+
+\begin{itemize}
+  \item 行内 \texttt{\$...\$}，行间 \texttt{\textbackslash[...\textbackslash]}
+  \item 分数 \texttt{\textbackslash frac\{\}\{\}}，太长用 \texttt{\textbackslash dfrac}
+        （Overfull 时换回 \texttt{\textbackslash frac}）
+  \item \texttt{\textbackslash sin \textbackslash cos \textbackslash tan}，
+        \texttt{\textbackslash ln \textbackslash lg}；分段函数 \texttt{\textbackslash begin\{cases\}}
+  \item 集合 \texttt{\textbackslash\{ \textbackslash\}} 转义、\texttt{\textbackslash mid} 表示"使得"；
+        向量 \texttt{\textbackslash vec\{a\}} / \texttt{\textbackslash mathbf\{a\}}
+  \item \texttt{\textbackslash pi}；\texttt{\textbackslash mathrm\{e\}} 自然底数、
+        \texttt{\textbackslash mathrm\{i\}} 虚数单位（答案模板已简写为
+        \texttt{\textbackslash me} / \texttt{\textbackslash mi}）
+\end{itemize}
+
+\textbf{题型编号约定（新高考 I 卷）}：
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+题型 & 环境 \\
+\midrule
+选择题 1--8  & \texttt{\textbackslash begin\{enumerate\}[itemsep=0.3em]} \\
+多选题 9--12 & \texttt{\textbackslash begin\{enumerate\}[start=9]} \\
+填空题 13--16 & \texttt{\textbackslash begin\{enumerate\}[start=12]} \\
+解答题 17--22 & \texttt{\textbackslash begin\{examenum\}[start=17, itemsep=2.5cm]} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+选项 → tasks 环境（简短 4 列，内容长 2 列）；填空空位 → \texttt{\textbackslash blank}；
+大题多问 → examenum 嵌套。
+
+\textbf{图片插入三档}（所有图片宽度不得超过 \texttt{0.35\textbackslash textwidth}，显示在题目内容右侧）：
+
+\begin{enumerate}
+  \item 小装饰图 → \texttt{\textbackslash includegraphics[height=0.6em]}（行内）
+  \item 几何示意图（列表环境外）→ \texttt{wrapfigure} 右侧环绕，宽 \texttt{0.35\textbackslash textwidth}
+  \item 几何示意图（列表环境内，wrapfigure 失效）→ \texttt{minipage} 左右并排：
+        左 \texttt{0.62\textbackslash textwidth} 放题目 + 小问，右 \texttt{0.30\textbackslash textwidth}
+        放图片 + \texttt{\textbackslash captionof\{figure\}}
+  \item TikZ 图 → \texttt{\textbackslash resizebox\{0.35\textbackslash textwidth\}\{!\}\{...\}} 控制宽度
+\end{enumerate}
+
+\textbf{答案文档特例}：
+
+\begin{itemize}
+  \item \texttt{\textbackslash graphicspath\{\{images/\}\}} 必须替换为推导出的图片目录
+  \item 选项图用 \texttt{\textbackslash eqimg[0.15]\{imageN.png\}}（DOCX 通道）；
+        PDF 通道优先直接用 LaTeX 公式
+  \item 每题结构固定：题目文本 → \texttt{\textbackslash daan\{答案\}} →
+        \texttt{\textbackslash jieti}（解析）→ \texttt{\textbackslash xijie}（详解）
+  \item 解答题多问用 \texttt{\textbackslash xiaoI} / \texttt{\textbackslash xiaoII} 分别标注
+        小问 1/2 详解
+  \item 表格 → 标准 \texttt{tabular} + \texttt{booktabs} 三线表 + \texttt{\textbackslash captionof\{table\}}
+  \item 答案文档不需要生成教师版，也不需要 \texttt{itemsep} 间距
+\end{itemize}
+
+\textbf{页数控制（硬约束）}：学生版严格匹配试卷标注的"本试卷共X页"；超页时在导言区加
+\texttt{\textbackslash linespread\{1.05\}\textbackslash selectfont}（视觉几乎无感，能省半页到一页）。
+
+\subsection{第 5 步：生成教师版（仅试题文档，答案文档跳过）}
+
+\begin{itemize}
+  \item 前面三个大题（一～三）连续排版不分页
+  \item 解答题每题单独分页：Q17 紧跟"四、解答题"标题，Q18--Q22 各起新页
+  \item 页数紧张时 Q22 可不分页（紧接 Q21 后，Q21 通常已独占一页）
+\end{itemize}
+
+实现：Python 脚本（\texttt{gen\_teacher.py}）按 examenum 外层 \texttt{\textbackslash item}
+计数插入 \texttt{\textbackslash newpage}，并从 \texttt{[start=17, itemsep=2.5cm]} 中移除
+\texttt{itemsep}（分页已替代间隙作用）。
+
+\textbf{陷阱}：Python 里匹配 LaTeX 命令必须用 raw string（\texttt{r"\textbackslash begin"}），
+否则 \texttt{"\textbackslash\textbackslash begin"} 里的 \texttt{\textbackslash b} 会被解析成
+退格符 0x08 导致匹配失败。
+
+\subsection{第 6 步：编译 → 验证}
+
+试题文档（学生版 + 教师版各编译两次，XeLaTeX 需两遍跑完交叉引用）：
+
+\begin{codeblock}
+xelatex -interaction=nonstopmode "<file>.tex"
+xelatex -interaction=nonstopmode "<file>.tex"
+grep -E "Overfull|Error" "<file>.log" | grep -v infwarerr
+\end{codeblock}
+
+答案文档只编译一个版本。\textbf{验证要点}：
+
+\begin{itemize}
+  \item 学生版/答案版页数与试卷标注一致（如"本试卷共4页"）
+  \item 教师版 $\leq$ 7 页；解答题编号正确
+  \item 答案文档 \texttt{\textbackslash daan} / \texttt{\textbackslash jieti} /
+        \texttt{\textbackslash xijie} 结构显示正确；图片全部正常显示
+\end{itemize}
+
+\subsection{第 7 步：清理}
+
+\begin{itemize}
+  \item \textbf{删除}：临时目录、\texttt{gen\_teacher.py}、\texttt{.aux} / \texttt{.log} /
+        \texttt{.out} 辅助文件
+  \item \textbf{保留}：试题文档 → 学生版 \texttt{.tex} + 教师版 \texttt{.tex} + 两个
+        \texttt{.pdf} + 图片；答案文档 → 一个 \texttt{.tex} + 一个 \texttt{.pdf} + 图片目录
+\end{itemize}
+
+\section{试题模板排版细节（gaokao-template.tex）}
+
+\subsection{页面与字号}
+
+\begin{itemize}
+  \item \texttt{\textbackslash documentclass[12pt, a4paper, oneside]\{ctexart\}}
+  \item 边距：\texttt{geometry} \texttt{margin=2.5cm}，\texttt{footskip=1cm}（紧凑布局）
+  \item 行距默认单倍；预留 \texttt{\textbackslash linespread\{1.5\}} 选项但注释
+        （1.5 倍会明显增页）
+\end{itemize}
+
+\subsection{字体}
+
+数学字体 \texttt{newtxmath}（Times 风格，兼容 pdflatex + ctex）为默认；
+可注释切换 \texttt{stix2}（更现代）+ \texttt{upgreek} 直立希腊字母。
+
+\subsection{页眉页脚}
+
+\begin{itemize}
+  \item \texttt{fancyhdr} + \texttt{lastpage}（动态总页数）
+  \item 页脚居中：\texttt{数学试题第X页（共Y页）}（\texttt{\textbackslash fancyfoot[C]}）
+  \item 页眉线 / 页脚线均 \texttt{0pt}（无）
+\end{itemize}
+
+\subsection{核心宏包}
+
+\texttt{amsmath} / \texttt{amsthm} / \texttt{amssymb}、\texttt{hyperref}（colorlinks，
+citecolor=blue，linkcolor=black）、\texttt{graphicx}、\texttt{adjustbox}、
+\texttt{diagbox}（斜线表头）、\texttt{makecell}（单元格换行）、\texttt{caption}、
+\texttt{float}（[H] 强制定位）、\texttt{tikz}（绘图）。
+
+\subsection{选择题选项：tasks 环境配置}
+
+\begin{codeblock}
+\settasks{
+    label        = \Alph*.,
+    label-width  = 1.8em,
+    item-indent  = 2.4em,
+    label-offset = 0.5em,
+    column-sep   = 2em,
+    before-skip  = 0pt,
+    after-skip   = 0pt
+}
+\end{codeblock}
+
+列数：\texttt{\textbackslash begin\{tasks\}(4)} 四列（简短选项）；内容长时改 \texttt{(2)} 两列。
+
+\subsection{大题编号：examenum 环境（enumitem 三级嵌套）}
+
+\begin{codeblock}
+\newlist{examenum}{enumerate}{3}
+\setlist[examenum,1]{label=\arabic*., leftmargin=2em, itemsep=0.3em, parsep=0em}
+\setlist[examenum,2]{label=(\arabic*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+\setlist[examenum,3]{label=(\roman*), leftmargin=1.5em, itemsep=0.1em, parsep=0em}
+\end{codeblock}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+层级 & 编号样式 & 缩进 & 间距 \\
+\midrule
+一级（大题） & 阿拉伯数字 1. & 2em   & itemsep 0.3em \\
+二级（小问） & 括号数字 (1)  & 1.5em & itemsep 0.1em \\
+三级（嵌套） & 罗马数字 (i)  & 1.5em & itemsep 0.1em \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{自定义命令}
+
+\begin{codeblock}
+% 圈号数字（条件编号，TikZ 绘制）
+\newcommand{\mycircled}[1]{%
+  \tikz[baseline=(char.base),outer sep=0pt]{%
+    \node[draw,circle,inner sep=0.5pt,minimum size=1.4em,
+          line width=0.4pt,font=\zihao{-5}] (char) {#1};%
+  }%
+}
+% 旋转平行符号（立体几何线线平行）
+\newcommand{\Parallel}{\raisebox{0.1ex}{\rotatebox[origin=c]{-20}{$\parallel$}}}
+% 密级星号
+\newcommand{\bigstarraised}{\raisebox{0.2ex}{$\bigstar$}}
+% 下划线填空
+\newcommand{\blank}{\underline{\hspace{2cm}}}
+% 大标题辅助命令
+\newcommand{\subjecttitle}[1]{{\fontsize{24pt}{22pt}\selectfont\centering\textbf{#1}\par}}
+\newcommand{\subtitle}[1]{{\fontsize{16pt}{16pt}\selectfont\centering #1\par}}
+\end{codeblock}
+
+\subsection{标题区两种方案}
+
+\begin{itemize}
+  \item \textbf{方案 A（紧凑，默认）}：单行合并 \texttt{202X年全国统一高考数学试卷 \textbackslash\textbackslash 新高考I卷}，
+        \texttt{\textbackslash LARGE} 加粗居中——省页数
+  \item \textbf{方案 B（展开）}：年份与科目分两行（\texttt{\textbackslash subtitle} +
+        \texttt{\textbackslash subjecttitle}）——占位多
+\end{itemize}
+
+\subsection{题型结构与编号}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+大题 & 题量与分值 & 环境 \\
+\midrule
+一、选择题（单选） & 8 题 × 5 分 = 40 分 & enumerate[itemsep=0.3em] + tasks(4) \\
+二、选择题（多选） & 3 题 × 6 分 = 18 分 & enumerate[start=9] + tasks(2) \\
+三、填空题 & 3 题 × 5 分 = 15 分 & enumerate[start=12] + \texttt{\textbackslash blank} \\
+四、解答题 & 5 题共 77 分 & examenum[start=17, itemsep=2.5cm] \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+每题分值标注格式：\texttt{\textbackslash item （13分）...} / \texttt{\textbackslash item （15分）...}
+紧跟题干。
+
+\subsection{表格风格}
+
+\texttt{tabular} 带竖线 + \texttt{diagbox} 斜线表头（\texttt{\textbackslash diagbox\{组别\}\{检查结果\}}）
++ \texttt{makecell} 单元格内换行 + \texttt{float} [H] 强制定位——列联表 / 统计表专用。
+
+\subsection{配图}
+
+立体几何图直接 \texttt{tikzpicture} 画坐标点 + 虚线实线，配
+\texttt{\textbackslash captionof\{figure\}\{图注\}}。
+
+\section{答案模板排版细节（gaokao-answer-template.tex）}
+
+\subsection{页面布局}
+
+\begin{itemize}
+  \item \texttt{\textbackslash documentclass[12pt, a4paper]\{ctexart\}}
+  \item 边距不对称：\texttt{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}（上下更窄）
+  \item \texttt{\textbackslash onehalfspacing} 固定 1.5 倍行距（信息量大，行距拉开便于阅读）
+\end{itemize}
+
+\subsection{页眉页脚}
+
+\begin{itemize}
+  \item 页眉居中：\texttt{202X年普通高等学校招生全国统一考试·数学 参考答案}（small）
+  \item 页脚居中：纯页码 \texttt{\textbackslash thepage}
+  \item 页眉线 \texttt{0.4pt}（与试题卷的无线条形成区分）
+\end{itemize}
+
+\subsection{图片路径}
+
+\texttt{\textbackslash graphicspath\{\{images/\}\}} —— 转换时必须替换为推导出的图片目录
+（如 \texttt{Images-答案}），否则 \texttt{\textbackslash eqimg} 和
+\texttt{\textbackslash includegraphics} 全部找不到图。
+
+\subsection{命令体系（答案卷核心排版语义）}
+
+\begin{codeblock}
+% 【答案】红色加粗
+\newcommand{\daan}[1]{{\color{red}\textbf{【答案】#1}}}
+% 【解析】灰色前缀
+\newcommand{\jieti}{\par{\color{gray!60!black}\textbf{【解析】}}}
+% 【详解】蓝色前缀
+\newcommand{\xijie}{\par{\color{blue!60!black}\textbf{【详解】}}}
+% 【小问 1/2 详解】蓝色前缀
+\newcommand{\xiaoI}{\par{\color{blue!60!black}\textbf{【小问 1 详解】}}}
+\newcommand{\xiaoII}{\par{\color{blue!60!black}\textbf{【小问 2 详解】}}}
+% 插入公式图片（WMF 转 PNG），默认宽 0.5\textwidth
+\newcommand{\eqimg}[2][0.5]{%
+  \includegraphics[width=#1\textwidth,keepaspectratio]{#2}%
+}
+% 虚数单位 / 自然底数简写
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\me}{\mathrm{e}}
+\end{codeblock}
+
+注意：上述命令定义中含有中文（【答案】等），实际使用时同样以原样写入文档。
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+命令 & 样式 & 用途 \\
+\midrule
+\texttt{\textbackslash daan\{...\}} & 红色加粗【答案】 & 答案 \\
+\texttt{\textbackslash jieti} & 灰色前缀【解析】（正文楷体） & 解析 \\
+\texttt{\textbackslash xijie} & 蓝色前缀【详解】 & 详解 \\
+\texttt{\textbackslash xiaoI} / \texttt{\textbackslash xiaoII} & 蓝色前缀 & 小问 1/2 详解 \\
+\texttt{\textbackslash eqimg[宽]\{图\}} & 图片，默认 0.5\textbackslash textwidth & 公式图片（选项图常用 0.15） \\
+\texttt{\textbackslash mi} / \texttt{\textbackslash me} & 直立体 & 虚数单位 / 自然底数 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{标题区（密级风格）}
+
+\texttt{绝密}$\bigstar$\texttt{启用前 试卷类型：A}（large 加粗）→ 考试名称（Large）→
+\texttt{数 学}（huge）→ \texttt{参考答案}（large）→ \texttt{\textbackslash hrule} 横线收尾。
+
+\subsection{题型结构与命令搭配}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+大题 & 环境 & 命令链 \\
+\midrule
+一、选择题 & section* + enumerate & daan → jieti → xijie \\
+二、选择题（多选） & enumerate[resume] & 同上，选项 flushleft 平铺 \\
+三、填空题 & enumerate[resume] & 下划线填空 + daan \\
+四、解答题 & enumerate[resume] + 嵌套小问 & daan(1)(2) → jieti → xiaoI → xiaoII \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+注意：答案模板题号全走 \texttt{enumerate} 体系并 \texttt{[resume]} 接续编号，不用 tasks
+（选项多为图片，用 \texttt{flushleft} + \texttt{\textbackslash eqimg} 平铺）。
+
+\subsection{选项排版双通道差异}
+
+\begin{itemize}
+  \item \textbf{DOCX 输入}：选项是 WMF 公式图 → \texttt{\textbackslash eqimg[0.15]\{imageN.png\}}
+        逐个插入
+  \item \textbf{PDF 输入}：MinerU 已识别为 LaTeX 公式 → 优先直接写公式，图片才用
+        \texttt{\textbackslash eqimg}
+\end{itemize}
+
+\section{通用排版约定}
+
+\subsection{图片插入三档（两模板共用）}
+
+\begin{enumerate}
+  \item 小装饰图 → \texttt{\textbackslash includegraphics[height=0.6em]}（行内）
+  \item 几何示意图（列表环境外）→ \texttt{wrapfigure} 右侧环绕，宽 $\leq$ \texttt{0.35\textbackslash textwidth}
+  \item 几何示意图（列表环境内，wrapfigure 失效）→ \texttt{minipage} 左右并排：
+        左 \texttt{0.62\textbackslash textwidth} 放题目 / 小问，右 \texttt{0.30\textbackslash textwidth}
+        放图片 + \texttt{\textbackslash captionof\{figure\}}
+\end{enumerate}
+
+\subsection{数学公式规范}
+
+行内 \texttt{\$...\$} / 行间 \texttt{\textbackslash[...\textbackslash]}；分数
+\texttt{\textbackslash frac}，超长用 \texttt{\textbackslash dfrac}（Overfull 时换回）；
+\texttt{\textbackslash sin \textbackslash cos \textbackslash tan \textbackslash ln \textbackslash lg}；
+\texttt{cases} 分段函数；集合 \texttt{\textbackslash\{ \textbackslash\}} 转义、
+\texttt{\textbackslash mid} 表"使得"；向量 \texttt{\textbackslash vec} / \texttt{\textbackslash mathbf}；
+\texttt{\textbackslash pi}；\texttt{\textbackslash mathrm\{e\}} / \texttt{\textbackslash mathrm\{i\}}
+（答案模板已简写为 \texttt{\textbackslash me} / \texttt{\textbackslash mi}）。
+
+\subsection{页数控制（反复强调的硬约束）}
+
+\begin{itemize}
+  \item \textbf{学生版}：必须严格匹配试卷标注的"本试卷共X页"
+  \item \textbf{超页手段}：导言区加 \texttt{\textbackslash linespread\{1.05\}\textbackslash selectfont}
+        （视觉几乎无感，省半页到一页）
+  \item \textbf{教师版}：不受标注页数约束，控制在 7 页内
+  \item \textbf{教师版}：移除 \texttt{itemsep=2.5cm}（分页已替代间隙作用）
+\end{itemize}
+
+\subsection{一致性原则}
+
+转换时保留模板完整导言区，只替换正文；标题格式、注意事项文字、各题型标题、
+分值标注格式全部照抄模板，不自由发挥。
+
+\section{常见问题速查}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+症状 & 修复 \\
+\midrule
+Overfull \texttt{\textbackslash hbox} & 选项改 2 列；\texttt{\textbackslash dfrac} 改 \texttt{\textbackslash frac}；缩短公式 \\
+图片错位 / 消失 & 列表环境内改用 \texttt{minipage} 方案 \\
+页数超限 & \texttt{\textbackslash linespread\{1.05\}} 压缩行距 \\
+MinerU 解析失败（PDF） & 检查 Token；文件 $\leq$ 200MB / 600 页；扫描件加 \texttt{--ocr} \\
+UnicodeEncodeError（Windows） & 加 \texttt{PYTHONIOENCODING=utf-8} 前缀 \\
+中文不显示 & 确认模板用 \texttt{ctexart} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{附：整条链路一句话总结}
+
+识别格式 → 提取（pandoc / MinerU）→ 取图（解包 / WMF 转 PNG）→ 选模板（含答案
+三段式匹配）→ 逐题转 LaTeX（守导言区、守编号、守图片环绕）→ 分版本（学生 / 教师）
+编译验证（XeLaTeX × 2 + Overfull 检查 + 页数核对）→ 清理保留产物。
+
+试题卷风格 = 12pt + 2.5cm 边距 + tasks 选项 + examenum 三级大题 + 页脚"第X页（共Y页）"；
+答案卷风格 = 上下 2cm 边距 + 1.5 倍行距 + 红【答案】灰【解析】蓝【详解】命令体系 +
+\texttt{\textbackslash eqimg} 公式图。两者共用同一套数学公式规范与图片环绕规则，
+页数是贯穿始终的硬约束。
+
+\end{document}
