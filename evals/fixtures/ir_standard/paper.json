@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "title": "2026 年测试卷（IR 渲染）",
+    "template": "gaokao",
+    "total_pages": 1,
+    "images_dir": "media",
+    "answer_space": "normal"
+  },
+  "sections": [
+    {
+      "heading": "一、选择题：本题共2小题，每小题5分，共10分。",
+      "type": "choice_single",
+      "questions": [
+        {
+          "stem": "已知集合 $A=\\{x \\mid x^2-3x+2=0\\}$，$B=\\{0,1,2\\}$，则 $A \\cup B =$",
+          "options": [
+            {"label": "A", "text": "$\\{0\\}$"},
+            {"label": "B", "text": "$\\{0,1,2\\}$"},
+            {"label": "C", "text": "$\\{1,2\\}$"},
+            {"label": "D", "text": "$\\{0,1\\}$"}
+          ]
+        },
+        {
+          "stem": "设 $z = 3 + 2\\mi$，则 $|z| =$",
+          "options": [
+            {"label": "A", "text": "$\\sqrt{5}$"},
+            {"label": "B", "text": "$\\sqrt{13}$"},
+            {"label": "C", "text": "$5$"},
+            {"label": "D", "text": "$13$"}
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "二、选择题：本题共1小题，每小题6分，共6分。在每小题给出的选项中，有多项符合题目要求。",
+      "type": "choice_multi",
+      "questions": [
+        {
+          "stem": "关于双曲函数，下列结论正确的是",
+          "options": [
+            {"label": "A", "text": "双曲正弦函数 $\\sinh x$ 在实数集上单调递增，且为奇函数"},
+            {"label": "B", "text": "对任意实数 $x,y$，都有 $\\tanh(x+y) = \\dfrac{\\tanh x + \\tanh y}{1 + \\tanh x \\tanh y}$"},
+            {"label": "C", "text": "对任意实数 $x$，恒有 $\\cosh^{2} x - \\sinh^{2} x = 1$"},
+            {"label": "D", "text": "对任意实数 $x$，恒有 $\\sinh 2x = 2\\sinh x \\cosh x$"}
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "三、填空题：本题共1小题，每小题5分，共5分。",
+      "type": "fill_blank",
+      "questions": [
+        {
+          "stem": "若直线 $y=2x+5$ 是曲线 $y=\\me^{x}+x+a$ 的一条切线，则 $a=$"
+        }
+      ]
+    },
+    {
+      "heading": "四、解答题：本题共2小题，共24分。",
+      "type": "long_answer",
+      "questions": [
+        {
+          "stem": "已知数列 $\\{a_n\\}$ 中，$a_1=3$，$a_{n+1}=2a_n+1$.",
+          "points": 12,
+          "subquestions": [
+            "证明：数列 $\\{a_n+1\\}$ 是等比数列；",
+            "求 $\\{a_n\\}$ 的前 $n$ 项和 $S_n$."
+          ]
+        },
+        {
+          "stem": "在 $\\triangle ABC$ 中，角 $A,B,C$ 的对边分别为 $a,b,c$，且 $2a\\cos B = 2c - b$.",
+          "points": 12,
+          "subquestions": [
+            "求角 $A$ 的大小；",
+            "若 $a=3$，求 $\\triangle ABC$ 面积的最大值."
+          ]
+        }
+      ]
+    }
+  ]
+}
